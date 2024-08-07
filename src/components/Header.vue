@@ -6,7 +6,7 @@
 
         <div class="flex-row mobileShow">
           <!-- @change="handleClick" -->
-          <el-select v-model="explorerList.value" placeholder="Select" size="small">
+          <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
             <template #prefix>
               <div class="flex-row font-17">
                 <i class="icon icon-swanProxima"></i>
@@ -25,7 +25,7 @@
       <div class="flex-row nowrap swan-right font-17">
         <div class="flex-row pcShow">
           <!-- @change="handleClick" -->
-          <el-select v-model="explorerList.value" placeholder="Select" size="small">
+          <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
             <template #prefix>
               <div class="flex-row font-17">
                 <i class="icon icon-swanProxima"></i>
@@ -47,7 +47,7 @@
 
         <div class="header-right flex-row nowrap pcShow" v-if="accessToken !== ''">
           <div class="set">
-            <el-dropdown popper-class="menu-style" @command="handleSelect" placement="bottom-end" :hide-on-click="false">
+            <el-dropdown popper-class="menu-style" @command="handleSelect" placement="bottom-end">
               <div class="el-dropdown-link setting-style loginImg flex-row">
                 <el-icon>
                   <Avatar />
@@ -288,11 +288,15 @@ export default defineComponent({
       tx_hash: ''
     })
     const explorerList = reactive({
-      value: 'Swan Proxima Chain',
+      value: store.state.networkValue || 'Mainnet',
       options: [
         {
-          value: 'Swan Proxima Chain',
-          label: 'Swan Proxima Chain'
+          value: 'Mainnet',
+          label: 'Swan Chain Mainnet'
+        },
+        {
+          value: 'Proxima',
+          label: 'Swan Chain Proxima'
         }]
     })
     const txLink = process.env.VUE_APP_ATOMBLOCKURL
@@ -465,6 +469,10 @@ export default defineComponent({
       // }
       cpCheckCont.show = false
     }
+    async function currentMethod(key) {
+      store.dispatch('setNetwork', key)
+      window.location.reload()
+    }
     onMounted(async () => { })
     watch(route, (to, from) => {
       window.scrollTo(0, 0)
@@ -482,7 +490,7 @@ export default defineComponent({
       ruleForm,
       bodyWidth, cpCheckCont, cpCollateralCont, txLink, explorerList,
       getdataList, createCom, deleteToken, handleKeyChange, handleSizeChange,
-      handleSelect, cpCollateral
+      handleSelect, cpCollateral, currentMethod
     }
   }
 })

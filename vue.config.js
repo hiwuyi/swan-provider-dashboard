@@ -23,7 +23,7 @@ const externals = {
 
 module.exports = {
   // publicPath: process.env.NODE_ENV === 'testnet' ? '' : '/',
-  publicPath:  '',
+  publicPath: '/',
 
   outputDir: process.env.VUE_APP_OUTPUTDIR,
 

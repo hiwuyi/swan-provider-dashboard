@@ -205,7 +205,7 @@ export default defineComponent({
         node_id: networkZK.node_id
       }
       // const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_UBI}providers?${system.$Qs.stringify(params)}`, 'get')
-      const providerRes = await system.$commonFun.sendRequest(`./static/js/ecplist.json`, 'get')
+      const providerRes = await system.$commonFun.sendRequest(`../../../static/js/ecplist.json`, 'get')
       if (providerRes && providerRes.code === 0) {
         paginZK.total = providerRes.data.total || 0
         providerBody.ubiTableData = providerRes.data.list || []

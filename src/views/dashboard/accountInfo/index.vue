@@ -19,7 +19,7 @@
                     <p class="text-capitalize">CP Contract Address:</p>
                   </el-col>
                   <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex-row baseline">
-                    <p>0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</p>
+                    <a class="link-to" :href="`${system.$explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
                   </el-col>
                   <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex-row baseline">
                     <p class="text-capitalize">Account Type:</p>
@@ -32,17 +32,12 @@
                   </el-col>
                   <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex-row baseline">
                     <div class="flex-row copy-style">
-                      0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677
+                      <a class="link-to" :href="`${system.$explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
                       <svg @click="system.$commonFun.copyContent('0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677', 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                         <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                           fill="#3d3d3d" p-id="6468"></path>
                         <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
                           fill="#3d3d3d" p-id="6469"></path>
-                      </svg>
-                      <svg @click="system.$commonFun.goLink(`${system.$explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`)" t="1716455516372" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2408" width="14" height="14">
-                        <path d="M892 928.1H134c-19.9 0-36-16.1-36-36v-758c0-19.9 16.1-36 36-36h314.1c19.9 0 36 16.1 36 36s-16.1 36-36 36H170v686h686V579.6c0-19.9 16.1-36 36-36s36 16.1 36 36v312.5c0 19.9-16.1 36-36 36z" fill="#2c2c2c" p-id="2409"></path>
-                        <path d="M927.9 131.6v-0.5c-0.1-1.7-0.4-3.3-0.7-4.9 0-0.1 0-0.2-0.1-0.3-0.4-1.7-0.9-3.3-1.5-4.9v-0.1c-0.6-1.6-1.4-3.1-2.2-4.6 0-0.1-0.1-0.1-0.1-0.2-0.8-1.4-1.7-2.8-2.7-4.1-0.1-0.1-0.2-0.3-0.3-0.4-0.5-0.6-0.9-1.1-1.4-1.7 0-0.1-0.1-0.1-0.1-0.2-0.5-0.6-1-1.1-1.6-1.6l-0.4-0.4c-0.5-0.5-1.1-1-1.6-1.5l-0.1-0.1c-0.6-0.5-1.2-1-1.9-1.4-0.1-0.1-0.3-0.2-0.4-0.3-1.4-1-2.8-1.8-4.3-2.6l-0.1-0.1c-1.6-0.8-3.2-1.5-4.9-2-1.6-0.5-3.3-1-5-1.2-0.1 0-0.2 0-0.3-0.1l-2.4-0.3h-0.3c-0.7-0.1-1.3-0.1-2-0.1H640.1c-19.9 0-36 16.1-36 36s16.1 36 36 36h165L487.6 487.6c-14.1 14.1-14.1 36.9 0 50.9 7 7 16.2 10.5 25.5 10.5 9.2 0 18.4-3.5 25.5-10.5L856 221v162.8c0 19.9 16.1 36 36 36s36-16.1 36-36V134.1c0-0.8 0-1.7-0.1-2.5z"
-                          fill="#2c2c2c" p-id="2410"></path>
                       </svg>
                     </div>
                   </el-col>
@@ -51,7 +46,7 @@
                   </el-col>
                   <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex-row baseline">
                     <div class="flex-row copy-style">
-                      0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677
+                      <a class="link-to" :href="`${system.$explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
                       <svg @click="system.$commonFun.copyContent('0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677', 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                         <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                           fill="#3d3d3d" p-id="6468"></path>
@@ -65,7 +60,7 @@
                   </el-col>
                   <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex-row baseline">
                     <div class="flex-row copy-style">
-                      0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677
+                      <a class="link-to" :href="`${system.$explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
                       <svg @click="system.$commonFun.copyContent('0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677', 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                         <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                           fill="#3d3d3d" p-id="6468"></path>
@@ -86,37 +81,54 @@
               <div class="note b">
                 <el-row>
                   <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline">
-                    <p class="color font-18">Available Balance：0.9984 sETH</p>
+                    <p class="color font-18">Available Balance：0.9984 SWANC</p>
+                  </el-col>
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
+                    <p class="color font-16 tab-title">FCP</p>
                   </el-col>
                   <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
                     <div class="flex-row space-between width">
                       <span>FCP Collateral Balance:</span>
-                      <span class="text-right">0.1444 SETH</span>
+                      <span class="text-right">0.1444 SWANC</span>
                     </div>
                   </el-col>
                   <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
                     <div class="flex-row space-between width">
                       <span>FCP Locked Balance: </span>
-                      <span>0.1234 SETH</span>
+                      <span>0.1234 SWANC</span>
                     </div>
                   </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline">
-                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'FCP')">FCP Collateral</div>
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
+                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'FCP')">Add Collateral</div>
+                  </el-col>
+
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
+                    <p class="color font-16 tab-title">ECP</p>
                   </el-col>
                   <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
                     <div class="flex-row space-between width">
                       <span>ECP Collateral Balance:</span>
-                      <span class="text-right">0.1444 SETH</span>
+                      <span class="text-right">0.1444 SWANC</span>
                     </div>
                   </el-col>
                   <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
                     <div class="flex-row space-between width">
                       <span>ECP Locked Balance: </span>
-                      <span>0.1234 SETH</span>
+                      <span>0.1234 SWANC</span>
                     </div>
                   </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline">
-                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'ECP')">ECP Collateral</div>
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
+                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'ECP')">Add Collateral</div>
+                  </el-col>
+                  
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
+                    <div class="flex-row space-between width">
+                      <span>Sequencer Balance: </span>
+                      <span>0.1234 SWANC</span>
+                    </div>
+                  </el-col>
+                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex-row baseline s">
+                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'Sequencer')">Add Collateral</div>
                   </el-col>
                 </el-row>
               </div>
@@ -130,8 +142,8 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
             <div class="module-container">
               <div class="title">
-                <p class="font-16 weight-4">Job completion</p>
-                <p class="font-12 subtitle">Job completion total： 101</p>
+                <p class="font-16 weight-4">Job Status</p>
+                <p class="font-12 subtitle">Completion total: 101</p>
               </div>
               <div class='chart-trends' id='chart-job' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
               <div class="date">
@@ -146,8 +158,8 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
             <div class="module-container">
               <div class="title">
-                <p class="font-16 weight-4">Reward claimed</p>
-                <p class="font-12 subtitle">Reward claimed total： 87</p>
+                <p class="font-16 weight-4">Reward</p>
+                <p class="font-12 subtitle">Reward total: 87</p>
               </div>
               <div class='chart-trends' id='chart-reward' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
               <div class="date">
@@ -168,41 +180,20 @@
         </div>
         <div class="font-14 note b">
           <el-row>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
+            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex-row baseline">
               <p>Total Number Of Node:</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
+              &nbsp;&nbsp;&nbsp;&nbsp;
               <p>{{system.$commonFun.replaceFormat(pagin.total)}}</p>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>Average Score:</p>
+            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex-row baseline">
+              <p>Completed:</p>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <p>{{system.$commonFun.unifyNumber(0.9)}}%</p>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>{{ringGraphData.data.average_score_total || '-'}}</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>Used CPU/Total:</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>{{system.$commonFun.replaceFormat(ringGraphData.data.cpu_total)}}</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>Used Memory/Total (GiB):</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>{{system.$commonFun.replaceFormat(ringGraphData.data.memory_total)}}</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>Used GPU/Total:</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>{{system.$commonFun.replaceFormat(ringGraphData.data.gpu_total)}}</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>Used Storage/Total (GiB):</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex-row baseline">
-              <p>{{system.$commonFun.replaceFormat(ringGraphData.data.storage_total)}}</p>
+            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex-row baseline">
+              <p>Uptime:</p>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <p>{{system.$commonFun.unifyNumber(1)}}%</p>
             </el-col>
           </el-row>
           <div class="font-14">
@@ -975,7 +966,7 @@ export default defineComponent({
           containLabel: true
         },
         legend: {
-          data: ['Job Failed', 'Job Success'],
+          data: ['ECP Job Failed', 'ECP Job Success', 'FCP Job Running'],
           right: document.documentElement.clientWidth >= 1280 ? '100px' : 'auto',
           top: document.documentElement.clientWidth >= 1280 ? '5px' : '25px',
           icon: 'circle',
@@ -1007,12 +998,17 @@ export default defineComponent({
         ],
         yAxis: [
           {
-            type: 'value'
+            type: 'value',
+            // name: 'Job Success'
+          },
+          {
+            type: 'value',
+            // name: 'FCP Job Running'
           }
         ],
         series: [
           {
-            name: 'Job Failed',
+            name: 'ECP Job Failed',
             type: 'bar',
             // barCategoryGap: '0%',
             barGap: '0%',
@@ -1020,10 +1016,10 @@ export default defineComponent({
             data: [
               2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
             ],
-            color: '#699bff'
+            color: '#0000bf'
           },
           {
-            name: 'Job Success',
+            name: 'ECP Job Success',
             type: 'bar',
             // barCategoryGap: '0%',
             barGap: '0%',
@@ -1031,7 +1027,21 @@ export default defineComponent({
             data: [
               2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
             ],
-            color: '#52ce7c'
+            color: '#56cfb2'
+          },
+          {
+            name: 'FCP Job Running',
+            type: 'line',
+            smooth: true,
+            showSymbol: false,
+            yAxisIndex: 1,
+            tooltip: {
+              valueFormatter: function (value) {
+                return value;
+              }
+            },
+            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+            color: '#8ae664'
           }
         ]
       }
@@ -1050,7 +1060,7 @@ export default defineComponent({
           icon: 'roundRect',
         },
         legend: {
-          data: ['Claimed Count', 'Waiting'],
+          data: ['Daily reward', 'Waiting'],
           right: document.documentElement.clientWidth >= 1280 ? '100px' : 'auto',
           top: document.documentElement.clientWidth >= 1280 ? '5px' : '25px',
           icon: 'circle',
@@ -1089,12 +1099,12 @@ export default defineComponent({
         },
         series: [
           {
-            name: 'Claimed Count',
+            name: 'Daily reward',
             type: 'line',
             smooth: true,
             showSymbol: false,
             data: [120, 132, 101, 134, 90, 230, 210],
-            color: '#699bff'
+            color: '#61a5e8'
           },
           {
             name: 'Waiting',
@@ -1102,7 +1112,7 @@ export default defineComponent({
             smooth: true,
             showSymbol: false,
             data: [220, 182, 191, 234, 290, 330, 310],
-            color: '#52ce7c'
+            color: '#0000ff'
           }
         ]
       }
@@ -1308,6 +1318,10 @@ export default defineComponent({
       background-color: @white-color;
       border-radius: 0.2rem;
       .note {
+        a.link-to {
+          color: @theme-color;
+          text-decoration: underline;
+        }
         .el-row {
           margin: 0.1rem 0;
           .el-col {
@@ -1325,6 +1339,11 @@ export default defineComponent({
                 .blue {
                   color: #6067f5;
                 }
+              }
+              &.tab-title{
+                width: 100%;
+                margin: 0 0 0.1rem;
+                border-bottom: 1px solid @border-color;
               }
             }
             .collateral {

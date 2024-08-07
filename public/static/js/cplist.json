@@ -127,7 +127,8 @@
                 "uptime": 1,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Montreal",
@@ -253,7 +254,8 @@
                 "uptime": 1,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Richmond",
@@ -337,7 +339,8 @@
                 "uptime": 0.5,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Montreal",
@@ -463,7 +466,8 @@
                 "uptime": 0.1,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Richmond",
@@ -547,7 +551,8 @@
                 "uptime": 0.49,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Richmond",
@@ -631,7 +636,8 @@
                 "uptime": 0.33,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Richmond",
@@ -729,7 +735,8 @@
                 "uptime": 0.253537,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Montreal",
@@ -855,7 +862,8 @@
                 "uptime": 0.98887,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Richmond",
@@ -953,7 +961,8 @@
                 "uptime": 1,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             },
             {
                 "city": "Richmond",
@@ -1037,7 +1046,8 @@
                 "uptime": 1,
                 "task": {
                     "total": 43
-                }
+                },
+                "cp_account_address": "0x2bd6a6f41b37152677F8b4946490580F63494abD"
             }
         ]
     },

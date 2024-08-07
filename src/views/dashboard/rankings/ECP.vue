@@ -124,7 +124,7 @@
           </el-table-column>
           <el-table-column prop="uptime" min-width="140">
             <template #header>
-              <div class="font-14 weight-4">Task Completed</div>
+              <div class="font-14 weight-4">Task Completion Rate</div>
             </template>
             <template #default="scope">
               <div class="flex-row center nowrap uptime-container">
@@ -140,8 +140,24 @@
                   <li :class="{'active': scope.row.uptime >= 0.9}"></li>
                   <li :class="{'active': scope.row.uptime >= 1}"></li>
                 </ul>
-                <span class="uptime-text text-right task">{{scope.row.task?scope.row.task.total : '-'}}&nbsp;/&nbsp;{{system.$commonFun.unifyNumber(scope.row.uptime)}}%</span>
+                <span class="uptime-text text-right">{{system.$commonFun.unifyNumber(scope.row.uptime)}}%</span>
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="uptime" min-width="100">
+            <template #header>
+              <div class="font-14 weight-4">Total Task</div>
+            </template>
+            <template #default="scope">
+                <span class="uptime-text text-right task">{{scope.row.task?scope.row.task.total : '-'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="uptime" min-width="110">
+            <template #header>
+              <div class="font-14 weight-4">Contribution Score</div>
+            </template>
+            <template #default="scope">
+                <span class="uptime-text text-right task">{{scope.row.task?scope.row.task.total : '-'}}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -219,7 +235,7 @@ export default defineComponent({
         node_id: networkZK.node_id
       }
       // const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_UBI}providers?${system.$Qs.stringify(params)}`, 'get')
-      const providerRes = await system.$commonFun.sendRequest(`./static/js/ecplist.json`, 'get')
+      const providerRes = await system.$commonFun.sendRequest(`../../../static/js/ecplist.json`, 'get')
       if (providerRes && providerRes.code === 0) {
         paginZK.total = providerRes.data.total || 0
         providerBody.ubiTableData = await getList(providerRes.data.list, 'ECP')

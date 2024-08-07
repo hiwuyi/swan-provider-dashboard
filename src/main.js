@@ -1,5 +1,5 @@
 import {
-    createApp
+  createApp
 } from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -17,27 +17,27 @@ import qs from 'qs'
 
 var routed = '';
 router.beforeEach((to, from, next) => {
-    if (to.meta.title) {
-        document.title = to.meta.title
-    }
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
 
-    if (to.path != routed) {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0
-    }
-    routed = to.path
-    next()
+  if (to.path != routed) {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0
+  }
+  routed = to.path
+  next()
 })
 
 const app = createApp(App)
 app.config.globalProperties.$commonFun = commonFun
-app.config.globalProperties.$explorerLink = process.env.VUE_APP_ATOMBLOCKURL
+app.config.globalProperties.$explorerLink = store.state.networkValue === 'Proxima' ? process.env.VUE_APP_ATOMBLOCKURL : process.env.VUE_APP_SWANMAINNETBLOCKURL
 app.config.globalProperties.$proximaLink = process.env.VUE_APP_PROXIMALINK
 app.config.globalProperties.$Qs = qs
 app.use(ElementPlus, {
-    locale: en,
+  locale: en,
 })
-    .use(i18n)
-    .use(store)
-    .use(router)
+  .use(i18n)
+  .use(store)
+  .use(router)
 app.mount('#app')

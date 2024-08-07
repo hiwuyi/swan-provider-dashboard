@@ -4,6 +4,7 @@
       <template #header>
         <div class="flex-row font-24 header-title">
           <span v-if="props.list.type === 'claimAccount'">Signature Verifcation</span>
+          <span v-else-if="props.list.type === 'Sequencer'">Add Sequencer</span>
           <span v-else>{{`${props.list.type} Collateral`}}</span>
         </div>
       </template>
@@ -83,24 +84,47 @@
             </el-form-item>
           </el-form>
         </div>
+        <el-row class="font-14 note" v-else-if="props.list.type === 'Sequencer'" v-loading="ruleForm.show">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
+            <p>Available Balance:</p>
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
+            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
+            <p>Sequencer Balance:</p>
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
+            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
+            <p>Add Amount:</p>
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
+            <div class="flex-row nowrap">
+              <el-input-number v-model="ruleForm.amount" :min="0" :step="0.25" controls-position="right" />
+              <span class="text-white">&nbsp;&nbsp;SWANC</span>
+            </div>
+          </el-col>
+        </el-row>
         <el-row class="font-14 note" v-else v-loading="ruleForm.show">
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
             <p>Available Balance:</p>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
-            <p>0.9984 sETH</p>
+            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
             <p>{{props.list.type}} Collateral Balance:</p>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
-            <p>0.9984 sETH</p>
+            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
             <p>{{props.list.type}} Locked Balance:</p>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
-            <p>0.9984 sETH</p>
+            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
             <p>Collateral Amount:</p>
@@ -108,7 +132,7 @@
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex-row baseline">
             <div class="flex-row nowrap">
               <el-input-number v-model="ruleForm.amount" :min="0" :step="0.25" controls-position="right" />
-              <span class="text-white">&nbsp;&nbsp;sETH</span>
+              <span class="text-white">&nbsp;&nbsp;SWANC</span>
             </div>
           </el-col>
         </el-row>
@@ -274,7 +298,6 @@ export default defineComponent({
             p {
               color: #000;
               &.color {
-                color: @border-color;
                 .green {
                   color: #8dd565;
                 }
@@ -310,6 +333,11 @@ export default defineComponent({
               }
               @media screen and (max-width: 600px) {
                 height: 200px;
+              }
+            }
+            .el-input-number {
+              .el-input{
+                font-size: inherit;
               }
             }
           }
