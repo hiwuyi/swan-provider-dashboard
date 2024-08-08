@@ -1,0 +1,94 @@
+.pointer {
+  cursor: pointer;
+}
+
+.link {
+  .pointer();
+  color: var(--color-primary);
+  border-bottom: 0.02rem solid var(--color-primary);
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.btn-default {
+  cursor: pointer;
+  text-align: center;
+  border-radius: 1rem;
+  width: fit-content;
+  transition: all 0.2s;
+}
+
+.btn {
+  .btn-default();
+  background-color: var(--color-primary);
+  color: var(--color-light);
+  border: 0.02rem solid var(--color-primary);
+  transition: all 0.2s;
+  &.btn-light{
+    background-color: var(--color-light);
+    color: var(--color-dark);
+    border: 0.02rem solid var(--color-light);
+    &:hover {
+      background-color: transparent;
+      color: var(--color-light);
+    }
+  }
+  &.btn-dark{
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    border: 0.02rem solid var(--color-dark);
+    &:hover {
+      background-color: transparent;
+      color: var(--color-light);
+    }
+  }
+  &:hover {
+    background-color: var(--color-light);
+    border-color: var(--color-light);
+    color: var(--color-primary);
+    opacity: 1 !important;
+  }
+}
+
+.btn.btn-disabled{
+  cursor: no-drop;
+  background-color: #a0a0a0 !important;
+  border-color: #a0a0a0 !important;
+  color: var(--color-dark) !important;
+}
+
+.btn.active {
+  .btn-primary();
+  box-shadow: 0 0.16rem 0.32rem 0 rgba(64, 76, 251, 0.25);
+}
+
+.btn-primary {
+  .btn-default();
+  border: 0.01rem solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-light);
+}
+.btn-primary:hover {
+  border: 0.01rem solid var(--color-light);
+  background-color: var(--color-light);
+  color: var(--color-primary);
+  box-shadow: 0 0.16rem 0.32rem 0 rgba(64, 76, 251, 0.25);
+}
+.btn-primary.active {
+  .btn();
+  box-shadow: 0 0.16rem 0.32rem 0 rgba(64, 76, 251, 0.25);
+}
+.btn-plain {
+  .btn-default();
+  border: 0.01rem solid var(--color-light-grey);
+  background-color: var(--color-light);
+  color: var(--color-primary);
+}
+
+.btn-plain:hover,
+.btn-plain.active {
+  .btn-primary.active();
+  border-color: var(--color-primary);
+}

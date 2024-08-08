@@ -1,0 +1,80 @@
+:root {
+  --color-black: #000;
+  --color-black-opacity: rgba(0,0,0,0.32);
+  --color-light: #fff;
+  --color-dark: #000;
+  --color-primary: rgba(68, 125, 255,1);
+  --color-primary-opacity-10: 'rgba(68, 125, 255,0.1)';
+  --color-success: #67c23a;
+  --color-warning: #e6a23c;
+  --color-danger: #f56c6c;
+  --color-info: #868e96;
+  --color-dark-black: #101113;
+  --color-dark-grey: #495057;
+  --color-light-grey: #dee2e6;
+  --color-primary-light: #edf3ff;
+  --color-bg-input: #f8f9fa;
+  --color-border: #95a3bd;
+  --color-text: rgb(99, 102, 116);
+}
+
+.color-black {
+  color: var(--color-black);
+}
+
+.color-light {
+  color: var(--color-light);
+}
+
+.color-dark {
+  color: var(--color-dark);
+}
+
+.color-dark-black {
+  color: var(--color-dark-black);
+}
+
+.color-dark-grey {
+  color: var(--color-dark-grey);
+}
+
+.color-light-grey {
+  color: var(--color-light-grey);
+}
+
+.color-bg-input {
+  color: var(--color-bg-input);
+}
+
+.color-primary {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.color-success {
+  color: var(--color-success);
+}
+
+.color-warning {
+  color: var(--color-warning);
+}
+
+.color-danger {
+  color: var(--color-danger);
+}
+
+.color-info {
+  color: var(--color-info);
+}
+
+.bg-light {
+  background-color: var(--color-light);
+}
+
+.bg-dark {
+  background-color: var(--color-dark);
+}
+
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
