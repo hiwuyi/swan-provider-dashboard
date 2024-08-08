@@ -18,8 +18,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/:pathMatch(.*)*',
-    name: '404',
-    component: () => import('../views/error/not-found.vue')
+    redirect: '/overview',
+    // name: '404',
+    // component: () => import('../views/error/not-found.vue')
   }
 ]
 const router = createRouter({

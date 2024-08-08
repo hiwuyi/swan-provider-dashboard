@@ -5,5 +5,7 @@ export enum ELINK {
   GITHUB = 'https://github.com/swanchain',
   DISCORD = 'https://discord.gg/swanchain',
   T = 'https://t.me/swan_chain/1',
-  EMAIL = 'contact@swanchain.io'
+  EMAIL = 'contact@swanchain.io',
+  PROXIMAEXPLORER = 'https://proxima-explorer.swanchain.io',
+  MAINNETEXPLORER = 'https://mainnet-explorer.swanchain.io/',
 }

@@ -145,7 +145,7 @@
 
 <script setup lang="ts">
 import vmDrawer from "@/components/vmDrawer.vue"
-import { metaAddress, proximaLink } from "@/utils/storage";
+import { metaAddress } from "@/utils/storage";
 import {
   Search
 } from '@element-plus/icons-vue'

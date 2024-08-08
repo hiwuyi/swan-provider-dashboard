@@ -1,3 +1,4 @@
+import { ELINK } from '@/constant/envLink'
 import { EStorage } from '@/constant/storage'
 
 export const token = ref(getToken())
@@ -5,10 +6,9 @@ export const isLogin = computed(() => !!token.value)
 export const currentNetwork = ref('Mainnet')
 export const metaAddress = ref('')
 export const signature = ref('')
-export const explorerLink = currentNetwork.value === 'Proxima' ? import.meta.env.VITE_ATOMBLOCKURL : import.meta.env.VITE_SWANMAINNETBLOCKURL
-export const proximaLink = import.meta.env.VITE_PROXIMALINK
+export const explorerLink = ref(currentNetwork.value === 'Proxima' ? ELINK.PROXIMAEXPLORER : ELINK.MAINNETEXPLORER)
 export const baseurl = currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_BASEAPI : import.meta.env.VITE_BASEAPI_PROXIMA
-
+console.log(explorerLink.value)
 export function removeStorage(key: string) {
   localStorage.removeItem(key)
 }

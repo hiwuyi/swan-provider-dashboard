@@ -938,9 +938,10 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
       const machart_gpu = echarts.init(document.getElementById("chart-GPU"));
       const machart_edge = echarts.init(document.getElementById("chart-Edge"));
 
-      const gpuData = await dataGPU(data.gpu, 'active')
-      const gpuTotalData = await dataGPU(data.gpu, 'total')
-      console.log(gpuData)
+      // const gpuData = await dataGPU(data.gpu, 'active')
+      // const gpuTotalData = await dataGPU(data.gpu, 'total')
+      const gpuData = await dataGPU(gpuJSON, 'score')
+      const gpuTotalData = await dataGPU(gpuJSONTotal, 'score')
 
       const option1 = {
         tooltip: {
@@ -1219,7 +1220,6 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             // params 是一个数组，包含了每个系列的数据信息
             var result = params[0].name + '<br/>'; // X轴的值
             params.forEach(function (item) {
-              console.log(item)
               // 遍历每个系列的数据
               // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
               // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';

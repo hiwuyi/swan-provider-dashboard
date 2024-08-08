@@ -163,7 +163,7 @@ import * as echarts from "echarts"
     import badgeIcon03 from "@/assets/images/icons/badge-3.png"
 import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from "@/utils/common";
 import { getCPlistData, getOverviewData, searchCPData } from "@/api/overview";
-import { baseurl, proximaLink } from "@/utils/storage";
+import { baseurl } from "@/utils/storage";
     const providersLoad = ref(false)
     const providersTableLoad = ref(false)
     const providersData = ref([])
