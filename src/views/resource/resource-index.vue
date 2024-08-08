@@ -57,7 +57,7 @@
               <div class="date">
                 <el-select v-model="weekList.value" placeholder="Select" size="small">
                   <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-                    <div class="font-14">{{item.label}}</div>
+                    <div class="flex flex-ai-center font-14">{{item.label}}</div>
                   </el-option>
                 </el-select>
               </div>

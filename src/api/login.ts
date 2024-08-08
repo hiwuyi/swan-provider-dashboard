@@ -1,3 +1,4 @@
+import { request } from '@/utils/request'
 import { setToken } from '@/utils/storage'
 
 export async function loginAccount(data: { account: string; password: string }) {

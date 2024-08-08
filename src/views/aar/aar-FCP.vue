@@ -2,7 +2,7 @@
   <section id="aarFCP-container">
     <div class="flex flex-ai-center header-title">
       <h1 class="font-24 font-bold">
-        <a :href="proximaLink" class="color link" target="_blank">Atom Accelerator Race</a> FCP Rankings</h1>
+      FCP Rankings</h1>
     </div>
 
     <div class="providers-network font-14">
@@ -10,20 +10,14 @@
         <el-row class="search-body font-14">
           <el-col :xs="24" :sm="12" :md="24" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
-              <span class="font-14">Name: </span>
-              <el-input class="zk-input" v-model="networkInput.name" placeholder="please enter CP name" @chang="searchProvider" @input="searchProvider" />
-            </div>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="24" :lg="10" :xl="10">
-            <div class="flex flex-ai-center nowrap child">
-              <span class="font-14">Contract Address: </span>
+              <span class="font-14">CP Account Address: </span>
               <el-input class="zk-input" v-model="networkInput.contract_address" placeholder="please enter Contract Address" @chang="searchProvider" @input="searchProvider" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
             <div class="flex flex-ai-center nowrap child">
-              <el-button type="info" :disabled="!networkInput.contract_address && !networkInput.name  ? true:false" round @click="clearProvider">Clear</el-button>
-              <el-button type="primary" :disabled="!networkInput.contract_address && !networkInput.name ? true:false" round @click="searchProvider">
+              <el-button type="info" :disabled="!networkInput.contract_address ? true:false" round @click="clearProvider">Clear</el-button>
+              <el-button type="primary" :disabled="!networkInput.contract_address ? true:false" round @click="searchProvider">
                 <el-icon>
                   <Search />
                 </el-icon>
@@ -63,8 +57,8 @@
               <div class="font-14 weight-4">Contract Address</div>
             </template>
             <template #default="scope">
-              <div class="flex flex-ai-center flex-jc-center copy-style" @click="copyContent(scope.row.owner_addr, 'Copied')">
-                {{hiddAddress(scope.row.owner_addr)}}
+              <div class="flex flex-ai-center flex-jc-center copy-style" @click="copyContent(scope.row.cp_account_address, 'Copied')">
+                {{hiddAddress(scope.row.cp_account_address)}}
                 <svg t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
@@ -168,8 +162,8 @@ import * as echarts from "echarts"
     import badgeIcon02 from "@/assets/images/icons/badge-2.png"
     import badgeIcon03 from "@/assets/images/icons/badge-3.png"
 import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from "@/utils/common";
-import { getOverviewData } from "@/api/overview";
-import { proximaLink } from "@/utils/storage";
+import { getCPlistData, getOverviewData, searchCPData } from "@/api/overview";
+import { baseurl, proximaLink } from "@/utils/storage";
     const providersLoad = ref(false)
     const providersTableLoad = ref(false)
     const providersData = ref([])
@@ -199,33 +193,51 @@ import { proximaLink } from "@/utils/storage";
     }
     async function init () {
       providersTableLoad.value = true
+      providersData.value = []
       try{
         const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
-        const params = {
-          limit: pagin.pageSize,
-          offset: page * pagin.pageSize,
-          search_string: networkInput.name
+        const params = networkInput.contract_address ? {
+          cp_account_address: networkInput.contract_address
+        } : {
+            limit: pagin.pageSize,
+            offset: page * pagin.pageSize
         }
-        const providerRes = await getOverviewData(params)
-        pagin.total = providerRes.data.list_providers_cnt || 0
-        providersData.value = await getList(providerRes.data.providers)
+        const providerRes = networkInput.contract_address ? await searchCPData(params) : await getCPlistData(params)
+        pagin.total = providerRes?.data?.list_providers_cnt ?? 0
+        providersData.value = await getList(networkInput.contract_address ? providerRes?.data?.provider : providerRes?.data?.providers)
       } catch { console.error}
       providersTableLoad.value = false
     }
     async function getList (list) {
-      let l = list || []
+      let l = Array.isArray(list) ? list : [list]
       l.forEach((element) => {
         element.gpu_list = []
+        element.multiAddress = []
         try {
-          if (element.computer_provider.machines && element.computer_provider.machines.length > 0) {
-            element.computer_provider.machines.forEach((machines) => {
-              if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
-                machines.specs.gpu.details.forEach((gpu) => {
-                  if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
-                })
-              }
-            })
-          }
+          const n = element.name || element.multi_address
+          n.forEach(n => {
+            const ip = n.split('/')
+            const address = `${ip[2]}:${ip[4]}`
+            element.multiAddress.push(address)
+          })
+        } catch{
+          element.multiAddress.push(element.name)
+        }
+        try {
+          element.machines = element.machines || element.computer_provider ?.machines || []
+          element.machines.forEach((machines) => {
+            if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
+              machines.specs.gpu.details.forEach((gpu) => {
+                if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
+                // const field = 'name';
+                // const containsValue = element.gpu_list.some(item => item[field].includes(gpu.product_name));
+                // if (!containsValue) element.gpu_list.push({
+                //   name: gpu.product_name,
+                //   status: gpu.status
+                // })
+              })
+            }
+          })
         } catch{ }
       })
       return l
@@ -237,7 +249,6 @@ import { proximaLink } from "@/utils/storage";
     }, 700)
     function clearProvider () {
       networkInput.contract_address = ''
-      networkInput.name = ''
       pagin.pageSize = 10
       pagin.pageNo = 1
       init()
@@ -251,7 +262,6 @@ import { proximaLink } from "@/utils/storage";
       providersData.value = []
       providersLoad.value = false
       providersTableLoad.value = false
-      networkInput.name = ''
       networkInput.contract_address = ''
       init()
     }

@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: '',
   timeout: globalConfig.api_timeout,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json;charset=UTF-8'
   }
 })
 
@@ -47,6 +47,6 @@ instance.interceptors.response.use(
   }
 )
 
-type Req = <R = { status: string; data: any; message: string; list_projects_cnt: number }>(config: AxiosRequestConfig<any>) => Promise<R>
+type Req = <R = { status: string; data: any; message: string; code: number; list_projects_cnt: number }>(config: AxiosRequestConfig<any>) => Promise<R>
 
 export const request: Req = instance

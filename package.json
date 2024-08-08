@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
-    "build:testnet": "vite build --mode test",
+    "build:testnet": "vite build --mode testnet",
     "build:prod": "vite build --mode production",
     "preview": "vite preview",
     "build-only": "vite build",

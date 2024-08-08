@@ -38,7 +38,7 @@ export default defineConfig({
           else if (['.mp4'].some((ext) => assetInfo.name.endsWith(ext))) {
             return `assets/video/[name]-[hash].${getGitCommitHash()}.[ext]`
           }
-          else if (['.otf'].some((ext) => assetInfo.name.endsWith(ext))) {
+          else if (['.otf', '.TTF', '.ttf'].some((ext) => assetInfo.name.endsWith(ext))) {
             return `assets/font/[name]-[hash].${getGitCommitHash()}.[ext]`
           }
           else {

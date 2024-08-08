@@ -43,14 +43,14 @@
               <div class="font-14 weight-4">Ranking</div>
             </template>
           </el-table-column>
-          <el-table-column prop="owner_addr" min-width="140">
+          <el-table-column prop="cp_account_address" min-width="140">
             <template #header>
               <div class="font-14 weight-4">Contract Address</div>
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center copy-style">
-                {{hiddAddress(scope.row.owner_addr)}}
-                <svg @click="copyContent(scope.row.owner_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+                {{hiddAddress(scope.row.cp_account_address)}}
+                <svg @click="copyContent(scope.row.cp_account_address, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
                   <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
@@ -168,6 +168,7 @@ import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from
 import {
   Search
 } from '@element-plus/icons-vue'
+import dataListFCPArray from '@/assets/static/js/cplist.ts'
 
     const route = useRoute()
     const router = useRouter()
@@ -210,7 +211,8 @@ import {
           owner_addr: networkInput.owner_addr,
           node_id: networkInput.node_id
         }
-        const providerRes = getOverviewData(params)
+        const providerRes = dataListFCPArray
+        // const providerRes = await getOverviewData(params)
         pagin.total = providerRes?.data?.list_providers_cnt ?? 0
         providersData.value = await getList(providerRes?.data?.providers, 'FCP')
         providersTableLoad.value = false

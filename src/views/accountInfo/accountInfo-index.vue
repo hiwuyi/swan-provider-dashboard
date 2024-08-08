@@ -149,7 +149,7 @@
               <div class="date">
                 <el-select v-model="weekList.value" placeholder="Select" size="small">
                   <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-                    <div class="font-14">{{item.label}}</div>
+                    <div class="flex flex-ai-center font-14">{{item.label}}</div>
                   </el-option>
                 </el-select>
               </div>
@@ -165,7 +165,7 @@
               <div class="date">
                 <el-select v-model="weekList.value" placeholder="Select" size="small">
                   <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-                    <div class="font-14">{{item.label}}</div>
+                    <div class="flex flex-ai-center font-14">{{item.label}}</div>
                   </el-option>
                 </el-select>
               </div>
@@ -333,10 +333,10 @@
 </template>
 
 <script setup lang="ts">
-import vmDrawer from "@/components/vmDrawer"
-import vmDialog from "@/components/vmDialog"
-import paymentHistory from "@/components/paymentHistory"
-import ubiHistory from "@/components/UBIHistory"
+import vmDrawer from "@/components/vmDrawer.vue"
+import vmDialog from "@/components/vmDialog.vue"
+import paymentHistory from "@/components/paymentHistory.vue"
+import ubiHistory from "@/components/UBIHistory.vue"
 import {
   Search
 } from '@element-plus/icons-vue'
@@ -362,7 +362,7 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
     const background = ref(false)
     const cpLoad = ref(false)
     const networkInput = ref('')
-    const activeName = ref('FCP')
+    const activeName = ref('ECP')
     const vmOperate = reactive({
       centerDrawerVisible: false,
       row: {},

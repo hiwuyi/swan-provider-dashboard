@@ -7,6 +7,7 @@ export const metaAddress = ref('')
 export const signature = ref('')
 export const explorerLink = currentNetwork.value === 'Proxima' ? import.meta.env.VITE_ATOMBLOCKURL : import.meta.env.VITE_SWANMAINNETBLOCKURL
 export const proximaLink = import.meta.env.VITE_PROXIMALINK
+export const baseurl = currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_BASEAPI : import.meta.env.VITE_BASEAPI_PROXIMA
 
 export function removeStorage(key: string) {
   localStorage.removeItem(key)

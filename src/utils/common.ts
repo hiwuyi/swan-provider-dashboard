@@ -118,9 +118,9 @@ window.addEventListener("resize", function () {
   if (newParams !== paginationWidth) window.location.reload()
 })
 
-export function dataGPU (data: any) {
+export function dataGPU (data: any, type:string) {
   // console.log(data)
-  let datum: any[], timeArr: any[]
+  const datum = [], timeArr = []
   // 排序
   data.sort((itema:any, itemb:any) => {
     return itema.timestamp - itemb.timestamp
@@ -133,9 +133,9 @@ export function dataGPU (data: any) {
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
     if (timeArr.indexOf(time_end) === -1) {
       timeArr.push(time_end)
-      datum.push(item.score)
+      datum.push(type === 'active' ? item['total'] - item[type] : item[type])
     } else {
-      datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + item.score
+      datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + (type === 'active' ? item['total'] - item[type] : item[type])
     }
   })
   return {
@@ -329,4 +329,43 @@ export function copyContent(text: string, tipCont?: string) {
     console.log('Oops, unable to copy')
   }
   return false
+}
+
+export function getDateRange(unit:string) {
+  const now = new Date();
+  const oneDay = 24 * 60 * 60 * 1000;
+ 
+  switch (unit) {
+    case 'Week':
+      return {
+        start: getEchartDateTime(new Date(now - 7 * oneDay).toISOString()),
+        end: getEchartDateTime(now.toISOString())
+      };
+    case 'Month':
+      // 这里的实现取决于当前月份有多少天，可能不会准确
+      return {
+        start: getEchartDateTime(new Date(now - 30 * oneDay).toISOString()),
+        end: getEchartDateTime(now.toISOString())
+      };
+    case 'Year':
+      return {
+        start: getEchartDateTime(new Date(now - 365 * oneDay).toISOString()),
+        end: getEchartDateTime(now.toISOString())
+      };
+    default:
+      throw new Error('Invalid time unit');
+  }
+}
+
+export function getEchartDateTime (time: any) {
+  const now = time ? new Date(time) : new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 月份是从0开始的，所以需要加1
+  const day = now.getDate();
+
+  // 格式化月份和日期，保持两位数
+  const formattedMonth = month < 10 ? '0' + month : month;
+  const formattedDay = day < 10 ? '0' + day : day;
+
+  return `${year}-${formattedMonth}-${formattedDay}`;
 }

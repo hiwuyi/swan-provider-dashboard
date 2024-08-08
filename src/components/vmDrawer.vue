@@ -156,7 +156,7 @@
       <div class="drawer-content font-14" v-if="props.list.type === 'ECP'">
         <div class="flex flex-ai-center flex-jc-between name-title">
           <b class="font-16 weight-4">{{props.list.name}}</b>
-          <router-link v-if="route.name !== 'accountInfo'" :to="{name:'accountInfo', params: {type: 'FCP'}}" class="font-17" @click="closeHandle()">View CP Profile</router-link>
+          <router-link v-if="route.name !== 'accountInfo'" :to="{name:'accountInfo', params: {type: 'FCP'}}" class="font-16" @click="closeHandle()">View CP Profile</router-link>
         </div>
         <el-row class="font-14 note">
           <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">

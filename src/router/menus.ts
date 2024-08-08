@@ -32,7 +32,7 @@ export default [
     component: () => import("../views/aar/aar-FCP.vue"),
     meta: {
       keepAlive: true,
-      title: 'Atom Accelerator Race'
+      title: 'Swan Chain Mainnet Campaign'
     }
   },
   {
@@ -41,7 +41,7 @@ export default [
     component: () => import("../views/aar/aar-ECP.vue"),
     meta: {
       keepAlive: true,
-      title: 'Atom Accelerator Race'
+      title: 'Swan Chain Mainnet Campaign'
     }
   },
   {

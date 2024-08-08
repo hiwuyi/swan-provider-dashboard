@@ -38,7 +38,7 @@
         <el-sub-menu index="aar">
           <template #title>
             <i class="icon icon-AAR"></i>
-            <span class="font-16">Atom Accelerator Race
+            <span class="font-16">Swan Chain Mainnet Campaign
               <i class="icon icon-new"></i>
             </span>
           </template>

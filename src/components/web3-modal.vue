@@ -5,7 +5,7 @@ import { getAccount, watchAccount } from '@wagmi/core'
 import configJS from './../utils/config'
 import { Init, throttle, login } from '@/utils/login';
 import { metaAddress, signature } from '@/utils/storage';
-import { signOutFun } from '@/utils/common';
+import { signOutFun, timeout } from '@/utils/common';
 
 const projectId = configJS.projectId
 const config = configJS.config

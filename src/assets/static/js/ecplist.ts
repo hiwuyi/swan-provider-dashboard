@@ -1,4 +1,4 @@
-{
+const dataListECPArray = {
     "code": 0,
     "msg": "success",
     "data": {
@@ -507,3 +507,5 @@
         ]
     }
 }
+
+export default dataListECPArray

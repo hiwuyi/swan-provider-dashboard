@@ -8,13 +8,13 @@
           <!-- @change="handleClick" -->
           <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
             <template #prefix>
-              <div class="flex flex-ai-center font-17">
+              <div class="flex flex-ai-center font-16">
                 <i class="icon icon-swanProxima"></i>
                 {{explorerList.value}}
               </div>
             </template>
             <el-option v-for="item in explorerList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-17">
+              <div class="flex flex-ai-center font-16">
                 <i class="icon icon-swanProxima"></i>
                 {{item.label}}
               </div>
@@ -22,18 +22,18 @@
           </el-select>
         </div>
       </div>
-      <div class="flex flex-ai-center nowrap swan-right font-17">
+      <div class="flex flex-ai-center nowrap swan-right font-16">
         <div class="flex flex-ai-center pcShow">
           <!-- @change="handleClick" -->
           <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
             <template #prefix>
-              <div class="flex flex-ai-center font-17">
+              <div class="flex flex-ai-center font-16">
                 <i class="icon icon-swanProxima"></i>
                 {{explorerList.value}}
               </div>
             </template>
             <el-option v-for="item in explorerList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-17">
+              <div class="flex flex-ai-center font-16">
                 <i class="icon icon-swanProxima"></i>
                 {{item.label}}
               </div>
@@ -41,11 +41,11 @@
           </el-select>
         </div>
 
-        <div class="web3Modal-style">
+        <!-- <div class="web3Modal-style">
           <web3-modal />
-        </div>
+        </div> -->
 
-        <div class="header-right flex flex-ai-center nowrap pcShow" v-if="token !== ''">
+        <!-- <div class="header-right flex flex-ai-center nowrap pcShow" v-if="token !== ''">
           <div class="set">
             <el-dropdown popper-class="menu-style" @command="handleSelect" placement="bottom-end">
               <div class="el-dropdown-link setting-style loginImg flex flex-ai-center">
@@ -55,7 +55,7 @@
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <!-- <el-dropdown-item command="apiKey">
+                  <el-dropdown-item command="apiKey">
                     <div class="profile router-link b">Show API-Key</div>
                   </el-dropdown-item>
                   <el-dropdown-item command="cpCollateral">
@@ -63,7 +63,7 @@
                   </el-dropdown-item>
                   <el-dropdown-item command="cpCollateralCheck">
                     <div class="profile router-link b">CP Collateral Check</div>
-                  </el-dropdown-item> -->
+                  </el-dropdown-item>
                   <el-dropdown-item command="sign_out">
                     <span class="link">Sign Out</span>
                   </el-dropdown-item>
@@ -71,7 +71,7 @@
               </template>
             </el-dropdown>
           </div>
-        </div>
+        </div> -->
 
         <div class="header-right flex flex-ai-center nowrap">
           <div class="set mobileShow">
@@ -127,7 +127,7 @@
                     <div class="profile router-link b">
                       <div class="flex flex-ai-center font-16">
                         <i class="icon icon-AAR"></i>
-                        <span>Atom Accelerator Race
+                        <span>Swan Chain Mainnet Campaign
                           <i class="icon icon-new"></i>
                         </span>
                       </div>
@@ -282,16 +282,17 @@ import web3Init, { checkNetwork } from "@/utils/login"
       tx_hash: ''
     })
     const explorerList = reactive({
-      value: currentNetwork.value || 'Mainnet',
+      value: 'Swan Chain Mainnet',
       options: [
         {
-          value: 'Mainnet',
+          value: 'Swan Chain Mainnet',
           label: 'Swan Chain Mainnet'
         },
-        {
-          value: 'Proxima',
-          label: 'Swan Chain Proxima'
-        }]
+        // {
+        //   value: 'Proxima',
+        //   label: 'Swan Chain Proxima'
+        // }
+      ]
     })
     const txLink = import.meta.env.VITE_ATOMBLOCKURL
     const tokenAddress = import.meta.env.VITE_OPSWAN_SWANTOKEN_ADDRESS

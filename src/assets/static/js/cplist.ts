@@ -1,4 +1,4 @@
-{
+const dataListFCPArray = {
     "data": {
         "data-source": "computing on the fly",
         "list_providers_cnt": 171,
@@ -1054,3 +1054,5 @@
     "message": "cplist api returns successfully",
     "status": "success"
 }
+
+export default dataListFCPArray

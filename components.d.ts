@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Aside: typeof import('./src/components/side-bar/Aside.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -19,6 +18,8 @@ declare module 'vue' {
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElFooter: typeof import('element-plus/es')['ElFooter']
+    ElForm: typeof import('element-plus/es')['ElForm']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
@@ -37,15 +38,11 @@ declare module 'vue' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
-    Footer: typeof import('./src/components/footer/Footer.vue')['default']
     FooterIndex: typeof import('./src/components/footer/footer-index.vue')['default']
-    Header: typeof import('./src/components/header/Header.vue')['default']
     HeaderContent: typeof import('./src/components/header/header-content.vue')['default']
     HeaderIndex: typeof import('./src/components/header/header-index.vue')['default']
     HeaderLogo: typeof import('./src/components/header/header-logo.vue')['default']
     HeaderMenus: typeof import('./src/components/header/header-menus.vue')['default']
-    HeaderUser: typeof import('./src/components/header/header-user.vue')['default']
-    Home: typeof import('./src/components/Home.vue')['default']
     PaymentHistory: typeof import('./src/components/paymentHistory.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

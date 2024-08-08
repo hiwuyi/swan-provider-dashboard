@@ -40,7 +40,7 @@ export async function login () {
   }
   const time = await throttle()
   if (!time) return [false, '']
-  const [signature, signErr] = await sign(config)
+  const [signature, signErr] = await sign()
   setSignature(signature)
   if (!signature) return [false, signErr]
   const reqOpts = [metaAddress.value, signature]

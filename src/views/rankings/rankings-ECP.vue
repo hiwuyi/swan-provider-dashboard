@@ -182,6 +182,7 @@ import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from
 import {
   Search
 } from '@element-plus/icons-vue'
+import dataListECPArray from '@/assets/static/js/ecplist.ts'
 
     const route = useRoute()
     const router = useRouter()
@@ -225,7 +226,8 @@ import {
           owner_addr: networkZK.owner_addr,
           node_id: networkZK.node_id
         }
-        const providerRes = await getOverviewECPData(params)
+        const providerRes = dataListECPArray
+        // const providerRes = await getOverviewECPData(params)
         paginZK.total = providerRes?.data?.total ?? 0
         providerBody.ubiTableData = await getList(providerRes?.data?.list, 'ECP')
         providersECPLoad.value = false

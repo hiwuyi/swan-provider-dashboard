@@ -2,7 +2,7 @@
   <section id="aarECP-container">
     <div class="flex flex-ai-center header-title">
       <h1 class="font-24 font-bold">
-        <a :href="proximaLink" class="color link" target="_blank">Atom Accelerator Race</a> ECP Rankings</h1>
+      ECP Rankings</h1>
     </div>
 
     <div class="providers-network font-14">
@@ -11,19 +11,19 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Name: </span>
-              <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter CP name" @chang="searchZKProvider" @input="searchZKProvider" />
+              <el-input class="zk-input" v-model="networkZK.name" placeholder="please enter name" @chang="searchZKProvider" @input="searchZKProvider" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Contract Address: </span>
-              <el-input class="zk-input" v-model="networkZK.contract_address" placeholder="please enter Contract Address" @chang="searchZKProvider" @input="searchZKProvider" />
+              <el-input class="zk-input" v-model="networkZK.cp_addr" placeholder="please enter CP Account Address" @chang="searchZKProvider" @input="searchZKProvider" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="3" :xl="3">
             <div class="flex flex-ai-center nowrap child">
-              <el-button type="info" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id  ? true:false" round @click="clearProvider">Clear</el-button>
-              <el-button type="primary" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id ? true:false" round @click="searchZKProvider">
+              <el-button type="info" :disabled="!networkZK.cp_addr && !networkZK.name ? true:false" round @click="clearProvider">Clear</el-button>
+              <el-button type="primary" :disabled="!networkZK.cp_addr && !networkZK.name ? true:false" round @click="searchZKProvider">
                 <el-icon>
                   <Search />
                 </el-icon>
@@ -105,10 +105,16 @@
             <template #header>
               <div class="font-14 weight-4">Completion Rate</div>
             </template>
+            <template #default="scope">
+              <div class="name-style black">{{replaceFormat(scope.row.completion_rate)}}</div>
+            </template>
           </el-table-column>
           <el-table-column prop="completion_rate" min-width="100">
             <template #header>
               <div class="font-14 weight-4">Contribution Score</div>
+            </template>
+            <template #default="scope">
+              <div class="name-style black">{{replaceFormat(scope.row.completion_rate)}}</div>
             </template>
           </el-table-column>
           <el-table-column prop="region" min-width="100">
@@ -150,8 +156,8 @@ import * as echarts from "echarts"
     import badgeIcon01 from "@/assets/images/icons/badge-1.png"
     import badgeIcon02 from "@/assets/images/icons/badge-2.png"
     import badgeIcon03 from "@/assets/images/icons/badge-3.png"
-import { copyContent, debounce, hiddAddress, paginationWidth } from "@/utils/common";
-import { getOverviewECPData } from "@/api/overview";
+import { copyContent, debounce, fixedformat, hiddAddress, paginationWidth, replaceFormat } from "@/utils/common";
+import { getOverViewECP, getOverviewECPData } from "@/api/overview";
     const providersLoad = ref(false)
     const providersECPLoad = ref(false)
     const providerBody = reactive({
@@ -167,13 +173,9 @@ import { getOverviewECPData } from "@/api/overview";
     const small = ref(false)
     const background = ref(false)
     const cpLoad = ref(false)
-    const networkInput = reactive({
-      contract_address: '',
-      name: ''
-    })
     const networkZK = reactive({
-      contract_address: '',
-      owner_addr: '',
+      cp_addr: '',
+      name: '',
       node_id: ''
     })
     const vmOperate = reactive({
@@ -193,13 +195,13 @@ import { getOverviewECPData } from "@/api/overview";
         const params = {
           page_size: paginZK.pageSize,
           page_no: page,
-          contract_address: networkZK.contract_address,
-          owner_addr: networkZK.owner_addr,
+          cp_addr: networkZK.cp_addr,
+          name: networkZK.name,
           node_id: networkZK.node_id
         }
-        const providerRes = await getOverviewECPData(params)
+        const providerRes = await getOverViewECP(params)
         paginZK.total = providerRes?.data?.total ?? 0
-        providerBody.ubiTableData = await getList(providerRes.data.providers)
+        providerBody.ubiTableData = await getList(providerRes.data.list)
       } catch { console.error }
       providersECPLoad.value = false
     }
@@ -226,10 +228,8 @@ import { getOverviewECPData } from "@/api/overview";
       getUBITable()
     }, 700)
     function clearProvider () {
-      networkInput.contract_address = ''
-      networkInput.name = ''
-      networkZK.owner_addr = ''
-      networkZK.contract_address = ''
+      networkZK.name = ''
+      networkZK.cp_addr = ''
       networkZK.node_id = ''
       paginZK.pageNo = 1
       getUBITable()
@@ -242,10 +242,8 @@ import { getOverviewECPData } from "@/api/overview";
       paginZK.pageNo = 1
       providersLoad.value = false
       providersECPLoad.value = false
-      networkInput.name = ''
-      networkInput.contract_address = ''
-      networkZK.owner_addr = ''
-      networkZK.contract_address = ''
+      networkZK.name = ''
+      networkZK.cp_addr = ''
       networkZK.node_id = ''
       getUBITable()
     }

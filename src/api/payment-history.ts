@@ -40,7 +40,7 @@ export function userProviderPaymentsData(data:any) {
 export function getPaymentListData(params: any) {
   return request({
     headers: {},
-    url: `../assets/static/js/paymentList.json`,
+    url: `../assets/static/js/paymentList.ts`,
     // url: import.meta.env.VITE_BASEAPI_PROXIMA + 'crm_project/list',
     method: 'get',
     params

@@ -2,7 +2,7 @@
   <section id="main-container">
     <div class="flex flex-ai-center flex-jc-between nowrap header-title">
       <h1 class="font-24 font-bold">Swan Provider Overview</h1>
-      <div class="flex flex-ai-center nowrap search">
+      <div class="flex flex-ai-center nowrap search  font-18">
         <el-input
           v-model="contractAddress"
           style="max-width: 600px"
@@ -44,53 +44,73 @@
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Active FCP Number</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
-                        </b>
-                        <h6 class="span font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
-                        <h6 class="font-12 weight-4 text-right t">24h change</h6>
+                        <template v-if="overviewData.value.fcp.length>0">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.fcp[0].active_cps)}}
+                          </b>
+                          <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_cps - overviewData.value.fcp[1].active_cps)}}</h6>
+                          <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Active ECP numbers</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
-                        </b>
-                        <h6 class="span font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
-                        <h6 class="font-12 weight-4 text-right t">24h change</h6>
+                        <template v-if="overviewData.value.ecp.length>0">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.ecp[0].cps)}}
+                          </b>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps ? 'up': 'down'}`">{{overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps?'+':''}}{{replaceFormat(overviewData.value.ecp[0].cps - overviewData.value.ecp[1].cps)}}</h6>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total ZK tasks</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
-                        </b>
+                        <template v-if="overviewData.value.ecp.length>0">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.ecp[0].tasks)}}
+                          </b>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks - overviewData.value.ecp[1].tasks)}}</h6>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total Applications</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
-                        </b>
+                        <template v-if="overviewData.value.fcp.length>0">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.fcp[0].active_applications)}}
+                          </b>
+                          <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_applications - overviewData.value.fcp[1].active_applications)}}</h6>
+                          <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total GPU hours</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
-                        </b>
+                        <template v-if="overviewData.value.fcp.length>0">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.fcp[0].gpu_hours)}}
+                          </b>
+                          <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours ? 'up': 'down'}`">{{overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours?'+':''}}{{replaceFormat(overviewData.value.fcp[0].gpu_hours - overviewData.value.fcp[1].gpu_hours)}}</h6>
+                          <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total ZK rewards (SWAN)</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
-                        </b>
+                        <template v-if="overviewData.value.fcp.length>0">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.ecp[0].rewards)}}
+                          </b>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards - overviewData.value.ecp[1].rewards)}}</h6>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
                       </div>
                     </el-col>
                   </el-row>
@@ -99,67 +119,75 @@
                   <template #label>
                     <span class="font-14">FCP Summary</span>
                   </template>
-                  <el-row :gutter="18">
+                  <el-row :gutter="18" v-if="overviewData.value.fcp && overviewData.value.fcp.length>0">
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Active FCP Number</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.fcp[0].active_cps)}}
                         </b>
-                        <h6 class="font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
-                        <h6 class="font-12 weight-4 text-right t">24h change</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_cps - overviewData.value.fcp[1].active_cps)}}</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Active Applications</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.fcp[0].active_applications)}}
                         </b>
-                        <h6 class="font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
-                        <h6 class="font-12 weight-4 text-right t">24h change</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_applications - overviewData.value.fcp[1].active_applications)}}</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total Deployments</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.fcp[0].deployments)}}
                         </b>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].deployments >= overviewData.value.fcp[1].deployments ? 'up': 'down'}`">{{overviewData.value.fcp[0].deployments >= overviewData.value.fcp[1].deployments?'+':''}}{{replaceFormat(overviewData.value.fcp[0].deployments - overviewData.value.fcp[1].deployments)}}</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total jobs</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.fcp[0].jobs)}}
                         </b>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].jobs >= overviewData.value.fcp[1].jobs ? 'up': 'down'}`">{{overviewData.value.fcp[0].jobs >= overviewData.value.fcp[1].jobs?'+':''}}{{replaceFormat(overviewData.value.fcp[0].jobs - overviewData.value.fcp[1].jobs)}}</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total running jobs</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.fcp[0].running_jobs)}}
                         </b>
-                        <h6 class="font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
-                        <h6 class="font-12 weight-4 text-right t">24h change</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].running_jobs >= overviewData.value.fcp[1].running_jobs ? 'up': 'down'}`">{{overviewData.value.fcp[0].running_jobs >= overviewData.value.fcp[1].running_jobs?'+':''}}{{replaceFormat(overviewData.value.fcp[0].running_jobs - overviewData.value.fcp[1].running_jobs)}}</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total GPU hours</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.fcp[0].gpu_hours)}}
                         </b>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours ? 'up': 'down'}`">{{overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours?'+':''}}{{replaceFormat(overviewData.value.fcp[0].gpu_hours - overviewData.value.fcp[1].gpu_hours)}}</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total CPU hours</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.fcp[0].cpu_hours)}}
                         </b>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.fcp[0].cpu_hours >= overviewData.value.fcp[1].cpu_hours ? 'up': 'down'}`">{{overviewData.value.fcp[0].cpu_hours >= overviewData.value.fcp[1].cpu_hours?'+':''}}{{replaceFormat(overviewData.value.fcp[0].cpu_hours - overviewData.value.fcp[1].cpu_hours)}}</h6>
+                        <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                   </el-row>
@@ -168,55 +196,65 @@
                   <template #label>
                     <span class="font-14">ECP Summary</span>
                   </template>
-                  <el-row :gutter="18">
+                  <el-row :gutter="18" v-if="overviewData.value.ecp && overviewData.value.ecp.length>0">
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Active ECP Number</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.ecp[0].cps)}}
                         </b>
-                        <h6 class="font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
-                        <h6 class="font-12 weight-4 text-right t">24h change</h6>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps ? 'up': 'down'}`">{{overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps?'+':''}}{{replaceFormat(overviewData.value.ecp[0].cps - overviewData.value.ecp[1].cps)}}</h6>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total ZK rewards (SWAN)</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.ecp[0].rewards)}}
                         </b>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards - overviewData.value.ecp[1].rewards)}}</h6>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total ZK tasks</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.ecp[0].tasks)}}
                         </b>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks - overviewData.value.ecp[1].tasks)}}</h6>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">GPU ZK task</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.ecp[0].tasks_gpu)}}
                         </b>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks_gpu >= overviewData.value.ecp[1].tasks_gpu ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks_gpu >= overviewData.value.ecp[1].tasks_gpu?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks_gpu - overviewData.value.ecp[1].tasks_gpu)}}</h6>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">CPU ZK task</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.ecp[0].tasks_cpu)}}
                         </b>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks_cpu >= overviewData.value.ecp[1].tasks_cpu ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks_cpu >= overviewData.value.ecp[1].tasks_cpu?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks_cpu - overviewData.value.ecp[1].tasks_cpu)}}</h6>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Verified ZK task</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.ecp[0].tasks_verified)}}
                         </b>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks_verified >= overviewData.value.ecp[1].tasks_verified ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks_verified >= overviewData.value.ecp[1].tasks_verified?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks_verified - overviewData.value.ecp[1].tasks_verified)}}</h6>
+                        <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
@@ -229,10 +267,34 @@
                           </el-select>
                           Avg ZK rewards
                         </h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
-                        </b>
-                        <h6 class="font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
+                        <template v-if="AvgZKRewards.value === 'Daily'">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.ecp[0].rewards_avg_day)}}
+                          </b>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_day >= overviewData.value.ecp[1].rewards_avg_day ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_day >= overviewData.value.ecp[1].rewards_avg_day?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_day - overviewData.value.ecp[1].rewards_avg_day)}}</h6>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
+                        <template v-else-if="AvgZKRewards.value === 'Weekly'">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.ecp[0].rewards_avg_week)}}
+                          </b>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_week >= overviewData.value.ecp[1].rewards_avg_week ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_week >= overviewData.value.ecp[1].rewards_avg_week?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_week - overviewData.value.ecp[1].rewards_avg_week)}}</h6>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
+                        <template v-else-if="AvgZKRewards.value === 'Monthly'">
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.ecp[0].rewards_avg_month)}}
+                          </b>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_month >= overviewData.value.ecp[1].rewards_avg_month ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_month >= overviewData.value.ecp[1].rewards_avg_month?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_month - overviewData.value.ecp[1].rewards_avg_month)}}</h6>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
+                        <template v-else>
+                          <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                            {{replaceFormat(overviewData.value.ecp[0].rewards_avg_year)}}
+                          </b>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_year >= overviewData.value.ecp[1].rewards_avg_year ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_year >= overviewData.value.ecp[1].rewards_avg_year?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_year - overviewData.value.ecp[1].rewards_avg_year)}}</h6>
+                          <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
+                        </template>
                       </div>
                     </el-col>
                   </el-row>
@@ -241,47 +303,53 @@
                   <template #label>
                     <span class="font-14">Swan Chain</span>
                   </template>
-                  <el-row :gutter="18">
+                  <el-row :gutter="18" v-if="overviewData.value.swan && overviewData.value.swan.length>0">
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total Addresses</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.swan[0].total_addresses)}}
                         </b>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_addresses >= overviewData.value.swan[1].total_addresses ? 'up': 'down'}`">{{overviewData.value.swan[0].total_addresses >= overviewData.value.swan[1].total_addresses?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_addresses - overviewData.value.swan[1].total_addresses)}}</h6>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total Contracts(24H)</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.swan[0].total_contracts)}}
                         </b>
-                        <h6 class="font-22 weight-4 text-right t" :class="{'up': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h>=0,'down': providerBody.totalData.new_smart_contracts_24h&&providerBody.totalData.new_smart_contracts_24h<0}">{{providerBody.totalData.new_smart_contracts_24h?providerBody.totalData.new_smart_contracts_24h>=0?'+':'-':''}}{{replaceFormat(providerBody.totalData.new_smart_contracts_24h)}}</h6>
-                        <h6 class="font-12 weight-4 text-right t">24h change</h6>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_contracts >= overviewData.value.swan[1].total_contracts ? 'up': 'down'}`">{{overviewData.value.swan[0].total_contracts >= overviewData.value.swan[1].total_contracts?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_contracts - overviewData.value.swan[1].total_contracts)}}</h6>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Transactions Today</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{overviewData.value.swan.length>1 ? replaceFormat(overviewData.value.swan[0].total_txns - overviewData.value.swan[1].total_txns) : replaceFormat(overviewData.value.swan[0].total_txns)}}
                         </b>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total Transactions</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.swan[0].total_txns)}}
                         </b>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_txns >= overviewData.value.swan[1].total_txns ? 'up': 'down'}`">{{overviewData.value.swan[0].total_txns >= overviewData.value.swan[1].total_txns?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_txns - overviewData.value.swan[1].total_txns)}}</h6>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                     <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                       <div class="grid-content">
                         <h6 class="font-12 weight-4 text-center">Total Accounts</h6>
-                        <b v-loading="providersLoad" class="flex flex-ai-center flex-jc-center font-30 weight-4 text-center">
-                          {{providerBody.totalData.smart_contracts?replaceFormat(providerBody.totalData.smart_contracts):'-'}}
+                        <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-26 weight-4 text-center">
+                          {{replaceFormat(overviewData.value.swan[0].total_accounts)}}
                         </b>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-22 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_accounts >= overviewData.value.swan[1].total_accounts ? 'up': 'down'}`">{{overviewData.value.swan[0].total_accounts >= overviewData.value.swan[1].total_accounts?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_accounts - overviewData.value.swan[1].total_accounts)}}</h6>
+                        <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                       </div>
                     </el-col>
                   </el-row>
@@ -320,9 +388,9 @@
             </div>
             <div class='chart-trends' id='chart-GPU' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
             <div class="date">
-              <el-select v-model="weekList.value" placeholder="Select" size="small">
+              <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
                 <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-                  <div class="font-14">{{item.label}}</div>
+                  <div class="flex flex-ai-center font-14">{{item.label}}</div>
                 </el-option>
               </el-select>
             </div>
@@ -338,7 +406,7 @@
             <div class="date">
               <el-select v-model="weekList.value" placeholder="Select" size="small">
                 <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-                  <div class="font-14">{{item.label}}</div>
+                  <div class="flex flex-ai-center font-14">{{item.label}}</div>
                 </el-option>
               </el-select>
             </div>
@@ -354,7 +422,7 @@
             <div class="date">
               <el-select v-model="weekList.value" placeholder="Select" size="small">
                 <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-                  <div class="font-14">{{item.label}}</div>
+                  <div class="flex flex-ai-center font-14">{{item.label}}</div>
                 </el-option>
               </el-select>
             </div>
@@ -370,7 +438,7 @@
             <div class="date">
               <el-select v-model="weekList.value" placeholder="Select" size="small">
                 <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-                  <div class="font-14">{{item.label}}</div>
+                  <div class="flex flex-ai-center font-14">{{item.label}}</div>
                 </el-option>
               </el-select>
             </div>
@@ -456,7 +524,7 @@
               </router-link>
             </div>
             <!-- providerBody.ubiTableData -->
-            <el-table :data="providersData" empty-text="No Data" v-loading="providersTableLoad">
+            <el-table :data="providersECPData" empty-text="No Data" v-loading="providersTableLoad">
               <el-table-column type="index" min-width="70">
                 <template #header>
                   <div class="font-14 weight-4">Ranking</div>
@@ -468,8 +536,8 @@
                 </template>
                 <template #default="scope">
                   <div class="flex flex-ai-center flex-jc-center nowrap copy-style">
-                    <span class="name-style" @click="handleCP(scope.row)">{{hiddAddress(scope.row.cp_account_address)}}</span>
-                    <svg @click="copyContent(scope.row.cp_account_address, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
+                    <span class="name-style" @click="handleCP(scope.row)">{{hiddAddress(scope.row.owner_addr)}}</span>
+                    <svg @click="copyContent(scope.row.owner_addr, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
                       <path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z"
                         p-id="2310" fill="#b5b7c8"></path>
                       <path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2311" fill="#b5b7c8"></path>
@@ -532,17 +600,29 @@ import gpuJSON from '@/assets/js/gpuData.json'
 import gpuJSONTotal from '@/assets/js/gpuDataTotal.json'
 import { Search } from '@element-plus/icons-vue'
 import { currentNetwork, explorerLink } from '@/utils/storage'
-import { getOverviewData } from "@/api/overview"
-import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@/utils/common';
+import { getOverviewData, statsEchartsData, statsOverviewData } from "@/api/overview"
+import { copyContent, dataGPU, getDateRange, hiddAddress, replaceFormat, unifyNumber } from '@/utils/common';
+import dataListFCPArray from '@/assets/static/js/cplist.ts'
+import dataListECPArray from '@/assets/static/js/ecplist.ts'
 
 
     const bodyWidth = ref(document.body.clientWidth > 1440 ? 42 : 28)
     const route = useRoute()
     const router = useRouter()
     const gmtTime = new Date().toGMTString()
+    const overviewData = reactive({
+      value: {
+        fcp: [],
+        ecp: [],
+        location: [],
+        swan: []
+      }
+    })
+    const overviewLoad = ref(false)
     const providersLoad = ref(false)
     const providersTableLoad = ref(false)
     const providersData = ref([])
+    const providersECPData = ref([])
     const providerBody = reactive({
       data: {},
       ubiData: {},
@@ -610,13 +690,41 @@ import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@
     }
     async function init () {
       try{
+        overviewLoad.value = true
+        const overviewRes = await statsOverviewData()
+        overviewData.value = overviewRes?.data ?? {}
+        overviewLoad.value = false
+        const location = overviewRes?.data?.location ?? []
+        drawChart(location)
+      }catch{overviewLoad.value = false}
+    }
+    async function initEcharts () {
+      try{
+        cpLoad.value = true
+
+        const weekRange = getDateRange(weekList.value);
+        const params = {
+          from: weekRange.start,
+          to: weekRange.end
+        }
+        const echartsRes = await statsEchartsData(params)
+        const data = echartsRes?.data ?? {}
+        changetype(data)
+      }catch{ cpLoad.value = false}
+    }
+    async function initList () {
+      try{
         providersTableLoad.value = true
         const params = {
           limit: 10,
           offset: 0
         }
-        const providerRes = getOverviewData(params)
+        const providerRes = dataListFCPArray
+        // const providerRes = await getOverviewData(params)
         providersData.value = providerRes?.data?.providers ?? []
+
+        const providerECPRes = dataListECPArray
+        providersECPData.value = providerECPRes?.data?.list ?? []
         providersTableLoad.value = false
       }catch{console.error}
     }
@@ -634,10 +742,13 @@ import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@
     }
     function reset (type) {
       providersData.value = []
+      providersECPData.value = []
       providerBody.ubiTableData = []
       providersLoad.value = false
       providersTableLoad.value = false
       if (type) init()
+      initList()
+      initEcharts()
       getCounters()
     }
     let chart = null
@@ -813,21 +924,7 @@ import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@
               // shadowColor: '#7ca3fb'
               shadowColor: 'transparent'
             },
-            data: [
-              {
-                "city": "Test",
-                "value": [
-                  -88.535,
-                  45.8639
-                ]
-              },
-              {
-                "city": "Test001",
-                "value": [
-                  78.535,
-                  35.8639
-                ]
-              }],
+            data: dataArr,
             roam: true,
             symbolSize: 8,
             zlevel: 1
@@ -835,15 +932,15 @@ import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@
         ]
       })
     }
-    const changetype = async () => {
+    const changetype = async (data) => {
       const machart_resource = echarts.init(document.getElementById("chart-Resource"));
       const machart_fog = echarts.init(document.getElementById("chart-Fog"));
       const machart_gpu = echarts.init(document.getElementById("chart-GPU"));
       const machart_edge = echarts.init(document.getElementById("chart-Edge"));
 
-      const gpuData = await dataGPU(gpuJSON)
-      const gpuTotalData = await dataGPU(gpuJSONTotal)
-      // console.log(gpuData)
+      const gpuData = await dataGPU(data.gpu, 'active')
+      const gpuTotalData = await dataGPU(data.gpu, 'total')
+      console.log(gpuData)
 
       const option1 = {
         tooltip: {
@@ -1122,6 +1219,7 @@ import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@
             // params 是一个数组，包含了每个系列的数据信息
             var result = params[0].name + '<br/>'; // X轴的值
             params.forEach(function (item) {
+              console.log(item)
               // 遍历每个系列的数据
               // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
               // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
@@ -1188,7 +1286,7 @@ import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@
             fontSize: 12,
             fontWeight: 400,
             color: '#7c889b',
-            formatter: '{value}%'
+            formatter: '{value}'
           },
           interval: 50,
           splitLine: {
@@ -1391,14 +1489,6 @@ import { copyContent, dataGPU, hiddAddress, replaceFormat, unifyNumber } from '@
     onMounted(async () => {
       echarts.registerMap('worldHq', worldGeoJSON)
       reset('init')
-      drawChart([{
-        "city": "Test3333",
-        "value": [
-          100.535,
-          55.8639
-        ]
-      }])
-      changetype()
     })
 </script>
 
