@@ -62,3 +62,21 @@ export function statsEchartsData(params: any) {
       params
   })
 }
+
+export function getCPsECPListData(params: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/ecps`,
+      method: 'get',
+      params
+  })
+}
+
+export function getCPsFCPListData(params: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/fcps`,
+      method: 'get',
+      params
+  })
+}

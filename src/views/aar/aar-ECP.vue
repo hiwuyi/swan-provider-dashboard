@@ -34,59 +34,6 @@
         </el-row>
 
         <el-table :data="providerBody.ubiTableData" @filter-change="handleFilterECPChange" @expand-change="expandChange" :row-key="getRowKeys" :expand-row-keys="expands" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
-          <el-table-column type="expand" width="40">
-            <template #default="props">
-              <div class="service-body" v-if="props.row.resources">
-                <div v-for="n in props.row.resources" :key="n" class="list">
-                  <div class="li-title text-left">Machine ID: {{n.machine_id}}</div>
-                  <ul>
-                    <li>
-                      <div class="li-body">
-                        <p :class="{'t':true, 't-capitalize': true}">vcpu</p>
-                        <p>
-                          <strong>{{replaceFormat(n.vcpu.free)}}</strong>free</p>
-                        <p>
-                          <strong>{{replaceFormat(n.vcpu.total)}}</strong>total</p>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="li-body">
-                        <p :class="{'t':true}">memory</p>
-                        <p>
-                          <strong>{{sizeChange(n.memory.free)}}</strong>free</p>
-                        <p>
-                          <strong>{{sizeChange(n.memory.total)}}</strong>total</p>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="li-body">
-                        <p :class="{'t':true}">storage</p>
-                        <p>
-                          <strong>{{sizeChange(n.storage.free)}}</strong>free</p>
-                        <p>
-                          <strong>{{sizeChange(n.storage.total)}}</strong>total</p>
-                      </div>
-                    </li>
-                  </ul>
-                  <div class="li-title text-left">GPU Source</div>
-                  <ul>
-                    <li class="m-r" style="width:100%;">
-                      <div class="flex flex-ai-center">
-                        <div v-for="g in n.gpu.gpus" :key="g" :class="{'li-body':true}">
-                          <p :class="{'t':true, 't-capitalize': true}">{{g.model}} (gpu)</p>
-                          <p>
-                            <strong>{{replaceFormat(g.free)}}</strong>free</p>
-                          <p>
-                            <strong>{{replaceFormat(g.total)}}</strong>total</p>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="service-body text-center" v-else>No Data</div>
-            </template>
-          </el-table-column>
           <el-table-column prop="contract_addr" label="CP Account Address" min-width="140">
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
@@ -184,14 +131,10 @@
         </div>
       </div>
     </div>
-
-    <vm-drawer v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-drawer>
   </section>
 </template>
 
 <script setup lang="ts">
-import vmDrawer from "@/components/vmDrawer.vue"
-import { metaAddress } from "@/utils/storage";
 import {
   Search
 } from '@element-plus/icons-vue'
@@ -321,9 +264,6 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
       networkZK.cp_addr = ''
       networkZK.node_id = ''
       getUBITable()
-    }
-    function hardClose (dialog, type) {
-      vmOperate.centerDrawerVisible = dialog
     }
     onMounted(async () => {
       reset('init')

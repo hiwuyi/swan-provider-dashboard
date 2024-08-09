@@ -26,10 +26,10 @@ export function getCPsBalancesData(params: any) {
   })
 }
 
-export function getCPsECPListData(params: any) {
+export function getCPsEchartsData(params: any, addr: any) {
   return request({
       headers: {},
-      url: `${import.meta.env.VITE_BASE_URL}v1/ecps`,
+      url: `${import.meta.env.VITE_BASE_URL}v1/cps/${addr}/data`,
       method: 'get',
       params
   })

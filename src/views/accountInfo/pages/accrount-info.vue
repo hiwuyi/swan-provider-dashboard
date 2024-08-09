@@ -88,13 +88,13 @@
               <el-row class="m">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
-                    <span>FCP Collateral Balance:</span>
+                    <span>Collateral Balance:</span>
                     <span class="text-right">{{balanceData?.fcp_collateral?.balance}} SWANC</span>
                   </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
-                    <span>FCP Locked Balance: </span>
+                    <span>Locked Balance: </span>
                     <span>{{balanceData?.fcp_collateral?.locked}} SWANC</span>
                   </div>
                 </el-col>
@@ -111,13 +111,13 @@
               <el-row class="m">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
-                    <span>ECP Collateral Balance:</span>
+                    <span>Collateral Balance:</span>
                     <span class="text-right">{{balanceData?.ecp_collateral?.balance}} SWANC</span>
                   </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
-                    <span>ECP Locked Balance: </span>
+                    <span>Locked Balance: </span>
                     <span>{{balanceData?.ecp_collateral?.locked}} SWANC</span>
                   </div>
                 </el-col>
@@ -155,7 +155,7 @@
 <script setup lang="ts">
 import vmDialog from "@/components/vmDialog.vue"
 import { explorerLink, signature } from "@/utils/storage"
-import { getCPsBalancesData, getCPsData } from "@/api/cp-profile"
+import { getCPsBalancesData } from "@/api/cp-profile"
 import { copyContent } from "@/utils/common"
 
 const bodyWidth = ref(document.body.clientWidth > 1440 ? 32 : 22)

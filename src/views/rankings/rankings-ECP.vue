@@ -170,14 +170,11 @@
         </div>
       </div>
     </div>
-
-    <vm-drawer v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-drawer>
   </section>
 </template>
 
 <script setup lang="ts">
 import { getOverviewECPData } from "@/api/overview";
-import vmDrawer from "@/components/vmDrawer.vue"
 import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from "@/utils/common";
 import {
   Search
@@ -204,10 +201,6 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
       contract_address: '',
       owner_addr: '',
       node_id: ''
-    })
-    const vmOperate = reactive({
-      centerDrawerVisible: false,
-      row: {}
     })
 
     function handleSizeChange (val) { }
@@ -281,18 +274,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
       getUBITable()
     }
     async function handleSelect (key, row, type) {
-      // console.log(key, index, row) 
-      // switch (key) {
-      //   case 'ranking':
-      //     vmOperate.row = row
-      //     vmOperate.row.type = type
-      //     vmOperate.centerDrawerVisible = true
-      //     break;
-      // }
       router.push({ name: 'accountInfo', params: { cp_addr: type } })
-    }
-    function hardClose (dialog, type) {
-      vmOperate.centerDrawerVisible = dialog
     }
     onMounted(async () => {
       reset('init')

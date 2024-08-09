@@ -18,7 +18,7 @@ function getGitCommitHash() {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
+  base: '/',
   build: {
     rollupOptions: {
       output: {

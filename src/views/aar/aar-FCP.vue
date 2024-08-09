@@ -26,72 +26,9 @@
             </div>
           </el-col>
         </el-row>
+
         <el-table ref="singleTableRef" :data="providersData" @filter-change="handleFilterChange" @expand-change="expandV2Change" :row-key="getRowKeysV2" :expand-row-keys="expands" style="width: 100%" empty-text="No Data" v-loading="providersTableLoad">
-          <el-table-column type="expand" width="40">
-            <template #default="props">
-              <div class="service-body" v-if="props.row.machines && props.row.machines.length>0">
-                <div v-for="n in props.row.machines" :key="n" class="list">
-                  <!-- <div class="li-title">CP Account Address: {{props.row.cp_account_address}}</div> -->
-                  <ul>
-                    <li v-for="(child, vcpuKeys, k) in n.specs" :key="k" v-show="vcpuKeys === 'cpu'">
-                      <div class="li-body">
-                        <p :class="{'t text-left':true, 't-capitalize': vcpuKeys === 'cpu'}">{{vcpuKeys}}</p>
-                        <p>
-                          <strong>{{child.free}}</strong>free</p>
-                        <p>
-                          <strong>{{child.total}}</strong>total</p>
-                        <p>
-                          <strong>{{child.used}}</strong>used</p>
-                      </div>
-                    </li>
-                    <li v-for="(child, memoryKeys, k) in n.specs" :key="k" v-show="memoryKeys === 'memory'">
-                      <div class="li-body">
-                        <p :class="{'t':true, 't-capitalize': memoryKeys === 'vcpu'}">{{memoryKeys}}</p>
-                        <p>
-                          <strong>{{child.free}}</strong>free</p>
-                        <p>
-                          <strong>{{child.total}}</strong>total</p>
-                        <p>
-                          <strong>{{child.used}}</strong>used</p>
-                      </div>
-                    </li>
-                    <li v-for="(child, storageKeys, k) in n.specs" :key="k" v-show="storageKeys === 'storage'">
-                      <div class="li-body">
-                        <p :class="{'t':true, 't-capitalize': storageKeys === 'vcpu'}">{{storageKeys}}</p>
-                        <p>
-                          <strong>{{child.free}}</strong>free</p>
-                        <p>
-                          <strong>{{child.total}}</strong>total</p>
-                        <p>
-                          <strong>{{child.used}}</strong>used</p>
-                      </div>
-                    </li>
-                  </ul>
-                  <div class="li-title text-left">GPU Source</div>
-                  <ul>
-                    <li class="m-r" v-for="(child, gpuKeys, k) in n.specs" :key="k" v-show="gpuKeys === 'gpu'" style="width:100%;">
-                      <div class="flex flex-ai-center">
-                        <div v-for="g in child.details" :key="g" :class="{'li-body':true}">
-                          <p :class="{'t':true, 't-capitalize': gpuKeys === 'gpu'}">{{g.product_name}} ({{gpuKeys}})</p>
-                          <p>
-                            <strong>{{g.fb_memory_usage.free}}</strong>free</p>
-                          <p>
-                            <strong>{{g.fb_memory_usage.total}}</strong>total</p>
-                          <p>
-                            <strong>{{g.fb_memory_usage.used}}</strong>used</p>
-                          <p>Status:
-                            <strong>{{g.status}}</strong>
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="service-body text-center" v-else>No Data</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="cp_account_address" label="CP Account Address" min-width="180">
+          <el-table-column prop="cp_account_address" label="CP Account Address" min-width="140">
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
                 <img v-if="scope.$index < 2 && pagin.pageNo <= 1" :src="badgeIcon01" alt="">
@@ -116,7 +53,7 @@
             </template>
           </el-table-column>
           <!-- <el-table-column prop="country" label="Country" /> -->
-          <el-table-column prop="active_deployment" label="Active deployment" width="130" />
+          <el-table-column prop="active_deployment" label="Active deployment" min-width="130" />
           <!-- <el-table-column prop="score" label="Score" width="120" /> -->
           <el-table-column prop="gpu_list" label="GPU" min-width="140">
             <template #default="scope">
@@ -165,181 +102,155 @@
         </div>
       </div>
     </div>
-
-    <vm-drawer v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-drawer>
   </section>
 </template>
 
 <script setup lang="ts">
-  import vmDrawer from "@/components/vmDrawer.vue"
-  import {
-    Search
-  } from '@element-plus/icons-vue'
-  import badgeIcon01 from "@/assets/images/icons/badge-1.png"
-  import badgeIcon02 from "@/assets/images/icons/badge-2.png"
-  import badgeIcon03 from "@/assets/images/icons/badge-3.png"
-  import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from "@/utils/common";
-  import { getCPlistData, getOverviewData, searchCPData } from "@/api/overview";
-  import { baseurl } from "@/utils/storage";
+import {
+  Search
+} from '@element-plus/icons-vue'
+import badgeIcon01 from "@/assets/images/icons/badge-1.png"
+import badgeIcon02 from "@/assets/images/icons/badge-2.png"
+import badgeIcon03 from "@/assets/images/icons/badge-3.png"
+import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from "@/utils/common";
+import { getCPlistData, searchCPData } from "@/api/overview";
 
-  const route = useRoute()
-  const router = useRouter()
-    const providersLoad = ref(false)
-    const providersTableLoad = ref(false)
-    const providersData = ref([])
-    const pagin = reactive({
-      pageSize: 10,
-      pageNo: 1,
-      total: 0,
-      total_deployments: 0,
-      active_applications: 0
-    })
-    const small = ref(false)
-    const background = ref(false)
-    const cpLoad = ref(false)
-    const networkInput = reactive({
-      contract_address: '',
-      name: ''
-    })
-    const vmOperate = reactive({
-      centerDrawerVisible: false,
-      row: {}
-    })
-    const paramsFilter = reactive({
-      data: {
-        online: 0,
-        total: 1
-      }
-    })
-    const expands = ref([])
+const providersLoad = ref(false)
+const providersTableLoad = ref(false)
+const providersData = ref([])
+const pagin = reactive({
+  pageSize: 10,
+  pageNo: 1,
+  total: 0,
+  total_deployments: 0,
+  active_applications: 0
+})
+const small = ref(false)
+const background = ref(false)
+const networkInput = reactive({
+  contract_address: '',
+  name: ''
+})
+const paramsFilter = reactive({
+  data: {
+    online: 0,
+    total: 1
+  }
+})
+const expands = ref([])
 
-    function handleSizeChange (val) {
-      pagin.pageSize = val
-      pagin.pageNo = 1
-      init()
+function handleSizeChange (val) {
+  pagin.pageSize = val
+  pagin.pageNo = 1
+  init()
+}
+async function handleCurrentChange (currentPage) {
+  pagin.pageNo = currentPage
+  init()
+}
+async function init () {
+  providersTableLoad.value = true
+  providersData.value = []
+  try{
+    const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
+    let params = networkInput.contract_address ? {
+      cp_account_address: networkInput.contract_address
+    } : {
+        limit: pagin.pageSize,
+        offset: page * pagin.pageSize
     }
-    async function handleCurrentChange (currentPage) {
-      pagin.pageNo = currentPage
-      init()
-    }
-    async function init () {
-      providersTableLoad.value = true
-      providersData.value = []
-      try{
-        const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
-        let params = networkInput.contract_address ? {
-          cp_account_address: networkInput.contract_address
-        } : {
-            limit: pagin.pageSize,
-            offset: page * pagin.pageSize
-        }
-        if(!networkInput.contract_address) params = Object.assign({}, params, paramsFilter.data)
-        const providerRes = networkInput.contract_address ? await searchCPData(params) : await getCPlistData(params)
-        console.log(providerRes)
-        pagin.total = providerRes?.data?.list_providers_cnt ?? 0
-        providersData.value = await getList(networkInput.contract_address ? providerRes?.data?.provider : providerRes?.data?.providers)
-        if (networkInput.contract_address) singleTableRef.value?.clearFilter?.()
-      } catch { console.error }
-      providersTableLoad.value = false
-    }
-    const handleFilterChange = (filters) => {
-      for (const key in filters) {
-        if (key === 'status') {
-          const result = filters.status[0] ?? ''
-          if (result === '') paramsFilter.data.total = 1
-          else {
-            paramsFilter.data.online = result
-            paramsFilter.data.total = 0
-          }
-        }
+    if(!networkInput.contract_address) params = Object.assign({}, params, paramsFilter.data)
+    const providerRes = networkInput.contract_address ? await searchCPData(params) : await getCPlistData(params)
+    console.log(providerRes)
+    pagin.total = providerRes?.data?.list_providers_cnt ?? 0
+    providersData.value = await getList(networkInput.contract_address ? providerRes?.data?.provider : providerRes?.data?.providers)
+    if (networkInput.contract_address) singleTableRef.value?.clearFilter?.()
+  } catch { console.error }
+  providersTableLoad.value = false
+}
+const handleFilterChange = (filters) => {
+  for (const key in filters) {
+    if (key === 'status') {
+      const result = filters.status[0] ?? ''
+      if (result === '') paramsFilter.data.total = 1
+      else {
+        paramsFilter.data.online = result
+        paramsFilter.data.total = 0
       }
-      handleCurrentChange(1, 1)
     }
-    function expandV2Change (row, expandedRows) {
-      // console.log(row, expandedRows)
-      if (expandedRows.length) {
-        expands.value = [];
-        if (row) expands.value.push(row.cp_account_address);
-      } else expands.value = [];
-    }
-    let getRowKeysV2 = (row) => {
-      return row.cp_account_address;
-    }
-    async function getList (list) {
-      let l = Array.isArray(list) ? list : [list]
-      l.forEach((element) => {
-        element.gpu_list = []
-        element.multiAddress = []
-        try {
-          const n = element.name || element.multi_address
-          n.forEach(n => {
-            const ip = n.split('/')
-            const address = `${ip[2]}:${ip[4]}`
-            element.multiAddress.push(address)
-          })
-        } catch{
-          element.multiAddress.push(element.name)
-        }
-        try {
-          element.machines = element.machines || element.computer_provider ?.machines || []
-          element.machines.forEach((machines) => {
-            if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
-              machines.specs.gpu.details.forEach((gpu) => {
-                if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
-                // const field = 'name';
-                // const containsValue = element.gpu_list.some(item => item[field].includes(gpu.product_name));
-                // if (!containsValue) element.gpu_list.push({
-                //   name: gpu.product_name,
-                //   status: gpu.status
-                // })
-              })
-            }
-          })
-        } catch{ }
+  }
+  handleCurrentChange(1, 1)
+}
+function expandV2Change (row, expandedRows) {
+  // console.log(row, expandedRows)
+  if (expandedRows.length) {
+    expands.value = [];
+    if (row) expands.value.push(row.cp_account_address);
+  } else expands.value = [];
+}
+let getRowKeysV2 = (row) => {
+  return row.cp_account_address;
+}
+async function getList (list) {
+  let l = Array.isArray(list) ? list : [list]
+  l.forEach((element) => {
+    element.gpu_list = []
+    element.multiAddress = []
+    try {
+      const n = element.name || element.multi_address
+      n.forEach(n => {
+        const ip = n.split('/')
+        const address = `${ip[2]}:${ip[4]}`
+        element.multiAddress.push(address)
       })
-      return l
+    } catch{
+      element.multiAddress.push(element.name)
     }
-    const searchProvider = debounce(async function () {
-      pagin.pageSize = 10
-      pagin.pageNo = 1
-      init()
-    }, 700)
-    function clearProvider () {
-      networkInput.contract_address = ''
-      pagin.pageSize = 10
-      pagin.pageNo = 1
-      init()
-    }
-    function reset (type) {
-      pagin.total = 0
-      pagin.total_deployments = 0
-      pagin.active_applications = 0
-      pagin.pageSize = 10
-      pagin.pageNo = 1
-      providersData.value = []
-      providersLoad.value = false
-      providersTableLoad.value = false
-      networkInput.contract_address = ''
-      init()
-    }
-    async function handleSelect (key, row, type) {
-      // console.log(key, index, row) 
-      // switch (key) {
-      //   case 'ranking':
-      //     vmOperate.row = row
-      //     vmOperate.row.type = type
-      //     vmOperate.centerDrawerVisible = true
-      //     break;
-      // }
-      router.push({ name: 'accountInfo', params: { type: 'FCP' } })
-    }
-    function hardClose (dialog, type) {
-      vmOperate.centerDrawerVisible = dialog
-    }
-    onMounted(async () => {
-      reset('init')
-    })
-  
+    try {
+      element.machines = element.machines || element.computer_provider ?.machines || []
+      element.machines.forEach((machines) => {
+        if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
+          machines.specs.gpu.details.forEach((gpu) => {
+            if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
+            // const field = 'name';
+            // const containsValue = element.gpu_list.some(item => item[field].includes(gpu.product_name));
+            // if (!containsValue) element.gpu_list.push({
+            //   name: gpu.product_name,
+            //   status: gpu.status
+            // })
+          })
+        }
+      })
+    } catch{ }
+  })
+  return l
+}
+const searchProvider = debounce(async function () {
+  pagin.pageSize = 10
+  pagin.pageNo = 1
+  init()
+}, 700)
+function clearProvider () {
+  networkInput.contract_address = ''
+  pagin.pageSize = 10
+  pagin.pageNo = 1
+  init()
+}
+function reset (type) {
+  pagin.total = 0
+  pagin.total_deployments = 0
+  pagin.active_applications = 0
+  pagin.pageSize = 10
+  pagin.pageNo = 1
+  providersData.value = []
+  providersLoad.value = false
+  providersTableLoad.value = false
+  networkInput.contract_address = ''
+  init()
+}
+onMounted(async () => {
+  reset('init')
+})
 </script>
 
 <style lang="less" scoped>
