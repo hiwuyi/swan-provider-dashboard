@@ -3,28 +3,21 @@
     <div class="swan-logo flex flex-ai-center nowrap">
       <div class="flex flex-ai-center flex-jc-between swan-icon">
         <img :src="swanLogo" @click="openPage('https://www.swanchain.io/')" />
-
-        <div class="flex flex-ai-center mobileShow">
-          <!-- @change="handleClick" -->
-          <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
-            <template #prefix>
-              <div class="flex flex-ai-center font-16">
-                <i class="icon icon-swanProxima"></i>
-                {{explorerList.value}}
-              </div>
-            </template>
-            <el-option v-for="item in explorerList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-16">
-                <i class="icon icon-swanProxima"></i>
-                {{item.label}}
-              </div>
-            </el-option>
-          </el-select>
-        </div>
       </div>
       <div class="flex flex-ai-center nowrap swan-right font-16">
-        <div class="flex flex-ai-center pcShow">
+        <div class="flex flex-ai-center flex-jc-right nowrap swan-right-search w-100">
           <!-- @change="handleClick" -->
+          <el-input
+            v-model="contractAddress"
+            placeholder="Contract Address"
+            class="input-with-select mr-10"
+          >
+            <template #append>
+              <el-button :disabled="!contractAddress" @click="toCPProfile">
+                <el-icon><Search /></el-icon>
+              </el-button>
+            </template>
+          </el-input>
           <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
             <template #prefix>
               <div class="flex flex-ai-center font-16">
@@ -236,7 +229,7 @@
 <script setup lang="ts">
 import web3Modal from "../web3-modal.vue"
 import {
-  DocumentCopy, Avatar, Delete, View, Menu
+  DocumentCopy, Avatar, Delete, View, Menu, Search
 } from '@element-plus/icons-vue'
 import * as echarts from "echarts"
 import SpaceTokenABI from '@/utils/abi/SwanToken.json'
@@ -249,6 +242,7 @@ import { apiTokenData, apiTokenDelete, cpCollateralData, getApiTokenData } from 
 import web3Init, { checkNetwork } from "@/utils/login"
 
     
+const contractAddress = ref('')
     const bodyWidth = ref(document.body.clientWidth > 600 ? '450px' : '95%')
     const route = useRoute()
     const router = useRouter()
@@ -301,6 +295,10 @@ import web3Init, { checkNetwork } from "@/utils/login"
     let collateralContract
 
 
+    function toCPProfile() {
+      if (!contractAddress.value) return
+      router.push({ name: 'accountInfo', params: { cp_addr: contractAddress.value } })
+    }
     async function handleKeyChange (currentPage) {
       paginKey.pageNo = currentPage
       getdataList()
@@ -372,7 +370,7 @@ import web3Init, { checkNetwork } from "@/utils/login"
       else if (key === 'rankings-ecp') router.push({ name: 'rankingsECP' })
       else if (key === 'aar' || key === 'aar-fcp') router.push({ name: 'aarFCP' })
       else if (key === 'aar-ecp') router.push({ name: 'aarECP' })
-      else if (key === 'accountInfo') router.push({ name: 'accountInfo', params: { type: 'FCP' } })
+      else if (key === 'accountInfo') router.push({ name: 'accountInfo', params: { cp_addr: metaAddress.value } })
       else if (key === 'resource') router.push({ name: 'resource' })
     }
     async function cpCollateral () {
@@ -506,11 +504,25 @@ import web3Init, { checkNetwork } from "@/utils/login"
       }
     }
     .swan-right {
+      min-width: 50%;
       @media screen and (max-width: 600px) {
         flex-wrap: wrap;
         justify-content: flex-end;
         width: 100%;
         margin: 6px 0 0;
+      }
+      .swan-right-search {
+        :deep(.input-with-select) {
+          width: 400px;
+          background-color: var(--color-light);
+          border-radius: 0.1rem;
+          @media screen and (max-width: 768px) {
+            width: 250px;
+          }
+          .el-input__wrapper{
+            box-shadow: none;
+          }
+        }
       }
     }
     .pcShow {

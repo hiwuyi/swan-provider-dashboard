@@ -27,17 +27,17 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res) => {
-    const { code, message, data, status, detail } = res.data
+    const { code, message, data, status, detail, msg } = res.data
     if (status === 'success' || code == 0) return res.data
     else if (res?.data?.code === undefined && res?.data?.status === undefined) return res.data
-    else messageTip('error', message || detail)
+    else messageTip('error', message || detail || msg)
     throw res.data
   },
   (error) => {
     console.error('response error', error)
     if (error?.response?.data) {
-      const { message, status, detail } = error.response.data
-      messageTip('error', message || detail)
+      const { message, status, detail, msg } = error.response.data
+      messageTip('error', message || detail || msg)
       if (status === 401) {
         // await timeout(2000)
         // urlClear()

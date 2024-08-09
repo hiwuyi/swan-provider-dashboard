@@ -54,7 +54,7 @@ export default [
     }
   },
   {
-    path: '/cp-profile',
+    path: '/cp-profile/:cp_addr',
     name: 'accountInfo',
     component: () => import("../views/accountInfo/accountInfo-index.vue"),
     meta: {

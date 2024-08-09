@@ -118,9 +118,9 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Price from </span>
-              <el-input v-model="networkInput" placeholder=" " class="font-14 small-spacing" @chang="searchProvider" @input="searchProvider" />
+              <el-input v-model="networkInput" placeholder=" " class="font-14 small-spacing" />
               <span class="font-14">to </span>
-              <el-input v-model="networkInput" placeholder=" " class="font-14 small-spacing" @chang="searchProvider" @input="searchProvider" />
+              <el-input v-model="networkInput" placeholder=" " class="font-14 small-spacing" />
               <span class="font-14">$ &nbsp;&nbsp;&nbsp;&nbsp;</span>
             </div>
           </el-col>
@@ -455,7 +455,7 @@ import * as echarts from "echarts"
             data: [10, 13, 11, 34, 50, 90, 20],
             color: '#699bff',
             showSymbol: false,
-            smooth: true
+            smooth: false
           },
           {
             name: 'Memory',
@@ -463,7 +463,7 @@ import * as echarts from "echarts"
             data: [35, 12, 59, 24, 29, 83, 31],
             color: '#52ce7c',
             showSymbol: false,
-            smooth: true
+            smooth: false
           },
           {
             name: 'Storage',
@@ -471,7 +471,7 @@ import * as echarts from "echarts"
             data: [6, 23, 20, 75, 59, 30, 41],
             color: '#0046b7',
             showSymbol: false,
-            smooth: true
+            smooth: false
           },
           {
             name: 'GPU',
@@ -479,7 +479,7 @@ import * as echarts from "echarts"
             data: [26, 63, 30, 85, 50, 10, 21],
             color: '#93c605',
             showSymbol: false,
-            smooth: true
+            smooth: false
           }
         ]
       }

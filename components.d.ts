@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    copy: typeof import('./src/components/vmDrawer copy.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -50,6 +51,7 @@ declare module 'vue' {
     UBIHistory: typeof import('./src/components/UBIHistory.vue')['default']
     VmDialog: typeof import('./src/components/vmDialog.vue')['default']
     VmDrawer: typeof import('./src/components/vmDrawer.vue')['default']
+    'VmDrawer copy': typeof import('./src/components/vmDrawer copy.vue')['default']
     Web3Modal: typeof import('./src/components/web3-modal.vue')['default']
   }
   export interface ComponentCustomProperties {

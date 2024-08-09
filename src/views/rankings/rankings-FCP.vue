@@ -10,19 +10,19 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Contract Address: </span>
-              <el-input class="zk-input" v-model="networkInput.contract_address" placeholder="please enter Contract Address" @chang="searchProvider" @input="searchProvider" />
+              <el-input class="zk-input" v-model="networkInput.contract_address" placeholder="please enter Contract Address" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Name: </span>
-              <el-input class="zk-input" v-model="networkInput.owner_addr" placeholder="please enter CP name" @chang="searchProvider" @input="searchProvider" />
+              <el-input class="zk-input" v-model="networkInput.owner_addr" placeholder="please enter CP name" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="7" :xl="7">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">NodeID: </span>
-              <el-input class="zk-input" v-model="networkInput.node_id" placeholder="please enter NodeID" @chang="searchProvider" @input="searchProvider" />
+              <el-input class="zk-input" v-model="networkInput.node_id" placeholder="please enter NodeID" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="3" :xl="3">
@@ -66,7 +66,7 @@
             <template #default="scope">
               <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.name">
                 <template #reference>
-                  <div class="name-style" @click="handleSelect('ranking', scope.row, 'FCP')">{{scope.row.name}}</div>
+                  <div class="name-style" @click="handleSelect('ranking', scope.row, scope.row.cp_account_address)">{{scope.row.name}}</div>
                 </template>
               </el-popover>
             </template>
@@ -278,7 +278,7 @@ import dataListFCPArray from '@/assets/static/js/cplist.ts'
       //     vmOperate.centerDrawerVisible = true
       //     break;
       // }
-      router.push({ name: 'accountInfo', params: { type: 'FCP' } })
+      router.push({ name: 'accountInfo', params: { cp_addr: type } })
     }
     function hardClose (dialog, type) {
       vmOperate.centerDrawerVisible = dialog

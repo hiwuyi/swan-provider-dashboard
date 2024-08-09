@@ -4,7 +4,7 @@
       <div class="drawer-content font-14" v-if="props.list.type === 'FCP'">
         <div class="flex flex-ai-center flex-jc-between name-title">
           <b class="font-16 weight-4">{{props.list.name}}</b>
-          <router-link v-if="route.name !== 'accountInfo'" :to="{name:'accountInfo', params: {type: 'FCP'}}" class="font-16" @click="closeHandle()">View CP Profile</router-link>
+          <router-link v-if="route.name !== 'accountInfo'" :to="{name:'accountInfo', params: {cp_addr: 'FCP'}}" class="font-16" @click="closeHandle()">View CP Profile</router-link>
         </div>
         <el-row class="font-14 note">
           <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
@@ -92,11 +92,11 @@
                 <span class="blue">{{machines.specs.storage.used}}</span> used
               </p>
             </el-col>
-            <el-col v-show="machines.MachineShow" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
+            <!-- <el-col v-show="machines.MachineShow" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
               <div class="grid-content width">
                 <div class='chart-trends' id='chart-name' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
               </div>
-            </el-col>
+            </el-col> -->
           </el-row>
           <div v-show="machines.MachineShow" class="flex flex-ai-center flex-jc-between name-title">
             <b class="font-16 weight-4">GPU Source</b>
@@ -156,7 +156,7 @@
       <div class="drawer-content font-14" v-if="props.list.type === 'ECP'">
         <div class="flex flex-ai-center flex-jc-between name-title">
           <b class="font-16 weight-4">{{props.list.name}}</b>
-          <router-link v-if="route.name !== 'accountInfo'" :to="{name:'accountInfo', params: {type: 'FCP'}}" class="font-16" @click="closeHandle()">View CP Profile</router-link>
+          <router-link v-if="route.name !== 'accountInfo'" :to="{name:'accountInfo', params: {cp_addr: 'FCP'}}" class="font-16" @click="closeHandle()">View CP Profile</router-link>
         </div>
         <el-row class="font-14 note">
           <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
@@ -244,11 +244,11 @@
                 <span class="blue">{{replaceFormat(byteStorage(machinesECP.storage.total-machinesECP.storage.free))}}</span> used
               </p>
             </el-col>
-            <el-col v-show="machinesECP.MachineShow" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
+            <!-- <el-col v-show="machinesECP.MachineShow" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
               <div class="grid-content width">
                 <div class='chart-trends' id='chart-name' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
               </div>
-            </el-col>
+            </el-col> -->
           </el-row>
           <div v-show="machinesECP.MachineShow" class="flex flex-ai-center flex-jc-between name-title">
             <b class="font-16 weight-4">GPU Source</b>
@@ -309,96 +309,84 @@
         <div class="flex flex-ai-center flex-jc-between header-title">
           <b class="font-16 weight-4">Machine Details</b>
         </div>
-        <div class="font-14 note b" v-if="props.list.computer_provider" v-for="(machines, m) in props.list.computer_provider.machines" :key="m">
+        <div class="font-14 note b">
           <el-row>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
               <p>MachineID: </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
-              <p class="width color text-right" v-if="machines.specs">{{machines.machine_id}}</p>
+              <p class="width color text-right">{{props.list.machine_id}}</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
               <p>Current CPU usage:</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
-              <p class="width color text-right" v-if="machines.specs">
-                <span class="green">{{replaceFormat(machines.specs.cpu.free)}}</span> free
-                <span class="green">{{replaceFormat(machines.specs.cpu.total)}}</span> total
-                <span class="green">{{replaceFormat(machines.specs.cpu.used)}}</span> used
+              <p class="width color text-right">
+                <span class="green">{{replaceFormat(props.list.cpu.free)}}</span> free
+                <span class="green">{{replaceFormat(props.list.cpu.total)}}</span> total
+                <span class="green">{{replaceFormat(props.list.cpu.used)}}</span> used
               </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
               <p>Current Memory usage(GiB):</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
-              <p class="width color text-right" v-if="machines.specs">
-                <span class="orange">{{machines.specs.memory.free}}</span> free
-                <span class="orange">{{machines.specs.memory.total}}</span> total
-                <span class="orange">{{machines.specs.memory.used}}</span> used
+              <p class="width color text-right">
+                <span class="orange">{{ sizeChange(props.list.memory.free, 'GB') }}</span> free
+                <span class="orange">{{ sizeChange(props.list.memory.total, 'GB') }}</span> total
+                <span class="orange">{{ sizeChange(props.list.memory.used, 'GB') }}</span> used
               </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
               <p>Current Storage usage(GiB):</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
-              <p class="width color text-right" v-if="machines.specs">
-                <span class="blue">{{machines.specs.storage.free}}</span> free
-                <span class="blue">{{machines.specs.storage.total}}</span> total
-                <span class="blue">{{machines.specs.storage.used}}</span> used
+              <p class="width color text-right">
+                <span class="blue">{{ sizeChange(props.list.storage.free, 'GB') }}</span> free
+                <span class="blue">{{ sizeChange(props.list.storage.total, 'GB') }}</span> total
+                <span class="blue">{{ sizeChange(props.list.storage.used, 'GB') }}</span> used
               </p>
             </el-col>
-            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
+            <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
               <div class="grid-content width">
                 <div class='chart-trends' id='chart-name' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
               </div>
-            </el-col>
+            </el-col> -->
           </el-row>
           <div class="flex flex-ai-center flex-jc-between name-title">
             <b class="font-16 weight-4">GPU Source</b>
           </div>
-          <el-table v-show="machines.specs && machines.specs.gpu" :data="machines.specs.gpu.details" style="width: 100%" empty-text="No Data">
-            <el-table-column type="product_name" min-width="70">
+          <el-table v-show="props.list.gpu && props.list.gpu.gpus" :data="props.list.gpu.gpus" style="width: 100%" empty-text="No Data">
+            <el-table-column type="model" min-width="70">
               <template #header>
                 <div class="font-14 weight-4">GPU</div>
               </template>
               <template #default="scope">
-                <div>{{scope.row.product_name}}</div>
+                <div>{{scope.row.model}}</div>
               </template>
             </el-table-column>
-            <el-table-column type="status" min-width="80" column-key="status" filterable :filters="[
-              { text: 'Occupied', value: 'Occupied' },
-              { text: 'Available', value: 'Available' }
-            ]" filter-placement="bottom-end" :filter-multiple="false">
-              <template #header>
-                <div class="font-14 weight-4">Status</div>
-              </template>
-              <template #default="scope">
-                <div v-if="scope.row.status" :class="{'text-capitalize': true, 'color-available':scope.row.status.toLowerCase() === 'available', 'color-occupied':scope.row.status.toLowerCase() === 'occupied'}">{{scope.row.status}}</div>
-                <span v-else>-</span>
-              </template>
-            </el-table-column>
-            <el-table-column type="fb_memory_usage.free" min-width="70">
+            <el-table-column type="free" min-width="70">
               <template #header>
                 <div class="font-14 weight-4">Free</div>
               </template>
               <template #default="scope">
-                <div class="color-free">{{scope.row.fb_memory_usage.free}}</div>
+                <div class="color-free">{{replaceFormat(scope.row.free)}}</div>
               </template>
             </el-table-column>
-            <el-table-column type="fb_memory_usage.total" min-width="70">
+            <el-table-column type="total" min-width="70">
               <template #header>
                 <div class="font-14 weight-4">Total</div>
               </template>
               <template #default="scope">
-                <div class="color-total">{{scope.row.fb_memory_usage.total}}</div>
+                <div class="color-total">{{replaceFormat(scope.row.total)}}</div>
               </template>
             </el-table-column>
-            <el-table-column type="fb_memory_usage.used" min-width="70">
+            <el-table-column type="total" min-width="70">
               <template #header>
                 <div class="font-14 weight-4">Used</div>
               </template>
               <template #default="scope">
-                <div class="color-used">{{scope.row.fb_memory_usage.used}}</div>
+                <div class="color-used">{{replaceFormat(scope.row.total-scope.row.free)}}</div>
               </template>
             </el-table-column>
           </el-table>
@@ -409,7 +397,7 @@
 </template>
 
 <script setup lang="ts">
-import { byteStorage, fixedformat, replaceFormat, timeout, unifyNumber } from '@/utils/common';
+import { byteStorage, dataResource, fixedformat, replaceFormat, sizeChange, timeout, unifyNumber } from '@/utils/common';
 import {
   Warning
 } from '@element-plus/icons-vue'
@@ -434,12 +422,19 @@ const props = withDefaults(
     const cpLoad = ref(false)
     const route = useRoute()
 
+    const emits = defineEmits(['hardClose'])
     function closeHandle (type) {
-      context.emit('hardClose', false, type)
+      emits('hardClose', false, type)
     }
-    const changetype = () => {
+    const changetype = async () => {
+      return
       cpLoad.value = true
       const machart_name = echarts.init(document.getElementById("chart-name"));
+
+      const cpuData = await dataResource(props.list.cpu, 'free')
+      const memoryData = await dataResource(props.list.memory, 'free')
+      const storageData = await dataResource(props.list.storage, 'free')
+
       const option1 = {
         tooltip: {
           trigger: 'axis',
@@ -458,16 +453,40 @@ const props = withDefaults(
             var result = params[0].name + '<br/>'; // X轴的值
             params.forEach(function (item) {
               // 遍历每个系列的数据
+              const unit = item.seriesName === "CPU" ? 'CPU' : 'GiB'
+              const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : replaceFormat(sizeChange(item.data.used, 'GB'))
+              const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : replaceFormat(sizeChange(item.data.total, 'GB'))
               var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
               let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% 11/11 GiB' + '<br/>'; // 系列名和对应的值
+              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
             });
             return result;
           }
         },
+        legend: {
+          data: ['CPU', 'Memory', 'Storage'],
+          right: document.documentElement.clientWidth >= 1280 ? '110px' : 'auto',
+          top: document.documentElement.clientWidth >= 1280 ? '0' : '25px',
+          icon: 'circle',
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 20,
+          textStyle: {
+            color: '#95a3bd',
+            fontSize: 11,
+            fontFamily: 'HELVETICA-ROMAN',
+            // lineHeight: 14,
+            rich: {
+              a: {
+                verticalAlign: 'middle',
+              },
+            },
+            padding: [0, 0, -2, 2]
+          }
+        },
         grid: {
-          left: '3%',
-          right: '5%',
+          left: '0',
+          right: '4%',
           bottom: '3%',
           containLabel: true
         },
@@ -477,39 +496,50 @@ const props = withDefaults(
           axisTick: {
             show: false
           },
-          data: ['8/01', '8/02', '8/03', '8/04', '8/05', '8/06', '8/07']
+          axisLabel: {
+            fontSize: 12,
+            // interval: 6,
+            color: '#7c889b',
+            formatter: function (value) {
+              // 使用字符串的 replace 方法将空格替换为换行符
+              return value.split(' ').join('\n');
+            }
+          },
+          data: cpuData.timeArr
         },
         yAxis: {
           type: 'value',
           axisLabel: {
+            fontSize: 12,
+            color: '#7c889b',
             // 使用 formatter 函数格式化标签
             formatter: '{value}%'
           },
-          minInterval: 50
+          interval: 50
         },
         series: [
           {
             name: 'CPU',
             type: 'line',
-            smooth: true,
             showSymbol: false,
-            data: [10, 13, 11, 34, 90, 30, 20],
+            smooth: false,
+            data: cpuData.datum,
             color: '#699bff'
           },
           {
             name: 'Memory',
             type: 'line',
-            smooth: true,
             showSymbol: false,
-            data: [20, 12, 19, 24, 29, 33, 31],
+            smooth: false,
+            data: memoryData.datum,
             color: '#52ce7c'
           },
           {
             name: 'Storage',
             type: 'line',
-            smooth: true,
             showSymbol: false,
-            data: [15, 23, 20, 15, 19, 30, 41],
+            smooth: false,
+            data: storageData.datum,
             color: '#0046b7'
           }
         ]

@@ -86,7 +86,7 @@
 }
 
 .flex-ai-between {
-  align-items: flex-jc-between;
+  align-items: space-between;
 }
 
 .flex-ai-around {

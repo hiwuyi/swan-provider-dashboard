@@ -8,7 +8,7 @@ export const metaAddress = ref('')
 export const signature = ref('')
 export const explorerLink = ref(currentNetwork.value === 'Proxima' ? ELINK.PROXIMAEXPLORER : ELINK.MAINNETEXPLORER)
 export const baseurl = currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_BASEAPI : import.meta.env.VITE_BASEAPI_PROXIMA
-console.log(explorerLink.value)
+
 export function removeStorage(key: string) {
   localStorage.removeItem(key)
 }

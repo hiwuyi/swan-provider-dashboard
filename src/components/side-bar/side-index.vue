@@ -71,7 +71,7 @@ import vFoot from '../footer/footer-index.vue'
       else if (key === 'rankings-ecp') router.push({ name: 'rankingsECP' })
       else if (key === 'aar-fcp') router.push({ name: 'aarFCP' })
       else if (key === 'aar-ecp') router.push({ name: 'aarECP' })
-      else if (key === 'accountInfo') router.push({ name: 'accountInfo', params: { type: 'FCP' } })
+      else if (key === 'accountInfo') router.push({ name: 'accountInfo', params: { cp_addr: metaAddress.value } })
       else if (key === 'resource') router.push({ name: 'resource' })
     }
     async function activeMenu (row) {
@@ -101,7 +101,7 @@ import vFoot from '../footer/footer-index.vue'
   height: calc(100% - 0.65rem);
   padding: 0.4rem 0.15rem 0.25rem;
   align-items: start;
-  align-content: flex-jc-between;
+  align-content: space-between;
   line-height: 1.2;
   &:hover {
     .collapse-button {

@@ -121,11 +121,9 @@ window.addEventListener("resize", function () {
 export function dataGPU (data: any, type:string) {
   // console.log(data)
   const datum = [], timeArr = []
-  // 排序
   data.sort((itema:any, itemb:any) => {
     return itema.timestamp - itemb.timestamp
   })
-  // 循环处理数组
   data.forEach((item:any) => {
     // let time_end = momentFun(item.timestamp)
     // let time = new Date(parseInt(item.timestamp) * 1000)
@@ -137,6 +135,54 @@ export function dataGPU (data: any, type:string) {
     } else {
       datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + (type === 'active' ? item['total'] - item[type] : item[type])
     }
+  })
+  return {
+    datum: datum,
+    timeArr: timeArr
+  }
+}
+
+export function dataDelta (data: any, type:string) {
+  // console.log(data)
+  const datum = [], timeArr = []
+  data.sort((itema:any, itemb:any) => {
+    return itema.timestamp - itemb.timestamp
+  })
+  data.forEach((item:any, index:number) => {
+    const time_end = getDateTime(parseInt(item.timestamp) * 1000)
+    if (timeArr.indexOf(time_end) === -1) {
+      timeArr.push(time_end)
+      if(type === 'delta' && index > 0) datum.push(data[index].total - item.total)
+      else if(type === 'delta' && index === 0) datum.push(0)
+      else datum.push(item[type])
+    } else {
+      datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + item[type]
+    }
+  })
+  return {
+    datum: datum,
+    timeArr: timeArr
+  }
+}
+
+export function dataResource (data: any, type:string) {
+  // console.log(data)
+  const datum = [], timeArr = []
+  // 排序
+  data.sort((itema:any, itemb:any) => {
+    return itema.timestamp - itemb.timestamp
+  })
+  // 循环处理数组
+  data.forEach((item:any) => {
+    const time_end = getDateTime(parseInt(item.timestamp) * 1000)
+    if (timeArr.indexOf(time_end) === -1) {
+      timeArr.push(time_end)
+      datum.push({
+        value: unifyNumber((item['total'] - item[type]) / item['total']),
+        used: item['total'] - item[type],
+        total: item['total']
+      })
+    } 
   })
   return {
     datum: datum,
@@ -160,7 +206,7 @@ export function getDateTime (time: any) {
   const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
   const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
 
-  return time ? `${formattedMonth}/${formattedDay}` : `${year}-${formattedMonth}-${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  return time ? `${formattedMonth}/${formattedDay} ${formattedHours}:${formattedMinutes}` : `${year}-${formattedMonth}-${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
 export function AddFormat (num1:string, num2:string) {

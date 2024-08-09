@@ -5,13 +5,13 @@
         <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
           <div class="flex flex-ai-center nowrap child">
             <span class="font-14">Task ID: </span>
-            <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter Task ID" @chang="searchZKProvider" @input="searchZKProvider" />
+            <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter Task ID" />
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
           <div class="flex flex-ai-center nowrap child">
             <span class="font-14">NodeID: </span>
-            <el-input class="zk-input" v-model="networkZK.node_id" placeholder="please enter NodeID" @chang="searchZKProvider" @input="searchZKProvider" />
+            <el-input class="zk-input" v-model="networkZK.node_id" placeholder="please enter NodeID" />
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
@@ -171,99 +171,8 @@ import {
         "code": 0,
         "msg": "success",
         "data": {
-          "total": 6,
-          "list": [
-            {
-              "node_id": "04a451d1903ccb3cb45feec101f026fd0b1b5f821ed44c71837e0b52f4348b16e2a26b639d891e109c7f9f8da67625757f556e7858dd13a36b4eff92538004693f",
-              "task_id": 2011,
-              "type": 1,
-              "zk_type": "fil-c2-32G",
-              "task_contract": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "beneficiary_addr": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "amount": "50.000000000000000000",
-              "from": "0xd76a526A0612ce12633D66f97fFA7Ac365f95262",
-              "tx_hash": "0xf4dcf04bb4ef9c2ff7378bba36e864cd51642b5dad4a1e650efd4a74082f4fdc",
-              "chain_id": 2024,
-              "started_at": 1706784007,
-              "ended_at": 1706785094,
-              "rewarded_at": 1706793300
-            },
-            {
-              "node_id": "04a451d1903ccb3cb45feec101f026fd0b1b5f821ed44c71837e0b52f4348b16e2a26b639d891e109c7f9f8da67625757f556e7858dd13a36b4eff92538004693f",
-              "task_id": 2009,
-              "type": 1,
-              "zk_type": "fil-c2-32G",
-              "task_contract": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "beneficiary_addr": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "amount": "50.000000000000000000",
-              "from": "0xd76a526A0612ce12633D66f97fFA7Ac365f95262",
-              "tx_hash": "0xa273acdb787cc4ef5bf67fe3602a101570bad2885776926c999db2a7ee68009f",
-              "chain_id": 2024,
-              "started_at": 1706782207,
-              "ended_at": 1706783214,
-              "rewarded_at": 1706791500
-            },
-            {
-              "node_id": "04a451d1903ccb3cb45feec101f026fd0b1b5f821ed44c71837e0b52f4348b16e2a26b639d891e109c7f9f8da67625757f556e7858dd13a36b4eff92538004693f",
-              "task_id": 2007,
-              "type": 1,
-              "zk_type": "fil-c2-32G",
-              "task_contract": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "beneficiary_addr": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "amount": "50.000000000000000000",
-              "from": "0xd76a526A0612ce12633D66f97fFA7Ac365f95262",
-              "tx_hash": "0x6abc40b5fc765ea89514e8db35396ef1bafcda34792ffe15b5c638ae458ee62f",
-              "chain_id": 2024,
-              "started_at": 1706780408,
-              "ended_at": 1706781442,
-              "rewarded_at": 1706789700
-            },
-            {
-              "node_id": "04a451d1903ccb3cb45feec101f026fd0b1b5f821ed44c71837e0b52f4348b16e2a26b639d891e109c7f9f8da67625757f556e7858dd13a36b4eff92538004693f",
-              "task_id": 2005,
-              "type": 1,
-              "zk_type": "fil-c2-32G",
-              "task_contract": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "beneficiary_addr": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "amount": "50.000000000000000000",
-              "from": "0xd76a526A0612ce12633D66f97fFA7Ac365f95262",
-              "tx_hash": "0xd9c9a28246f59887a60b169fd7279c4b82592b7c8b2a1f8c58843d6a33a9ffaf",
-              "chain_id": 2024,
-              "started_at": 1706778607,
-              "ended_at": 1706779628,
-              "rewarded_at": 1706787900
-            },
-            {
-              "node_id": "04a451d1903ccb3cb45feec101f026fd0b1b5f821ed44c71837e0b52f4348b16e2a26b639d891e109c7f9f8da67625757f556e7858dd13a36b4eff92538004693f",
-              "task_id": 2003,
-              "type": 1,
-              "zk_type": "fil-c2-32G",
-              "task_contract": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "beneficiary_addr": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "amount": "50.000000000000000000",
-              "from": "0xd76a526A0612ce12633D66f97fFA7Ac365f95262",
-              "tx_hash": "0x5f871c416fb3b44968ce567f6ac4445f460c8f815e59e3950eafd96b7ff57f85",
-              "chain_id": 2024,
-              "started_at": 1706776807,
-              "ended_at": 1706777782,
-              "rewarded_at": 1706786100
-            },
-            {
-              "node_id": "04a451d1903ccb3cb45feec101f026fd0b1b5f821ed44c71837e0b52f4348b16e2a26b639d891e109c7f9f8da67625757f556e7858dd13a36b4eff92538004693f",
-              "task_id": 2001,
-              "type": 1,
-              "zk_type": "fil-c2-32G",
-              "task_contract": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "beneficiary_addr": "0x1AE8665873565C9089753920A0866C49Bd35DCC9",
-              "amount": "50.000000000000000000",
-              "from": "0xd76a526A0612ce12633D66f97fFA7Ac365f95262",
-              "tx_hash": "0xff70058d636ec8267dca42cbeaacfb6dff7f12bce5b396e02975064b53df26ee",
-              "chain_id": 2024,
-              "started_at": 1706773791,
-              "ended_at": 1706774822,
-              "rewarded_at": 1706783415
-            }
-          ]
+          "total": 0,
+          "list": []
         }
       }
 
@@ -320,8 +229,8 @@ import {
     .search-container {
       justify-content: flex-start;
       flex-wrap: wrap;
+      min-height: 30px;
       margin: 0;
-      padding: 0 0 0.4rem;
       .el-select {
         width: auto;
         margin: 0 0.3rem 0 0;

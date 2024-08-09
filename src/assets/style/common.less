@@ -15,6 +15,14 @@ body,
   color: var(--color-dark);
 }
 
+ul,
+li,
+dd,
+dl,
+dt {
+    list-style: none;
+}
+
 .el-message {
   max-width: 95%;
   word-break: break-word;
@@ -531,6 +539,20 @@ body {
   }
 }
 
+
+.machines-style {
+  flex-wrap: wrap;
+  span {
+    padding: 3px 10px 2px;
+    margin: 3px 5px 3px 0;
+    background-color: var(--color-primary);
+    border-radius: 45px;
+    word-break: break-word;
+    line-height: 1;
+    color: var(--color-light);
+  }
+}
+
 .el-container {
   .header-title {
     padding: 0.15rem 0 0.2rem;
@@ -686,25 +708,13 @@ body {
           align-items: center;
           white-space: normal;
           word-break: break-word;
-          .img {
+          .img, img {
             width: 0.23rem;
             height: 0.23rem;
             margin-right: 0.15rem;
             @media screen and (max-width: 1260px) {
               width: 20px;
               height: 20px;
-            }
-          }
-          .machines-style {
-            flex-wrap: wrap;
-            span {
-              padding: 3px 10px 2px;
-              margin: 3px 5px 3px 0;
-              background-color: var(--color-primary);
-              border-radius: 45px;
-              word-break: break-word;
-              line-height: 1;
-              color: var(--color-light);
             }
           }
         }
@@ -718,6 +728,10 @@ body {
     background-color: rgb(38, 39, 47);
     height: 0;
   }
+  .el-table th.el-table__cell>.cell.highlight{
+    color: var(--color-light);
+  }
+
   .pagination-style {
     color: #878c93;
     .showing{

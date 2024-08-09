@@ -9,3 +9,28 @@ export function statsCpscoresData(data:any) {
     data
   })
 }
+
+export function getCPsData(params: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/cps/${params}`,
+      method: 'get'
+  })
+}
+
+export function getCPsBalancesData(params: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/cps/${params}/balances`,
+      method: 'get'
+  })
+}
+
+export function getCPsECPListData(params: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/ecps`,
+      method: 'get',
+      params
+  })
+}

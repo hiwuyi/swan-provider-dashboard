@@ -203,8 +203,9 @@ const props = withDefaults(
     const collateralAddress = import.meta.env.VITE_COLLATERAL_CONTACT
     const collateralContract = new web3Init.eth.Contract(CollateralABI, collateralAddress)
 
+    const emits = defineEmits(['hardClose'])
     function closeHandle (type) {
-      context.emit('hardClose', false, type)
+      emits('hardClose', false, type)
     }
     function cpCollateral () {
       ruleForm.show = true

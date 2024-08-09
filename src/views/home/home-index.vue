@@ -2,19 +2,7 @@
   <section id="main-container">
     <div class="flex flex-ai-center flex-jc-between nowrap header-title">
       <h1 class="font-24 font-bold">Swan Provider Overview</h1>
-      <div class="flex flex-ai-center nowrap search  font-18">
-        <el-input
-          v-model="contractAddress"
-          style="max-width: 600px"
-          placeholder="Contract Address"
-          class="input-with-select"
-        >
-          <template #append>
-            <el-button>
-              <el-icon><Search /></el-icon>
-            </el-button>
-          </template>
-        </el-input>
+      <div class="flex flex-ai-center nowrap search font-18">
         <a :href="explorerLink" target="_blank" class="flex flex-ai-center nowrap font-18">
           Swan Chain {{ currentNetwork }} explorer
           <i></i>
@@ -467,7 +455,7 @@
                 </template>
                 <template #default="scope">
                   <div class="flex flex-ai-center flex-jc-center nowrap copy-style">
-                    <span class="name-style" @click="handleCP(scope.row)">{{hiddAddress(scope.row.cp_account_address)}}</span>
+                    <span class="name-style" @click="handleCP(scope.row.cp_account_address)">{{hiddAddress(scope.row.cp_account_address)}}</span>
                     <svg @click="copyContent(scope.row.cp_account_address, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
                       <path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z"
                         p-id="2310" fill="#b5b7c8"></path>
@@ -536,7 +524,7 @@
                 </template>
                 <template #default="scope">
                   <div class="flex flex-ai-center flex-jc-center nowrap copy-style">
-                    <span class="name-style" @click="handleCP(scope.row)">{{hiddAddress(scope.row.owner_addr)}}</span>
+                    <span class="name-style" @click="handleCP(scope.row.owner_addr)">{{hiddAddress(scope.row.owner_addr)}}</span>
                     <svg @click="copyContent(scope.row.owner_addr, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
                       <path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z"
                         p-id="2310" fill="#b5b7c8"></path>
@@ -598,10 +586,9 @@ import * as echarts from "echarts"
 import worldGeoJSON from '@/assets/js/world.json'
 import gpuJSON from '@/assets/js/gpuData.json'
 import gpuJSONTotal from '@/assets/js/gpuDataTotal.json'
-import { Search } from '@element-plus/icons-vue'
 import { currentNetwork, explorerLink } from '@/utils/storage'
 import { getOverviewData, statsEchartsData, statsOverviewData } from "@/api/overview"
-import { copyContent, dataGPU, getDateRange, hiddAddress, replaceFormat, unifyNumber } from '@/utils/common';
+import { copyContent, dataDelta, dataGPU, dataResource, getDateRange, hiddAddress, replaceFormat, sizeChange, unifyNumber } from '@/utils/common';
 import dataListFCPArray from '@/assets/static/js/cplist.ts'
 import dataListECPArray from '@/assets/static/js/ecplist.ts'
 
@@ -682,7 +669,6 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
           label: '1 Year'
         }]
     })
-    const contractAddress = ref('')
 
     function tabsSwitch (index:number) {
       if (index > 0 && activeName.value < 3) activeName.value += 1
@@ -719,11 +705,13 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
           limit: 10,
           offset: 0
         }
-        const providerRes = dataListFCPArray
+        // const providerRes = dataListFCPArray
+        const providerRes = []
         // const providerRes = await getOverviewData(params)
         providersData.value = providerRes?.data?.providers ?? []
 
-        const providerECPRes = dataListECPArray
+        // const providerECPRes = dataListECPArray
+        const providerECPRes = []
         providersECPData.value = providerECPRes?.data?.list ?? []
         providersTableLoad.value = false
       }catch{console.error}
@@ -938,10 +926,20 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
       const machart_gpu = echarts.init(document.getElementById("chart-GPU"));
       const machart_edge = echarts.init(document.getElementById("chart-Edge"));
 
-      // const gpuData = await dataGPU(data.gpu, 'active')
-      // const gpuTotalData = await dataGPU(data.gpu, 'total')
-      const gpuData = await dataGPU(gpuJSON, 'score')
-      const gpuTotalData = await dataGPU(gpuJSONTotal, 'score')
+      const gpuData = await dataGPU(data.gpu, 'active')
+      const gpuTotalData = await dataGPU(data.gpu, 'total')
+      // const gpuData = await dataGPU(gpuJSON, 'score')
+      // const gpuTotalData = await dataGPU(gpuJSONTotal, 'score')
+
+      const cpuData = await dataResource(data.cpu, 'active')
+      const memoryData = await dataResource(data.memory, 'active')
+      const storageData = await dataResource(data.storage, 'active')
+
+      const fcpData = await dataDelta(data.fcp, 'total')
+      const fcpDeltaData = await dataDelta(data.fcp, 'delta')
+
+      const ecpData = await dataDelta(data.ecp, 'total')
+      const ecpDeltaData = await dataDelta(data.ecp, 'delta')
 
       const option1 = {
         tooltip: {
@@ -961,9 +959,12 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             var result = params[0].name + '<br/>'; // X轴的值
             params.forEach(function (item) {
               // 遍历每个系列的数据
+              const unit = item.seriesName === "CPU" ? 'CPU' : 'GiB'
+              const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : replaceFormat(sizeChange(item.data.used, 'GB'))
+              const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : replaceFormat(sizeChange(item.data.total, 'GB'))
               var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
               let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% 11/11 GiB' + '<br/>'; // 系列名和对应的值
+              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
             });
             return result;
           }
@@ -1010,7 +1011,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
               return value.split(' ').join('\n');
             }
           },
-          data: ['8/01', '8/02', '8/03', '8/04', '8/05', '8/06', '8/07']
+          data: cpuData.timeArr
         },
         yAxis: {
           type: 'value',
@@ -1027,24 +1028,24 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             name: 'CPU',
             type: 'line',
             showSymbol: false,
-            smooth: true,
-            data: [10, 13, 11, 34, 90, 30, 20],
+            smooth: false,
+            data: cpuData.datum,
             color: '#699bff'
           },
           {
             name: 'Memory',
             type: 'line',
             showSymbol: false,
-            smooth: true,
-            data: [20, 12, 19, 24, 29, 33, 31],
+            smooth: false,
+            data: memoryData.datum,
             color: '#52ce7c'
           },
           {
             name: 'Storage',
             type: 'line',
             showSymbol: false,
-            smooth: true,
-            data: [15, 23, 20, 15, 19, 30, 41],
+            smooth: false,
+            data: storageData.datum,
             color: '#0046b7'
           }
         ]
@@ -1110,7 +1111,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
         xAxis: [
           {
             type: 'category',
-            data: ['8/01', '8/02', '8/03', '8/04', '8/05', '8/06', '8/07'],
+            data: fcpData.timeArr,
             boundaryGap: false,
             axisTick: {
               show: false
@@ -1157,7 +1158,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             name: 'FCP',
             type: 'line',
             stack: 'Total',
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             itemStyle: {
               color: 'rgba(105,155,255,1)'
@@ -1174,13 +1175,13 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
                 }
               ])
             },
-            data: [220, 172, 141, 94, 120, 130, 110]
+            data: fcpData.datum
           },
           {
             name: 'Delta',
             type: 'line',
             stack: 'Total',
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             // tooltip: {
             //   valueFormatter: function (value) {
@@ -1188,7 +1189,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             //   }
             // },
             color: '#52ce7c',
-            data: [60, 35, 85, 27, 22, 72, 25]
+            data: fcpDeltaData.datum
           }
         ]
       }
@@ -1303,7 +1304,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             type: 'line',
             showSymbol: false,
             color: '#a801a1',
-            smooth: true,
+            smooth: false,
             data: gpuData.datum
           },
           {
@@ -1311,7 +1312,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             type: 'line',
             showSymbol: false,
             color: '#93c605',
-            smooth: true,
+            smooth: false,
             data: gpuTotalData.datum
           }
         ]
@@ -1377,7 +1378,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
         xAxis: [
           {
             type: 'category',
-            data: ['8/01', '8/02', '8/03', '8/04', '8/05', '8/06', '8/07'],
+            data: ecpData.timeArr,
             boundaryGap: false,
             axisTick: {
               show: false
@@ -1418,7 +1419,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
           {
             name: 'ECP',
             type: 'line',
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             itemStyle: {
               color: 'rgba(147,198,5,1)'
@@ -1435,12 +1436,12 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
                 }
               ])
             },
-            data: [220, 172, 141, 94, 120, 130, 110]
+            data: ecpData.datum
           },
           {
             name: 'Delta',
             type: 'line',
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             // tooltip: {
             //   valueFormatter: function (value) {
@@ -1448,7 +1449,7 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             //   }
             // },
             color: '#0046b7',
-            data: [120, 132, 101, 134, 90, 230, 210]
+            data: ecpDeltaData.datum
           }
         ]
       }
@@ -1483,8 +1484,8 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
       })
       cpLoad.value = false
     }
-    function handleCP (row) {
-      router.push({ name: 'accountInfo' })
+    function handleCP (row:string) {
+      router.push({ name: 'accountInfo', params: {cp_addr: row} })
     }
     onMounted(async () => {
       echarts.registerMap('worldHq', worldGeoJSON)
@@ -1668,9 +1669,9 @@ import dataListECPArray from '@/assets/static/js/ecplist.ts'
             width: auto;
             font-size: inherit;
             .el-tooltip__trigger {
-              width: 63px;
+              width: 40px;
               padding: 2px 4px;
-              margin: 0;
+              margin: 0 3px 0 0;
               background-color: transparent;
             }
             .el-select__wrapper {

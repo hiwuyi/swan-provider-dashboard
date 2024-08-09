@@ -11,13 +11,13 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Name: </span>
-              <el-input class="zk-input" v-model="networkZK.name" placeholder="please enter name" @chang="searchZKProvider" @input="searchZKProvider" />
+              <el-input class="zk-input" v-model="networkZK.name" placeholder="please enter name" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Contract Address: </span>
-              <el-input class="zk-input" v-model="networkZK.cp_addr" placeholder="please enter CP Account Address" @chang="searchZKProvider" @input="searchZKProvider" />
+              <el-input class="zk-input" v-model="networkZK.cp_addr" placeholder="please enter CP Account Address" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="3" :xl="3">
@@ -33,100 +33,146 @@
           </el-col>
         </el-row>
 
-        <el-table :data="providerBody.ubiTableData" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
-          <el-table-column type="index" width="80">
-            <template #header>
-              <div class="font-14 weight-4">Ranking</div>
+        <el-table :data="providerBody.ubiTableData" @filter-change="handleFilterECPChange" @expand-change="expandChange" :row-key="getRowKeys" :expand-row-keys="expands" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
+          <el-table-column type="expand" width="40">
+            <template #default="props">
+              <div class="service-body" v-if="props.row.resources">
+                <div v-for="n in props.row.resources" :key="n" class="list">
+                  <div class="li-title text-left">Machine ID: {{n.machine_id}}</div>
+                  <ul>
+                    <li>
+                      <div class="li-body">
+                        <p :class="{'t':true, 't-capitalize': true}">vcpu</p>
+                        <p>
+                          <strong>{{replaceFormat(n.vcpu.free)}}</strong>free</p>
+                        <p>
+                          <strong>{{replaceFormat(n.vcpu.total)}}</strong>total</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="li-body">
+                        <p :class="{'t':true}">memory</p>
+                        <p>
+                          <strong>{{sizeChange(n.memory.free)}}</strong>free</p>
+                        <p>
+                          <strong>{{sizeChange(n.memory.total)}}</strong>total</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="li-body">
+                        <p :class="{'t':true}">storage</p>
+                        <p>
+                          <strong>{{sizeChange(n.storage.free)}}</strong>free</p>
+                        <p>
+                          <strong>{{sizeChange(n.storage.total)}}</strong>total</p>
+                      </div>
+                    </li>
+                  </ul>
+                  <div class="li-title text-left">GPU Source</div>
+                  <ul>
+                    <li class="m-r" style="width:100%;">
+                      <div class="flex flex-ai-center">
+                        <div v-for="g in n.gpu.gpus" :key="g" :class="{'li-body':true}">
+                          <p :class="{'t':true, 't-capitalize': true}">{{g.model}} (gpu)</p>
+                          <p>
+                            <strong>{{replaceFormat(g.free)}}</strong>free</p>
+                          <p>
+                            <strong>{{replaceFormat(g.total)}}</strong>total</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="service-body text-center" v-else>No Data</div>
             </template>
+          </el-table-column>
+          <el-table-column prop="contract_addr" label="CP Account Address" min-width="140">
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
-                <img v-if="scope.$index === 0 && paginZK.pageNo <= 1" :src="badgeIcon01" alt="" class="img">
-                <img v-else-if="scope.$index === 1 && paginZK.pageNo <= 1" :src="badgeIcon02" alt="" class="img">
-                <img v-else-if="scope.$index === 2 && paginZK.pageNo <= 1" :src="badgeIcon03" alt="" class="img">
-                <span v-else class="img"></span> {{scope.$index+1}}
+                <img v-if="scope.$index < 2 && paginZK.pageNo <= 1" :src="badgeIcon01" alt="">
+                <img v-else :src="badgeIcon02" alt="">
+                <div class="flex flex-ai-center flex-jc-center copy-style">
+                  <router-link :to="{ name: 'accountInfo', params: {cp_addr: scope.row.contract_addr} }">{{hiddAddress(scope.row.contract_addr)}}</router-link>
+                  <svg @click="copyContent(scope.row.contract_addr, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
+                    <path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z"
+                      p-id="2310" fill="#b5b7c8"></path>
+                    <path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2311" fill="#b5b7c8"></path>
+                    <path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2312" fill="#b5b7c8"></path>
+                  </svg>
+                </div>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="name" min-width="120">
-            <template #header>
-              <div class="font-14 weight-4">Name</div>
-            </template>
+          <el-table-column prop="name" label="Name" min-width="120">
             <template #default="scope">
-              <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.name">
-                <template #reference>
-                  <div class="name-style" @click="handleSelect('ranking', scope.row, 'FCP')">{{scope.row.name}}</div>
-                </template>
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column prop="owner_addr" min-width="140">
-            <template #header>
-              <div class="font-14 weight-4">Contract Address</div>
-            </template>
-            <template #default="scope">
-              <div class="flex flex-ai-center flex-jc-center copy-style" @click="copyContent(scope.row.owner_addr, 'Copied')">
-                {{hiddAddress(scope.row.owner_addr)}}
-                <svg t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
-                  <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
-                    fill="#3d3d3d" p-id="6468"></path>
-                  <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
-                    fill="#3d3d3d" p-id="6469"></path>
-                </svg>
+              <div class="badge flex flex-ai-center flex-jc-center">
+                {{scope.row.name}}
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="node_id" min-width="120">
-            <template #header>
-              <div class="font-14 weight-4">nodeID</div>
-            </template>
+          <!-- <el-table-column prop="country" label="Country" /> -->
+          <el-table-column prop="node_id" label="nodeID" min-width="140">
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center copy-style" @click="copyContent(scope.row.node_id, 'Copied')">
                 {{hiddAddress(scope.row.node_id)}}
-                <svg t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
-                  <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
-                    fill="#3d3d3d" p-id="6468"></path>
-                  <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
-                    fill="#3d3d3d" p-id="6469"></path>
+                <svg t="1706499607741" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
+                  <path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z"
+                    p-id="2310" fill="#b5b7c8"></path>
+                  <path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2311" fill="#b5b7c8"></path>
+                  <path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2312" fill="#b5b7c8"></path>
                 </svg>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="task">
-            <template #header>
-              <div class="font-14 weight-4">Total Task</div>
+          <el-table-column prop="gpu_tags" label="GPU" min-width="140">
+            <template #default="scope">
+              <div class="badge">
+                <div class="flex flex-ai-center flex-jc-center machines-style">
+                  <span v-for="(gpu, g) in scope.row.gpu_tags" :key="g">
+                    {{gpu}}
+                  </span>
+                </div>
+              </div>
             </template>
+          </el-table-column>
+          <el-table-column prop="region" label="Region" min-width="100" />
+          <el-table-column prop="work_status" label="Status" min-width="105"
+            column-key="status" filterable :filters="[
+              { text: 'Inactive', value: 'Inactive' },
+              { text: 'Offline', value: 'Offline' },
+              { text: 'Online', value: 'Online' },
+              { text: 'Inconsistent', value: 'Inconsistent' },
+              { text: 'NSC', value: 'NSC' },
+              { text: 'NSR', value: 'NSR' },
+              { text: 'Declined', value: 'Declined' },
+              { text: 'Suspended', value: 'Suspended' }
+            ]" filter-placement="bottom-end" :filter-multiple="false">
+            <template #default="scope">
+              <div>
+                {{scope.row.work_status || '-'}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="task" label="Total Task">
             <template #default="scope">
               <div>
                 {{scope.row.task?scope.row.task.total : ''}}
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="completion_rate" min-width="100">
-            <template #header>
-              <div class="font-14 weight-4">Completion Rate</div>
-            </template>
+          <el-table-column prop="task" label="Completed(%)" min-width="120">
             <template #default="scope">
-              <div class="name-style black">{{replaceFormat(scope.row.completion_rate)}}</div>
+              <div>
+                {{fixedformat(scope.row.completion_rate,10000)}}%
+              </div>
             </template>
           </el-table-column>
-          <el-table-column prop="completion_rate" min-width="100">
-            <template #header>
-              <div class="font-14 weight-4">Contribution Score</div>
-            </template>
+          <el-table-column prop="score" label="Contribution Score" min-width="130">
             <template #default="scope">
-              <div class="name-style black">{{replaceFormat(scope.row.completion_rate)}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="region" min-width="100">
-            <template #header>
-              <div class="font-14 weight-4">Reward Score</div>
-            </template>
-            <template #default="scope">
-              <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.region">
-                <template #reference>
-                  <div class="name-style black">{{scope.row.region}}</div>
-                </template>
-              </el-popover>
+              <div>
+                {{replaceFormat(scope.row.score)}}
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -149,15 +195,14 @@ import { metaAddress } from "@/utils/storage";
 import {
   Search
 } from '@element-plus/icons-vue'
-import * as echarts from "echarts"
+import badgeIcon01 from "@/assets/images/icons/badge-1.png"
+import badgeIcon02 from "@/assets/images/icons/badge-2.png"
+import badgeIcon03 from "@/assets/images/icons/badge-3.png"
+import { copyContent, debounce, fixedformat, hiddAddress, paginationWidth, replaceFormat, sizeChange } from "@/utils/common";
+import { getOverViewECP, getOverviewECPData } from "@/api/overview";
 
     const route = useRoute()
     const router = useRouter()
-    import badgeIcon01 from "@/assets/images/icons/badge-1.png"
-    import badgeIcon02 from "@/assets/images/icons/badge-2.png"
-    import badgeIcon03 from "@/assets/images/icons/badge-3.png"
-import { copyContent, debounce, fixedformat, hiddAddress, paginationWidth, replaceFormat } from "@/utils/common";
-import { getOverViewECP, getOverviewECPData } from "@/api/overview";
     const providersLoad = ref(false)
     const providersECPLoad = ref(false)
     const providerBody = reactive({
@@ -182,8 +227,18 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
       centerDrawerVisible: false,
       row: {}
     })
+    const paramsECPFilter = reactive({
+      data: {
+        status: ''
+      }
+    })
+    const expands = ref([])
 
-    function handleSizeChange (val) { }
+    function handleSizeChange(val) {
+      paginZK.pageSize = val
+      paginZK.pageNo = 1
+      getUBITable()
+    }
     async function handleZKCurrentChange (currentPage) {
       paginZK.pageNo = currentPage
       getUBITable()
@@ -192,18 +247,38 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
       providersECPLoad.value = true
       try{
         const page = paginZK.pageNo > 0 ? paginZK.pageNo - 1 : 0
-        const params = {
+        let params = {
           page_size: paginZK.pageSize,
           page_no: page,
           cp_addr: networkZK.cp_addr,
           name: networkZK.name,
           node_id: networkZK.node_id
         }
+        params = Object.assign({}, params, paramsECPFilter.data)
         const providerRes = await getOverViewECP(params)
         paginZK.total = providerRes?.data?.total ?? 0
         providerBody.ubiTableData = await getList(providerRes.data.list)
       } catch { console.error }
       providersECPLoad.value = false
+    }
+    const handleFilterECPChange = (filters) => {
+      for (const key in filters) {
+        if (key === 'status') {
+          const result = filters.status[0] ?? ''
+          paramsECPFilter.data.status = result
+        }
+      }
+      handleZKCurrentChange(1)
+    }
+    let getRowKeys = (row) => {
+      return row.node_id;
+    }
+    function expandChange (row, expandedRows) {
+      // console.log(row, expandedRows)
+      if (expandedRows.length) {
+        expands.value = [];
+        if (row) expands.value.push(row.node_id);
+      } else expands.value = [];
     }
     async function getList (list) {
       let l = list || []
@@ -247,17 +322,6 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
       networkZK.node_id = ''
       getUBITable()
     }
-    async function handleSelect (key, row, type) {
-      // console.log(key, index, row) 
-      // switch (key) {
-      //   case 'ranking':
-      //     vmOperate.row = row
-      //     vmOperate.row.type = type
-      //     vmOperate.centerDrawerVisible = true
-      //     break;
-      // }
-      router.push({ name: 'accountInfo', params: { type: 'ECP' } })
-    }
     function hardClose (dialog, type) {
       vmOperate.centerDrawerVisible = dialog
     }
@@ -268,6 +332,8 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
 </script>
 
 <style lang="less" scoped>
+@import url('../../assets/style/table.less');
+
 #aarECP-container {
   padding: 0 0 0.4rem;
   font-size: 16px;

@@ -6,140 +6,12 @@
 
     <div class="providers-network font-16">
       <div class="providers">
-        <el-row :gutter="bodyWidth">
-          <el-col :xs="24" :sm="24" :md="24" :lg="15" :xl="15">
-            <div class="providers-cp s font-14">
-              <div class="flex flex-ai-center name-title">
-                <b class="font-16 weight-4">Account Info</b>
-                <a @click="handleSelect('claimAccount', {}, 'claimAccount')" :class="{'is-disabled': false}">Claim Account</a>
-              </div>
-              <div class="note b">
-                <el-row>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-                    <p class="text-capitalize">CP Contract Address:</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-                    <a class="link-to" :href="`${explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-                    <p class="text-capitalize">Account Type:</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-                    <div class="collateral m b-ecp" :class="{'b-fcp': activeName === 'FCP'}">{{activeName}}</div>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-                    <p class="text-capitalize">Owner Address:</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-                    <div class="flex flex-ai-center copy-style">
-                      <a class="link-to" :href="`${explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
-                      <svg @click="copyContent('0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677', 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
-                        <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
-                          fill="#3d3d3d" p-id="6468"></path>
-                        <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
-                          fill="#3d3d3d" p-id="6469"></path>
-                      </svg>
-                    </div>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-                    <p class="text-capitalize">Worker Address:</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-                    <div class="flex flex-ai-center copy-style">
-                      <a class="link-to" :href="`${explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
-                      <svg @click="copyContent('0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677', 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
-                        <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
-                          fill="#3d3d3d" p-id="6468"></path>
-                        <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
-                          fill="#3d3d3d" p-id="6469"></path>
-                      </svg>
-                    </div>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-                    <p class="text-capitalize">beneficiary Address:</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-                    <div class="flex flex-ai-center copy-style">
-                      <a class="link-to" :href="`${explorerLink}0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677`" target="_blank">0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677</a>
-                      <svg @click="copyContent('0xf1F8D7Ca4dDeDfAF0f69a1883f20505952134677', 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
-                        <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
-                          fill="#3d3d3d" p-id="6468"></path>
-                        <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
-                          fill="#3d3d3d" p-id="6469"></path>
-                      </svg>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="9" :xl="9">
-            <div class="providers-cp s font-14">
-              <div class="flex flex-ai-center flex-jc-between name-title">
-                <b class="font-16 weight-4">Balance Info</b>
-              </div>
-              <div class="note b">
-                <el-row>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
-                    <p class="color font-18">Available Balance：0.9984 SWANC</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <p class="color font-16 tab-title">FCP</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div class="flex flex-ai-center flex-jc-between width">
-                      <span>FCP Collateral Balance:</span>
-                      <span class="text-right">0.1444 SWANC</span>
-                    </div>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div class="flex flex-ai-center flex-jc-between width">
-                      <span>FCP Locked Balance: </span>
-                      <span>0.1234 SWANC</span>
-                    </div>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'FCP')">Add Collateral</div>
-                  </el-col>
-
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <p class="color font-16 tab-title">ECP</p>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div class="flex flex-ai-center flex-jc-between width">
-                      <span>ECP Collateral Balance:</span>
-                      <span class="text-right">0.1444 SWANC</span>
-                    </div>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div class="flex flex-ai-center flex-jc-between width">
-                      <span>ECP Locked Balance: </span>
-                      <span>0.1234 SWANC</span>
-                    </div>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'ECP')">Add Collateral</div>
-                  </el-col>
-                  
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div class="flex flex-ai-center flex-jc-between width">
-                      <span>Sequencer Balance: </span>
-                      <span>0.1234 SWANC</span>
-                    </div>
-                  </el-col>
-                  <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
-                    <div :class="{'collateral':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'Sequencer')">Add Collateral</div>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
+        <account-info :cpsData="cpsData" :cpsLoad="cpsLoad"></account-info>
       </div>
 
       <div class="providers">
         <el-row :gutter="bodyWidth">
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
             <div class="module-container">
               <div class="title">
                 <p class="font-16 weight-4">Job Status</p>
@@ -155,7 +27,7 @@
               </div>
             </div>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
             <div class="module-container">
               <div class="title">
                 <p class="font-16 weight-4">Reward</p>
@@ -178,176 +50,30 @@
         <div class="flex flex-ai-center flex-jc-between name-title">
           <b class="font-16 weight-4">Resource List</b>
         </div>
-        <div class="font-14 note b">
-          <el-row>
-            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-              <p>Total Number Of Node:</p>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <p>{{replaceFormat(pagin.total)}}</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-              <p>Completed:</p>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <p>{{unifyNumber(0.9)}}%</p>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-              <p>Uptime:</p>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <p>{{unifyNumber(1)}}%</p>
-            </el-col>
-          </el-row>
-          <div class="font-14">
-            <el-table :data="providersData" style="width: 100%" empty-text="No Data" v-loading="providersTableLoad">
-              <el-table-column prop="name" min-width="120">
-                <template #header>
-                  <div class="font-14 weight-4">Machine ID</div>
-                </template>
-                <template #default="scope">
-                  <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.name">
-                    <template #reference>
-                      <div class="badge flex flex-ai-center flex-jc-center name-style" @click="handleSelect('ranking', scope.row, 'resourceList')">
-                        {{scope.row.name}}
-                      </div>
-                    </template>
-                  </el-popover>
-                </template>
-              </el-table-column>
-              <!-- <el-table-column prop="country" label="Country" /> -->
-              <el-table-column prop="computer_provider.status" width="120" column-key="status" filterable :filters="[
-                { text: 'Online', value: 'Online' },
-                { text: 'Suspended', value: 'Suspended' },
-                { text: 'Offline', value: 'Offline' }
-              ]" filter-placement="bottom-end" :filter-multiple="false">
-                <template #header>
-                  <div class="font-14 weight-4">status</div>
-                </template>
-                <template #default="scope">
-                  <div v-if="scope.row.computer_provider.status" :class="{'text-capitalize': true, 'color-available':scope.row.computer_provider.status.toLowerCase() === 'available', 'color-occupied':scope.row.computer_provider.status.toLowerCase() === 'occupied'}">{{scope.row.computer_provider.status}}</div>
-                  <span v-else>-</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="gpu_list" min-width="140">
-                <template #header>
-                  <div class="font-14 weight-4">GPU</div>
-                </template>
-                <template #default="scope">
-                  <div class="badge flex flex-ai-center flex-jc-center">
-                    <div class="flex flex-ai-center flex-jc-center machines-style">
-                      <span v-for="(gpu, g) in scope.row.gpu_list" :key="g">
-                        {{gpu}}
-                      </span>
-                    </div>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="region" min-width="100">
-                <template #header>
-                  <div class="font-14 weight-4">Region</div>
-                </template>
-                <template #default="scope">
-                  <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.region">
-                    <template #reference>
-                      <div class="name-style black">{{scope.row.region}}</div>
-                    </template>
-                  </el-popover>
-                </template>
-              </el-table-column>
-              <el-table-column prop="task" min-width="140">
-                <template #header>
-                  <div class="font-14 weight-4">Completed(%)</div>
-                </template>
-                <template #default="scope">
-                  <span v-if="scope.row.type === 'FCP'">-</span>
-                  <div v-else>
-                    {{fixedformat(scope.row.completion_rate,10000)}}%
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="uptime" min-width="130">
-                <template #header>
-                  <div class="font-14 weight-4">Uptime</div>
-                </template>
-                <template #default="scope">
-                  <div class="flex flex-ai-center flex-jc-center nowrap uptime-container" v-if="scope.row.type === 'FCP'">
-                    <ul class="flex flex-ai-center uptime-ul">
-                      <li :class="{'active': scope.row.uptime >= 0.1}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.2}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.3}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.4}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.5}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.6}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.7}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.8}"></li>
-                      <li :class="{'active': scope.row.uptime >= 0.9}"></li>
-                      <li :class="{'active': scope.row.uptime >= 1}"></li>
-                    </ul>
-                    <span class="uptime-text text-right">{{unifyNumber(scope.row.uptime)}}%</span>
-                  </div>
-                  <span v-else>-</span>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="flex flex-ai-center flex-jc-center pagination-style font-14">
-              <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + providersData.length : 0 + providersData.length }} /&nbsp;</span>
-              <!-- hide-on-single-page -->
-              <el-pagination :page-size="pagin.pageSize" :page-sizes="[10, 20, 30, 40]" :current-page="pagin.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
-                :total="pagin.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-            </div>
-          </div>
-        </div>
+        <resource-list :cpsData="cpsData" :cpsLoad="cpsLoad"></resource-list>
       </div>
 
       <div class="providers-cp">
-        <div class="search-body flex flex-ai-center font-14">
-          <div class="tabs-container">
-            <div @click="activeName = 'FCP'" class="tabs-button text-center tabs-prev" :class="{'is-disabled': activeName === 'FCP'}">&lt;</div>
-            <div @click="activeName = 'ECP'" class="tabs-button text-center tabs-next" :class="{'is-disabled': activeName === 'ECP'}">&gt;</div>
-
-            <el-tabs v-model="activeName" class="demo-tabs">
-              <el-tab-pane name="FCP">
-                <template #label>
-                  <span class="font-14">FCP Reward List</span>
-                </template>
-              </el-tab-pane>
-              <el-tab-pane name="ECP">
-                <template #label>
-                  <span class="font-14">ZK Proof List</span>
-                </template>
-              </el-tab-pane>
-              <el-tab-pane name="Transaction" disabled>
-                <template #label>
-                  <span class="font-14">Transaction List</span>
-                </template>
-              </el-tab-pane>
-            </el-tabs>
-          </div>
-        </div>
-        <payment-history v-if="activeName === 'FCP'"></payment-history>
-        <ubi-history v-else-if="activeName === 'ECP'"></ubi-history>
+        <tab-list></tab-list>
       </div>
     </div>
 
-    <vm-drawer v-if="vmOperate.centerDrawerVisible && vmOperate.type === 'drawer'" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-drawer>
-    <vm-dialog v-else-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-dialog>
+    <vm-drawer v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-drawer>
   </section>
 </template>
 
 <script setup lang="ts">
+import accountInfo from './pages/accrount-info.vue'
+import resourceList from './pages/resource-list.vue'
+import tabList from './pages/tab-list.vue'
 import vmDrawer from "@/components/vmDrawer.vue"
-import vmDialog from "@/components/vmDialog.vue"
-import paymentHistory from "@/components/paymentHistory.vue"
-import ubiHistory from "@/components/UBIHistory.vue"
-import {
-  Search
-} from '@element-plus/icons-vue'
 import * as echarts from "echarts"
-import { explorerLink, metaAddress, signature } from "@/utils/storage"
-import { statsCpscoresData } from "@/api/cp-profile"
-import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replaceFormat, unifyNumber } from "@/utils/common"
+import { metaAddress } from "@/utils/storage"
+import { getCPsData, statsCpscoresData } from "@/api/cp-profile"
+import { messageTip } from "@/utils/common"
 
     const bodyWidth = ref(document.body.clientWidth > 1440 ? 32 : 22)
     const route = useRoute()
-    const router = useRouter()
     const providersLoad = ref(false)
     const providersTableLoad = ref(false)
     const providersData = ref([])
@@ -358,11 +84,8 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
       total_deployments: 0,
       active_applications: 0
     })
-    const small = ref(false)
-    const background = ref(false)
     const cpLoad = ref(false)
     const networkInput = ref('')
-    const activeName = ref('ECP')
     const vmOperate = reactive({
       centerDrawerVisible: false,
       row: {},
@@ -391,28 +114,6 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
         }]
     })
 
-    async function handleSelect (key, row, type) {
-      switch (key) {
-        case 'claimAccount':
-          vmOperate.row = row
-          vmOperate.row.type = type
-          vmOperate.type = 'dialog'
-          vmOperate.centerDrawerVisible = true
-          break;
-        case 'cpProfile':
-          vmOperate.row = row
-          vmOperate.row.type = type
-          vmOperate.type = 'dialog'
-          vmOperate.centerDrawerVisible = signature.value === '' ? false : true
-          break;
-        case 'ranking':
-          vmOperate.row = row
-          vmOperate.row.type = type
-          vmOperate.type = 'drawer'
-          vmOperate.centerDrawerVisible = true
-          break;
-      }
-    }
     function hardClose (dialog, type) {
       vmOperate.centerDrawerVisible = dialog
     }
@@ -427,25 +128,6 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
       providersLoad.value = false
       networkInput.value = ''
       init()
-    }
-    function handleSizeChange (val) { }
-    async function handleCurrentChange (currentPage) {
-      pagin.pageNo = currentPage
-      init()
-    }
-    async function getCpscore () {
-      providersLoad.value = true
-      try {
-        let formData = new FormData()
-        formData.append('wallet_address', metaAddress.value)
-        const cpscoreRes = await statsCpscoresData(formData)
-        if (cpscoreRes && cpscoreRes.status === 'success') {
-          ringGraphData.cpScore = cpscoreRes?.data?.providers_program ?? []
-          ringGraphData.transactionDriveProgram = cpscoreRes?.data?.transaction_drive_program ?? {}
-          ringGraphData.providersTotal = await providersNodeTree(ringGraphData.cpScore)
-        } else if (cpscoreRes.message) messageTip('error', cpscoreRes.message)
-      } catch { console.error }
-      providersLoad.value = false
     }
     function providersNodeTree (nodeData) {
       const res = {
@@ -996,9 +678,7 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
             // barCategoryGap: '0%',
             barGap: '0%',
             barWidth: '10',
-            data: [
-              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-            ],
+            data: [],
             color: '#0000bf'
           },
           {
@@ -1007,15 +687,13 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
             // barCategoryGap: '0%',
             barGap: '0%',
             barWidth: '10',
-            data: [
-              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
-            ],
+            data: [],
             color: '#56cfb2'
           },
           {
             name: 'FCP Job Running',
             type: 'line',
-            smooth: true,
+            smooth: false,
             showSymbol: false,
             yAxisIndex: 1,
             tooltip: {
@@ -1023,7 +701,7 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
                 return value;
               }
             },
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+            data: [],
             color: '#8ae664'
           }
         ]
@@ -1084,17 +762,17 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
           {
             name: 'Daily reward',
             type: 'line',
-            smooth: true,
+            smooth: false,
             showSymbol: false,
-            data: [120, 132, 101, 134, 90, 230, 210],
+            data: [],
             color: '#61a5e8'
           },
           {
             name: 'Waiting',
             type: 'line',
-            smooth: true,
+            smooth: false,
             showSymbol: false,
-            data: [220, 182, 191, 234, 290, 330, 310],
+            data: [],
             color: '#0000ff'
           }
         ]
@@ -1198,24 +876,6 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
       res.average_score_total = Number((res.average_score_total / list_providers_cnt).toFixed(2))
       return res
     }
-    async function getGraphData (list) {
-      let l = list || []
-      l.forEach((element) => {
-        element.gpu_list = []
-        try {
-          if (element.computer_provider.machines && element.computer_provider.machines.length > 0) {
-            element.computer_provider.machines.forEach((machines) => {
-              if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
-                machines.specs.gpu.details.forEach((gpu) => {
-                  if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
-                })
-              }
-            })
-          }
-        } catch{ }
-      })
-      return l
-    }
     async function getList (list) {
       let l = list || []
       l.forEach((element) => {
@@ -1235,15 +895,21 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
       })
       return l
     }
-    const searchProvider = debounce(async function () {
-      pagin.pageSize = 10
-      pagin.pageNo = 1
-      init()
-    }, 700)
+
+    const cpsLoad = ref(false)
+    const cpsData = ref<any>({})
+    async function getAllCPsData() {
+      cpsLoad.value = true
+      try{
+        const cpsRes = await getCPsData(route.params.cp_addr)
+        cpsData.value = cpsRes?.data ?? {}
+      }catch{console.error}
+      cpsLoad.value = false
+    }
     onMounted(async () => {
       reset('init')
+      getAllCPsData()
       changetype()
-      // getCpscore()
     })
 </script>
 
@@ -1281,63 +947,6 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
       margin: 0.4rem 0 0;
       background-color: var(--color-light);
       border-radius: 0.2rem;
-      .note {
-        a.link-to {
-          color: var(--color-primary);
-          text-decoration: underline;
-        }
-        .el-row {
-          margin: 0.1rem 0;
-          .el-col {
-            margin: 0.08rem 0;
-            p {
-              color: #000;
-              &.color {
-                color: var(--color-primary);
-                .green {
-                  color: #8dd565;
-                }
-                .orange {
-                  color: #ff9413;
-                }
-                .blue {
-                  color: #6067f5;
-                }
-              }
-              &.tab-title{
-                width: 100%;
-                margin: 0 0 0.1rem;
-                border-bottom: 1px solid var(--color-border);
-              }
-            }
-            .collateral {
-              padding: 0.05rem 0.12rem 0.03rem;
-              margin: 0 0 0.1rem;
-              background-color: var(--color-primary);
-              border-radius: 0.2rem;
-              color: var(--color-light);
-              line-height: 1;
-              cursor: pointer;
-              &.m {
-                margin: 0;
-              }
-              &.is-disabled {
-                opacity: 0.8;
-                cursor: no-drop;
-              }
-              &.b-ecp,
-              &.b-fcp {
-                margin: 0;
-                background-color: #52ce7c;
-                border-radius: 0.04rem;
-                &.b-fcp {
-                  background-color: #699bff;
-                }
-              }
-            }
-          }
-        }
-      }
     }
     .title {
       width: 100%;
@@ -1361,7 +970,6 @@ import { copyContent, debounce, fixedformat, messageTip, paginationWidth, replac
     }
     .el-row {
       .el-col {
-        margin: 0.22rem 0 0;
         &.flex {
           display: flex;
         }

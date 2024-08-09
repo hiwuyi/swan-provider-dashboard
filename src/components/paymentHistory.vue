@@ -3,19 +3,19 @@
     <div class="payment-history container-landing font-14">
       <el-row class="search-container font-14">
         <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
-          <div class="flex flex-ai-center child">
+          <div class="flex flex-ai-center nowrap child">
             <span class="font-14">Task UUID: </span>
-            <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter Task UUID" @chang="searchZKProvider" @input="searchZKProvider" />
+            <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter Task UUID" />
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
-          <div class="flex flex-ai-center child">
+          <div class="flex flex-ai-center nowrap child">
             <span class="font-14">NodeID: </span>
-            <el-input class="zk-input" v-model="networkZK.node_id" placeholder="please enter NodeID" @chang="searchZKProvider" @input="searchZKProvider" />
+            <el-input class="zk-input" v-model="networkZK.node_id" placeholder="please enter NodeID" />
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
-          <div class="flex flex-ai-center child">
+          <div class="flex flex-ai-center nowrap child">
             <el-button type="info" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id  ? true:false" round @click="clearProvider">Clear</el-button>
             <el-button type="primary" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id ? true:false" round @click="searchZKProvider">
               <el-icon>
@@ -523,15 +523,17 @@ import {
       paymentLoad.value = true
       try{
         const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
-        let paramsOption = {
-          limit: pagin.pageSize,
-          offset: page * pagin.pageSize
-        }
-        paramsOption = Object.assign({}, paramsOption, paramsFilter.data)
-        const requestURL = `${import.meta.env.VITE_BASEAPI}provider/payments`
-        const paymentsRes = await getPaymentListData(paramsOption)
-        paymentData.value = paymentsRes?.data?.payments ?? []
-        pagin.total = paymentsRes?.data?.total ?? 0
+        // let paramsOption = {
+        //   limit: pagin.pageSize,
+        //   offset: page * pagin.pageSize
+        // }
+        // paramsOption = Object.assign({}, paramsOption, paramsFilter.data)
+        // const requestURL = `${import.meta.env.VITE_BASEAPI}provider/payments`
+        // const paymentsRes = await getPaymentListData(paramsOption)
+        // paymentData.value = paymentsRes?.data?.payments ?? []
+        // pagin.total = paymentsRes?.data?.total ?? 0
+        paymentData.value =  []
+        pagin.total = 0
         paymentLoad.value = false
       }catch{paymentLoad.value = false}
     }
@@ -581,8 +583,8 @@ import {
     .search-container {
       justify-content: flex-start;
       flex-wrap: wrap;
+      min-height: 30px;
       margin: 0;
-      padding: 0 0 0.4rem;
       .el-select {
         width: auto;
         margin: 0 0.3rem 0 0;
