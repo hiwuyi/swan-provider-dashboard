@@ -37,20 +37,20 @@
             </div>
           </el-col>
         </el-row>
-        <el-table :data="providerBody.ubiTableData" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
+        <el-table :data="providerBody" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
           <el-table-column type="index" min-width="70">
             <template #header>
               <div class="font-14 weight-4">Ranking</div>
             </template>
           </el-table-column>
-          <el-table-column prop="owner_addr" min-width="140">
+          <el-table-column prop="addr" min-width="140">
             <template #header>
               <div class="font-14 weight-4">Contract Address</div>
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center copy-style">
-                {{hiddAddress(scope.row.owner_addr)}}
-                <svg @click="copyContent(scope.row.owner_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+                <span class="name-style w" @click="handleSelect(scope.row.addr)">{{hiddAddress(scope.row.addr)}}</span>
+                <svg @click="copyContent(scope.row.addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
                   <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
@@ -66,12 +66,12 @@
             <template #default="scope">
               <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.name">
                 <template #reference>
-                  <div class="name-style" @click="handleSelect('ranking', scope.row, scope.row.owner_addr)">{{scope.row.name}}</div>
+                  <div>{{scope.row.name}}</div>
                 </template>
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column prop="node_id" min-width="120">
+          <!-- <el-table-column prop="node_id" min-width="120">
             <template #header>
               <div class="font-14 weight-4">nodeID</div>
             </template>
@@ -100,17 +100,13 @@
                 </div>
               </div>
             </template>
-          </el-table-column>
-          <el-table-column prop="status" min-width="90" column-key="status" filterable :filters="[
-            { text: 'Online', value: 'Online' },
-            { text: 'Suspended', value: 'Suspended' },
-            { text: 'Offline', value: 'Offline' }
-          ]" filter-placement="bottom-end" :filter-multiple="false">
+          </el-table-column> -->
+          <el-table-column prop="status" min-width="90">
             <template #header>
               <div class="font-14 weight-4">status</div>
             </template>
           </el-table-column>
-          <el-table-column prop="region" min-width="100">
+          <!-- <el-table-column prop="region" min-width="100">
             <template #header>
               <div class="font-14 weight-4">Region</div>
             </template>
@@ -121,26 +117,14 @@
                 </template>
               </el-popover>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="uptime" min-width="140">
             <template #header>
               <div class="font-14 weight-4">Task Completion Rate</div>
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center nowrap uptime-container">
-                <ul class="flex flex-ai-center uptime-ul">
-                  <li :class="{'active': scope.row.uptime >= 0.1}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.2}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.3}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.4}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.5}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.6}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.7}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.8}"></li>
-                  <li :class="{'active': scope.row.uptime >= 0.9}"></li>
-                  <li :class="{'active': scope.row.uptime >= 1}"></li>
-                </ul>
-                <span class="uptime-text text-right">{{unifyNumber(scope.row.uptime)}}%</span>
+                <span class="uptime-text text-right task">{{ unifyNumber(scope.row.complete_rate/10000) }}%</span>
               </div>
             </template>
           </el-table-column>
@@ -149,23 +133,15 @@
               <div class="font-14 weight-4">Total Task</div>
             </template>
             <template #default="scope">
-                <span class="uptime-text text-right task">{{scope.row.task?scope.row.task.total : '-'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="uptime" min-width="110">
-            <template #header>
-              <div class="font-14 weight-4">Contribution Score</div>
-            </template>
-            <template #default="scope">
-                <span class="uptime-text text-right task">{{scope.row.task?scope.row.task.total : '-'}}</span>
+                <span class="uptime-text text-right task">{{replaceFormat(scope.row.tasks)}}</span>
             </template>
           </el-table-column>
         </el-table>
 
         <div class="flex flex-ai-center flex-jc-center pagination-style">
-          <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.ubiTableData.length : 0 + providerBody.ubiTableData.length }} /&nbsp;</span>
+          <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.length : 0 + providerBody.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
-          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20, 30, 40]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
+          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="paginZK.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
         </div>
       </div>
@@ -174,111 +150,69 @@
 </template>
 
 <script setup lang="ts">
-import { getOverviewECPData } from "@/api/overview";
-import { copyContent, debounce, hiddAddress, paginationWidth, unifyNumber } from "@/utils/common";
+import { getCPsECPListData } from "@/api/overview";
+import { copyContent, hiddAddress, paginationWidth, replaceFormat, unifyNumber } from "@/utils/common";
 import {
   Search
 } from '@element-plus/icons-vue'
-import dataListECPArray from '@/assets/static/js/ecplist.ts'
 
-    const route = useRoute()
-    const router = useRouter()
-    const providersECPLoad = ref(false)
-    const providerBody = reactive({
-      ubiTableData: []
-    })
-    const paginZK = reactive({
-      pageSize: 10,
-      pageNo: 1,
-      total: 0,
-      total_deployments: 0,
-      active_applications: 0
-    })
-    const small = ref(false)
-    const background = ref(false)
-    const cpLoad = ref(false)
-    const networkZK = reactive({
-      contract_address: '',
-      owner_addr: '',
-      node_id: ''
-    })
+const route = useRoute()
+const router = useRouter()
+const providersECPLoad = ref(false)
+const providerBody = ref([])
+const paginZK = reactive({
+  pageSize: 10,
+  pageNo: 1,
+  total: 0
+})
+const small = ref(false)
+const background = ref(false)
+const networkZK = reactive({
+  contract_address: '',
+  owner_addr: '',
+  node_id: ''
+})
 
-    function handleSizeChange (val) { }
-    async function handleZKCurrentChange (currentPage) {
-      paginZK.pageNo = currentPage
-      getUBITable()
+function handleSizeChange (val: number) {
+  paginZK.pageSize = val
+  paginZK.pageNo = 1
+  getUBITable()
+}
+async function handleZKCurrentChange (currentPage: number) {
+  paginZK.pageNo = currentPage
+  getUBITable()
+}
+async function getUBITable () {
+  providersECPLoad.value = true
+  try{
+    const page = paginZK.pageNo > 0 ? paginZK.pageNo - 1 : 0
+    const paramsCont = {
+      "page_no": page,
+      "page_size": paginZK.pageSize
     }
-    async function getUBITable () {
-      providersECPLoad.value = true
-      try{
-        const page = paginZK.pageNo > 0 ? paginZK.pageNo - 1 : 0
-        const params = {
-          page_size: paginZK.pageSize,
-          page_no: page,
-          contract_address: networkZK.contract_address,
-          owner_addr: networkZK.owner_addr,
-          node_id: networkZK.node_id
-        }
-        const providerRes = dataListECPArray
-        // const providerRes = await getOverviewECPData(params)
-        paginZK.total = providerRes?.data?.total ?? 0
-        providerBody.ubiTableData = await getList(providerRes?.data?.list, 'ECP')
-        providersECPLoad.value = false
-      }catch{providersECPLoad.value = false}
-    }
-    async function getList (list, type) {
-      let l = list || []
-      if (type === 'ECP') {
-        l.forEach((element) => {
-          try {
-            element.resources.forEach((machines) => {
-              machines.MachineShow = true
-            })
-          } catch{ }
-        })
-      } else {
-        l.forEach((element) => {
-          element.gpu_list = []
-          try {
-            if (element.computer_provider.machines && element.computer_provider.machines.length > 0) {
-              element.computer_provider.machines.forEach((machines) => {
-                machines.MachineShow = true
-                if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
-                  machines.specs.gpu.details.forEach((gpu) => {
-                    if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
-                  })
-                }
-              })
-            }
-          } catch{ }
-        })
-      }
-      return l
-    }
-    const searchZKProvider = debounce(async function () {
-      paginZK.pageNo = 1
-      getUBITable()
-    }, 700)
-    function clearProvider () {
-      networkZK.owner_addr = ''
-      networkZK.contract_address = ''
-      networkZK.node_id = ''
-      paginZK.pageNo = 1
-      getUBITable()
-    }
-    function reset (type) {
-      providersECPLoad.value = false
-      networkZK.owner_addr = ''
-      networkZK.contract_address = ''
-      networkZK.node_id = ''
-      getUBITable()
-    }
-    async function handleSelect (key, row, type) {
-      router.push({ name: 'accountInfo', params: { cp_addr: type } })
-    }
-    onMounted(async () => {
-      reset('init')
-    })
+    const providerECPRes = await getCPsECPListData(paramsCont)
+    providerBody.value = providerECPRes?.data?.list ?? []
+    paginZK.total = providerECPRes?.data?.total ?? 0
+  } catch { console.error }
+  providersECPLoad.value = false
+}
+const searchZKProvider = async function () {
+  paginZK.pageNo = 1
+  getUBITable()
+}
+function clearProvider () {
+  networkZK.owner_addr = ''
+  networkZK.contract_address = ''
+  networkZK.node_id = ''
+  paginZK.pageNo = 1
+  getUBITable()
+}
+async function handleSelect (type:string) {
+  router.push({ name: 'accountInfo', params: { cp_addr: type } })
+}
+onMounted(async () => {
+  getUBITable()
+})
 </script>
 
 <style lang="less" scoped>

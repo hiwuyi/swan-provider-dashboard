@@ -18,14 +18,13 @@ export async function timeout(delay: any) {
   return new Promise((resolve) => setTimeout(resolve, delay))
 }
 
-export function sizeChange (bytes: any, unit: any) {
-  if (bytes === 0) return unit ? `0 ${unit}` : '0 B'
+export function sizeChange (bytes: any) {
+  if (bytes === 0) return '0 B'
   if (!bytes) return '-'
   const k = 1024 // or 1000
   const sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-  let i = Math.floor(Math.log(bytes) / Math.log(k))
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
   const b = Math.floor(Math.log(bytes) / Math.log(k))
-  if (unit && sizes.indexOf(unit) > -1) i += sizes.indexOf(unit)
 
   // if (Math.round((bytes / Math.pow(k, b))).toString().length > 3) i += 1
   return parseFloat((bytes / Math.pow(k, b)).toFixed(2)) + ' ' + sizes[i]

@@ -1,6 +1,28 @@
 <template>
   <el-row :gutter="bodyWidth">
     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
+      <el-row class="m w-100">
+        <el-col :xs="24" :sm="24" :md="14" :lg="18" :xl="18" class="flex flex-ai-center baseline s">
+          <el-row class="m w-100">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
+              <div class="flex flex-ai-center flex-jc-between width">
+                <span>Collateral Balance:</span>
+                <span class="text-right">{{ replaceDecimalsFormat(balanceData?.fcp_collateral?.balance) }} SWANC</span>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
+              <div class="flex flex-ai-center flex-jc-between width">
+                <span>Locked Balance: </span>
+                <span>{{ replaceDecimalsFormat(balanceData?.fcp_collateral?.locked) }} SWANC</span>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="10" :lg="6" :xl="6" class="flex flex-ai-center flex-jc-right s">
+          <div :class="{'collateral m':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'FCP')">Add</div>
+        </el-col>
+      </el-row>
+
       <div class="module-container">
         <div class="title">
           <p class="font-16 weight-4">Job Status</p>
@@ -17,6 +39,44 @@
       </div>
     </el-col>
     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
+      <el-row class="m w-100">
+        <el-col :xs="24" :sm="24" :md="14" :lg="18" :xl="18" class="flex flex-ai-center baseline s">
+          <el-row class="m w-100">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
+              <div class="flex flex-ai-center flex-jc-between width">
+                <span>Collateral Balance:</span>
+                <span class="text-right">{{ replaceDecimalsFormat(balanceData?.ecp_collateral?.balance) }} SWANC</span>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
+              <div class="flex flex-ai-center flex-jc-between width">
+                <span>Locked Balance: </span>
+                <span>{{ replaceDecimalsFormat(balanceData?.ecp_collateral?.locked) }} SWANC</span>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="10" :lg="6" :xl="6" class="flex flex-ai-center flex-jc-right s">
+          <div :class="{'collateral m':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'ECP')">Add</div>
+        </el-col>
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
+          <p class="color font-16 tab-title">Sequencer</p>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="14" :lg="18" :xl="18" class="flex flex-ai-center baseline s">
+          <el-row class="m w-100">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
+              <div class="flex flex-ai-center flex-jc-between width">
+                <span>Sequencer Balance: </span>
+                <span>{{ replaceDecimalsFormat(balanceData?.sequencer?.balance) }} SWANC</span>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="10" :lg="6" :xl="6" class="flex flex-ai-center flex-jc-right s">
+          <div :class="{'collateral m':true,'is-disabled': !signature}" @click="handleSelect('cpProfile', {}, 'Sequencer')">Add</div>
+        </el-col>
+      </el-row>
       <div class="module-container">
         <div class="title">
           <p class="font-16 weight-4">Reward</p>
@@ -36,8 +96,9 @@
 </template>
 
 <script setup lang="ts">
-import { getCPsEchartsData } from "@/api/cp-profile";
-import { dataCpData, dataGPU, getDateRange, replaceFormat, sumArrays } from "@/utils/common";
+import { getCPsBalancesData, getCPsEchartsData } from "@/api/cp-profile";
+import { signature } from "@/utils/storage"
+import { dataCpData, dataGPU, getDateRange, replaceDecimalsFormat, replaceFormat, sumArrays } from "@/utils/common";
 import * as echarts from "echarts"
 
 const route = useRoute()
@@ -61,7 +122,19 @@ const weekList = reactive({
 })
 const totalJob = ref(0)
 const totalReward = ref(0)
+const balanceLoad = ref(false)
+const balanceData = ref<any>({})
 
+async function handleSelect (key:string, row:any, type:string) {
+  switch (key) {
+    case 'cpProfile':
+      vmOperate.row = row
+      vmOperate.row.type = type
+      vmOperate.type = 'dialog'
+      vmOperate.centerDrawerVisible = signature.value === '' ? false : true
+      break;
+  }
+}
 const changetype = async (data: any) => {
   const machart_job = echarts.init(document.getElementById("chart-job"));
   const machart_reward = echarts.init(document.getElementById("chart-reward"));
@@ -290,12 +363,35 @@ async function initEcharts () {
     changetype(data)
   }catch{ providersLoad.value = false}
 }
+async function getCPsBalanceData() {
+  balanceLoad.value = true
+  try{
+    const balanceRes = await getCPsBalancesData(route.params.cp_addr)
+    balanceData.value = balanceRes?.data ?? {}
+  }catch{console.error}
+  balanceLoad.value = false
+}
 onMounted(async () => {
+  getCPsBalanceData()
   initEcharts()
 })
 watch(route, (to:any) => {
-  if (to.name === "accountInfo") initEcharts()
+  if (to.name === "accountInfo") {
+    getCPsBalanceData()
+    initEcharts()
+  }
 })
+
+const props = withDefaults(
+  defineProps<{
+    cpsData?: any
+    cpsLoad?: boolean
+  }>(),
+  {
+    cpsData: {},
+    cpsLoad: false
+  }
+)
 </script>
 
 <style lang="less" scoped>

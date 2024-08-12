@@ -1,24 +1,10 @@
 <template>
-  <el-row class="re-list mb-24 font-14">
-    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-      <p>Total Number Of Node:</p>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <p>{{ props.cpsData.resources ? replaceFormat(props.cpsData.resources.length) : '-'}}</p>
-    </el-col>
-    <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-      <p>Completed:</p>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <p>{{unifyNumber(0.9)}}%</p>
-    </el-col>
-    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-      <p>Uptime:</p>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <p>{{unifyNumber(1)}}%</p>
-    </el-col> -->
-  </el-row>
-  
   <el-row :gutter="12" v-loading="cpLoad">
-    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
+    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+      <div class="title flex flex-ai-center">
+        <i class="icon icon-use"></i>
+        <span class="font-16 weight-4">Current Resource Use</span>
+      </div>
       <el-row class="width">
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
@@ -58,12 +44,24 @@
         </el-col>
       </el-row>
     </el-col>
+    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+      <div class="grid-content none">
+        <div class='chart-trends big' id='chart-Resource' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        <div class="date">
+          <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
+            <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
+              <div class="flex flex-ai-center font-14">{{item.label}}</div>
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+    </el-col>
   </el-row>
 </template>
 
 <script setup lang="ts">
-import { getCPsEchartsData } from '@/api/cp-profile'
-import { dataResource, getDateRange, replaceFormat, sizeChange, unifyNumber } from '@/utils/common';
+import { statsEchartsData } from '@/api/overview';
+import { dataResource, getDateRange, replaceFormat, byteStorage, unifyNumber, sizeChange } from '@/utils/common';
 import * as echarts from "echarts"
 
 const cpLoad = ref(false)
@@ -112,13 +110,15 @@ async function initEcharts () {
       from: weekRange.start,
       to: weekRange.end
     }
-    const echartsRes = await getCPsEchartsData(params)
+    const echartsRes = await statsEchartsData(params)
     const data = echartsRes?.data ?? {}
     changetype(data)
   }catch{ cpLoad.value = false}
 }
 const changetype = async (data: any) => {
   try{
+    const machart_resource = echarts.init(document.getElementById("chart-Resource"));
+
     const gpuData = await dataResource(data.gpu, 'active')
     const cpuData = await dataResource(data.cpu, 'active')
     const memoryData = await dataResource(data.memory, 'active')
@@ -131,21 +131,135 @@ const changetype = async (data: any) => {
     totalAll.memory.total = memoryData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
     totalAll.storage.used = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
     totalAll.storage.total = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
+
+    const option1 = {
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(0, 0, 0, 1)',
+        color: '#fff',
+        borderWidth: 0,
+        borderRadius: 9,
+        textStyle: {
+          color: '#fff',
+          fontSize: 11,
+          fontFamily: 'HELVETICA-ROMAN'
+        },
+        icon: 'roundRect',
+        formatter: function (params: any) {
+          // params 是一个数组，包含了每个系列的数据信息
+          var result = params[0].name + '<br/>'; // X轴的值
+          params.forEach(function (item: any) {
+            // 遍历每个系列的数据
+            const unit = item.seriesName === "CPU" || item.seriesName === "GPU" ? item.seriesName : ''
+            const used = item.seriesName === "CPU" || item.seriesName === "GPU" ? replaceFormat(item.data.used) : sizeChange(item.data.used)
+            const total = item.seriesName === "CPU" || item.seriesName === "GPU" ? replaceFormat(item.data.total) : sizeChange(item.data.total)
+            var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+            let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+            result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp; ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
+          });
+          return result;
+        }
+      },
+      legend: {
+        data: ['CPU', 'Memory', 'Storage', 'GPU'],
+        right: document.documentElement.clientWidth >= 1280 ? '130px' : 'auto',
+        top: document.documentElement.clientWidth >= 1280 ? '3px' : '25px',
+        icon: 'circle',
+        itemWidth: 10,
+        itemHeight: 10,
+        itemGap: 20,
+        textStyle: {
+          color: '#95a3bd',
+          fontSize: 11,
+          fontFamily: 'HELVETICA-ROMAN',
+          // lineHeight: 14,
+          rich: {
+            a: {
+              verticalAlign: 'middle',
+            },
+          },
+          padding: [0, 0, -2, 2]
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        axisTick: {
+          show: false
+        },
+        data: gpuData.timeArr
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          // 使用 formatter 函数格式化标签
+          formatter: '{value}%'
+        },
+        minInterval: 50
+      },
+      series: [
+        {
+          name: 'CPU',
+          type: 'line',
+          data: cpuData.datum,
+          color: '#699bff',
+          showSymbol: false,
+          smooth: false
+        },
+        {
+          name: 'Memory',
+          type: 'line',
+          data: memoryData.datum,
+          color: '#52ce7c',
+          showSymbol: false,
+          smooth: false
+        },
+        {
+          name: 'Storage',
+          type: 'line',
+          data: storageData.datum,
+          color: '#0046b7',
+          showSymbol: false,
+          smooth: false
+        },
+        {
+          name: 'GPU',
+          type: 'line',
+          data: gpuData.datum,
+          color: '#93c605',
+          showSymbol: false,
+          smooth: false
+        }
+      ]
+    }
+    machart_resource.setOption(option1);
+    if (typeof ResizeObserver !== 'undefined') {
+      let observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          machart_resource.resize();
+        }
+      });
+
+      let element = document.getElementById('resource-container');
+      observer.observe(element);
+    } else {
+      console.log('ResizeObserver is not supported in this browser.');
+    }
+    window.addEventListener("resize", function () {
+      machart_resource.resize();
+    })
   }catch{console.error}
   cpLoad.value = false
 }
 onMounted(async () => {
   initEcharts()
 })
-
-const props = withDefaults(
-  defineProps<{
-    cpsData?: any
-  }>(),
-  {
-    cpsData: {}
-  }
-)
 </script>
 
 <style lang="less" scoped>
@@ -296,78 +410,6 @@ const props = withDefaults(
         @media screen and (max-width: 768px) {
           height: 280px;
         }
-      }
-    }
-  }
-}
-
-
-.re-list {
-  .el-col {
-    margin: 0.22rem 0 0;
-    &.flex {
-      display: flex;
-    }
-    &.m {
-      margin: 0.22rem 0;
-    }
-    .module-container {
-      position: relative;
-      width: calc(100% - 0.64rem);
-      height: calc(100% - 0.5rem);
-      padding: 0.25rem 0.32rem;
-      background-color: var(--color-light);
-      border-radius: 0.14rem;
-      &.world {
-        background-color: var(--color-primary);
-        .title {
-          color: var(--color-light);
-        }
-      }
-      .el-col {
-        margin: 0;
-      }
-      .title {
-        margin: 0;
-        .subtitle {
-          margin: 0.06rem 0 0;
-          color: #7c889b;
-        }
-      }
-      .grid-content {
-        height: calc(100% - 0.53rem);
-        margin: 0.23rem 0 0;
-        background: #edf2ff;
-      }
-    }
-    .grid-content {
-      position: relative;
-      width: calc(100% - 0.28rem);
-      height: calc(100% - 0.3rem);
-      padding: 0.18rem 0.14rem 0.12rem;
-      background: var(--color-light);
-      border-radius: 0.18rem;
-      // box-shadow: 0 0 12px #e6e7eb;
-    }
-    .chart-trends {
-      width: 100%;
-      margin: -0.4rem auto 0;
-      height: 2.8rem;
-      @media screen and (min-width: 3600px) {
-        height: 400px;
-      }
-      @media screen and (max-width: 1600px) {
-        margin: -0.43rem auto 0;
-      }
-      @media screen and (max-width: 1440px) {
-        margin: -0.5rem auto 0;
-      }
-      @media screen and (max-width: 768px) {
-        height: 280px;
-        margin: -0.3rem auto 0;
-      }
-      @media screen and (max-width: 600px) {
-        height: 250px;
       }
     }
   }

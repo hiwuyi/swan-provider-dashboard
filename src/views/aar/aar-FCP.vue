@@ -58,7 +58,7 @@
           <el-table-column prop="gpu_list" label="GPU" min-width="140">
             <template #default="scope">
               <div class="badge">
-                <div class="flex flex-ai-center flex-jc-center machines-style">
+                <div class="flex flex-ai-center flex-jc-left machines-style">
                   <span v-for="(gpu, g) in scope.row.gpu_list" :key="g">
                     {{gpu}}
                   </span>
@@ -225,11 +225,11 @@ async function getList (list) {
   })
   return l
 }
-const searchProvider = debounce(async function () {
+const searchProvider = async function () {
   pagin.pageSize = 10
   pagin.pageNo = 1
   init()
-}, 700)
+}
 function clearProvider () {
   networkInput.contract_address = ''
   pagin.pageSize = 10

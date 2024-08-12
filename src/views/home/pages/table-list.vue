@@ -37,10 +37,16 @@
             <template #header>
               <div class="font-14 weight-4">Active Deployments</div>
             </template>
+            <template #default="scope">
+              <div>{{ replaceFormat(scope.row.active_deployments) }}</div>
+            </template>
           </el-table-column>
           <el-table-column prop="score" min-width="70">
             <template #header>
               <div class="font-14 weight-4">Score</div>
+            </template>
+            <template #default="scope">
+              <div>{{ replaceFormat(scope.row.score) }}</div>
             </template>
           </el-table-column>
           <el-table-column prop="uptime" min-width="130">
@@ -120,7 +126,7 @@
               <div class="font-14 weight-4">Complete Rate</div>
             </template>
             <template #default="scope">
-                <span class="uptime-text text-right task">{{ replaceFormat(scope.row.complete_rate) }}</span>
+                <span class="uptime-text text-right task">{{ unifyNumber(scope.row.complete_rate/10000) }}%</span>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="uptime" min-width="150">

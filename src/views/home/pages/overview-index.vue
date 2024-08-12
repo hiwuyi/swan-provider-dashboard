@@ -736,7 +736,7 @@ onMounted(async () => {
           font-size: 12px;
         }
       }
-      .el-select {
+      :deep(.el-select) {
         width: auto;
         font-size: inherit;
         .el-tooltip__trigger {
@@ -788,7 +788,7 @@ onMounted(async () => {
         height: 300px;
       }
     }
-    .el-tabs {
+    :deep(.el-tabs) {
       width: 100%;
       .el-tabs__nav-scroll {
         overflow: auto;

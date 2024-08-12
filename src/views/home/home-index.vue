@@ -46,7 +46,7 @@ import { currentNetwork, explorerLink } from '@/utils/storage'
     padding: 0;
     .title {
       width: 100%;
-      margin: 0 0 0.1rem;
+      // margin: 0 0 0.1rem;
       a {
         margin: 0 0 0 0.1rem;
         color: var(--color-primary);

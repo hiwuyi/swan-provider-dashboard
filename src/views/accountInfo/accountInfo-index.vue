@@ -1,23 +1,36 @@
 <template>
   <section id="cp-container">
-    <div class="flex flex-ai-center header-title">
-      <h1 class="font-24 font-bold">CP Profile</h1>
+    <div class="flex flex-ai-center header-title font-14">
+      <h1 class="font-24 font-bold s">CP Profile</h1>
+      <div class="flex flex-ai-center copy-style" v-if="route.params.cp_addr">
+        <a class="link-to s" :href="`${explorerLink}address/${route.params.cp_addr}`" target="_blank">{{route.params.cp_addr ?? '-'}}</a>
+        <svg @click="copyContent(route.params.cp_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+          <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
+            fill="#3d3d3d" p-id="6468"></path>
+          <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
+            fill="#3d3d3d" p-id="6469"></path>
+        </svg>
+      </div>
+      <span v-else>-</span>
+      <div class="flex name-title">
+        <a @click="handleSelect('claimAccount', {}, 'claimAccount')" :class="{'is-disabled': true}">Claim Account</a>
+      </div>
     </div>
 
     <div class="providers-network font-16">
-      <div class="providers">
-        <account-info :cpsData="cpsData" :cpsLoad="cpsLoad"></account-info>
+      <div class="providers mb-32">
+        <echart-list :cpsData="cpsData" :cpsLoad="cpsLoad"></echart-list>
       </div>
 
       <div class="providers">
-        <echart-list></echart-list>
+        <account-info :cpsData="cpsData" :cpsLoad="cpsLoad"></account-info>
       </div>
 
       <div class="providers-cp">
         <div class="flex flex-ai-center flex-jc-between name-title">
           <b class="font-16 weight-4">Resource List</b>
         </div>
-        <resource-echarts-list></resource-echarts-list>
+        <resource-echarts-list :cpsData="cpsData"></resource-echarts-list>
         <resource-list :cpsData="cpsData" :cpsLoad="cpsLoad"></resource-list>
       </div>
 
@@ -29,17 +42,29 @@
 </template>
 
 <script setup lang="ts">
+import { explorerLink } from '@/utils/storage'
 import accountInfo from './pages/accrount-info.vue'
 import echartList from './pages/echart-list.vue'
 import resourceEchartsList from './pages/resource-echarts-list.vue'
 import resourceList from './pages/resource-list.vue'
 import tabList from './pages/tab-list.vue'
 import { getCPsData } from "@/api/cp-profile"
+import { copyContent } from '@/utils/common'
 
 const route = useRoute()
 const cpsLoad = ref(false)
 const cpsData = ref<any>({})
 
+async function handleSelect(key: string, row: any, type: string) {
+  switch (key) {
+    case 'claimAccount':
+      // vmOperate.row = row
+      // vmOperate.row.type = type
+      // vmOperate.type = 'dialog'
+      // vmOperate.centerDrawerVisible = true
+      break;
+  }
+}
 async function getAllCPsData() {
   cpsLoad.value = true
   try{
@@ -86,6 +111,7 @@ watch(route, (to:any) => {
       margin: 0.08rem 0 0.18rem;
     }
     .providers-cp {
+      position: relative;
       height: calc(100% - 0.8rem);
       padding: 0.3rem 0.35rem 0.1rem;
       margin: 0.4rem 0 0;

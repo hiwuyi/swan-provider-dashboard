@@ -143,12 +143,12 @@ const changetype = async (data: any) => {
         var result = params[0].name + '<br/>'; // X轴的值
         params.forEach(function (item) {
           // 遍历每个系列的数据
-          const unit = item.seriesName === "CPU" ? 'CPU' : 'GiB'
-          const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : replaceFormat(sizeChange(item.data.used, 'GB'))
-          const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : replaceFormat(sizeChange(item.data.total, 'GB'))
+          const unit = item.seriesName === "CPU" ? 'CPU' : ''
+          const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : sizeChange(item.data.used)
+          const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : sizeChange(item.data.total)
           var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ' Usage: ' + item.value + '% ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
+          result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp; ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
         });
         return result;
       }

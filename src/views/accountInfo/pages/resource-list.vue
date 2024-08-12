@@ -1,29 +1,11 @@
 <template>
-  <el-row class="re-list">
-    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-      <p>Total Number Of Node:</p>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <p>{{ props.cpsData.resources ? replaceFormat(props.cpsData.resources.length) : '-'}}</p>
-    </el-col>
-    <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-      <p>Completed:</p>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <p>{{unifyNumber(0.9)}}%</p>
-    </el-col>
-    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
-      <p>Uptime:</p>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <p>{{unifyNumber(1)}}%</p>
-    </el-col> -->
-  </el-row>
-  
   <div class="font-14 note b" v-if="props.cpsData.resources" v-loading="props.cpsLoad">
-    <el-row :gutter="32">
+    <el-row :gutter="32" v-show="machineShow">
       <template v-for="machines in props.cpsData.resources" :key="machines">
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="mt-16 mb-16">
           <el-row>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
-              <p class="font-18 font-bold">MachineID: </p>
+              <p class="font-14">MachineID: </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
               <div class="flex flex-ai-center copy-style">
@@ -37,6 +19,36 @@
               </div>
             </el-col>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
+              <p>CPU usage:</p>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
+              <p class="width color text-left">
+                <span class="green">{{replaceFormat(machines.cpu.free)}}</span> free
+                <span class="green">{{replaceFormat(machines.cpu.total)}}</span> total
+                <span class="green">{{replaceFormat(machines.cpu.total - machines.cpu.free)}}</span> used
+              </p>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
+              <p>Memory usage (GiB):</p>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
+              <p class="width color text-left">
+                <span class="orange">{{ byteStorage(machines.memory.free) }}</span> free
+                <span class="orange">{{ byteStorage(machines.memory.total) }}</span> total
+                <span class="orange">{{ byteStorage(machines.memory.total - machines.memory.free) }}</span> used
+              </p>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
+              <p>Storage usage (GiB):</p>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
+              <p class="width color text-left">
+                <span class="blue">{{ byteStorage(machines.storage.free) }}</span> free
+                <span class="blue">{{ byteStorage(machines.storage.total) }}</span> total
+                <span class="blue">{{ byteStorage(machines.storage.total - machines.storage.free) }}</span> used
+              </p>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
               <p>GPU: </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
@@ -46,15 +58,18 @@
                 </span>
               </div>
             </el-col>
-            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center flex-jc-right">
+            <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center flex-jc-right">
               <div class="color text-right machines-style" @click="handleSelect('ranking', machines, 'resourceList')">
                 <span class="font-16 pointer">View</span>
               </div>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-col>
       </template>
     </el-row>
+    <div class="flex flex-jc-center open pointer" v-if="props.cpsData.resources && props.cpsData.resources.length > 0">
+      <svg @click="machineShow=!machineShow" :class="`icon ${machineShow?'up':''}`" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3824" width="32" height="32"><path d="M200.874667 311.125333l341.333333 341.333334L512 682.666667l-30.208-30.208 341.333333-341.333334 60.416 60.416-341.333333 341.333334q-2.986667 2.901333-6.485333 5.290666-3.498667 2.304-7.424 3.925334-3.84 1.621333-7.936 2.389333-4.181333 0.853333-8.362667 0.853333-4.266667 0-8.362667-0.853333t-7.936-2.389333q-3.925333-1.621333-7.424-3.925334-3.413333-2.389333-6.485333-5.290666l-341.333333-341.333334 60.416-60.416zM170.666667 384q-4.266667 0-8.362667-0.853333t-7.936-2.389334q-3.925333-1.621333-7.424-3.925333-3.413333-2.389333-6.485333-5.290667-2.901333-2.986667-5.290667-6.485333-2.304-3.498667-3.925333-7.424-1.621333-3.84-2.389334-7.936Q128 345.514667 128 341.333333q0-4.266667 0.853333-8.362666t2.389334-7.936q1.621333-3.925333 3.925333-7.424 2.389333-3.413333 5.290667-6.485334 2.986667-2.901333 6.485333-5.290666 3.498667-2.304 7.424-3.925334 3.84-1.621333 7.936-2.389333 4.181333-0.853333 8.362667-0.853333 4.266667 0 8.362666 0.853333t7.936 2.389333q3.925333 1.621333 7.424 3.925334 3.413333 2.389333 6.485334 5.290666 2.901333 2.986667 5.290666 6.485334 2.304 3.498667 3.925334 7.424 1.621333 3.84 2.389333 7.936 0.853333 4.181333 0.853333 8.362666 0 4.266667-0.853333 8.362667t-2.389333 7.936q-1.621333 3.925333-3.925334 7.424-2.389333 3.413333-5.290666 6.485333-2.986667 2.901333-6.485334 5.290667-3.498667 2.304-7.424 3.925333-3.84 1.621333-7.936 2.389334-4.181333 0.853333-8.362666 0.853333z m682.666666 0q-4.266667 0-8.362666-0.853333t-7.936-2.389334q-3.925333-1.621333-7.424-3.925333-3.413333-2.389333-6.485334-5.290667-2.901333-2.986667-5.290666-6.485333-2.304-3.498667-3.925334-7.424-1.621333-3.84-2.389333-7.936Q810.666667 345.514667 810.666667 341.333333q0-4.266667 0.853333-8.362666t2.389333-7.936q1.621333-3.925333 3.925334-7.424 2.389333-3.413333 5.290666-6.485334 2.986667-2.901333 6.485334-5.290666 3.498667-2.304 7.424-3.925334 3.84-1.621333 7.936-2.389333 4.181333-0.853333 8.362666-0.853333 4.266667 0 8.362667 0.853333t7.936 2.389333q3.925333 1.621333 7.424 3.925334 3.413333 2.389333 6.485333 5.290666 2.901333 2.986667 5.290667 6.485334 2.304 3.498667 3.925333 7.424 1.621333 3.84 2.389334 7.936 0.853333 4.181333 0.853333 8.362666 0 4.266667-0.853333 8.362667t-2.389334 7.936q-1.621333 3.925333-3.925333 7.424-2.389333 3.413333-5.290667 6.485333-2.986667 2.901333-6.485333 5.290667-3.498667 2.304-7.424 3.925333-3.84 1.621333-7.936 2.389334-4.181333 0.853333-8.362667 0.853333z" fill="#999999" p-id="3825"></path></svg>
+    </div>
   </div>
 
   <vm-drawer v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-drawer>
@@ -62,13 +77,14 @@
 
 <script setup lang="ts">
 import vmDrawer from "@/components/vmDrawer.vue"
-import { copyContent, fixedformat, replaceFormat, unifyNumber } from "@/utils/common"
+import { byteStorage, copyContent, replaceFormat } from "@/utils/common"
 
 const vmOperate = reactive({
   centerDrawerVisible: false,
   row: {},
   type: 'dialog'
 })
+const machineShow = ref(false)
 
 async function handleSelect (key:string, row:any, type:string) {
   switch (key) {
@@ -98,6 +114,25 @@ const props = withDefaults(
 
 <style lang="less" scoped>
 .note {
+  .open {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    padding: 0 0.1rem;
+    background-color: var(--color-light);
+    transform: translate(-50%, 50%);
+    border: 1px solid #b4b4b4;
+    border-radius: 0.06rem;
+    svg, path{
+      width: 24px;
+      height: 24px;
+      fill: #b4b4b4;
+      transition: all 0.2s;
+      &.up {
+        transform: rotate(180deg);
+      }
+    }
+  }
   .el-row {
     margin: 0.1rem 0;
     .el-col {
@@ -110,15 +145,15 @@ const props = withDefaults(
       p {
         color: #000;
         &.color {
-          color: var(--color-primary);
+          color: var(--color-dark);
           .green {
-            color: #8dd565;
+            color: #699bff;
           }
           .orange {
-            color: #ff9413;
+            color: #52cd7b;
           }
           .blue {
-            color: #6067f5;
+            color: #0046b7;
           }
         }
         &.tab-title{
@@ -126,76 +161,6 @@ const props = withDefaults(
           margin: 0 0 0.1rem;
           border-bottom: 1px solid var(--color-border);
         }
-      }
-    }
-  }
-}
-.re-list {
-  .el-col {
-    margin: 0.22rem 0 0;
-    &.flex {
-      display: flex;
-    }
-    &.m {
-      margin: 0.22rem 0;
-    }
-    .module-container {
-      position: relative;
-      width: calc(100% - 0.64rem);
-      height: calc(100% - 0.5rem);
-      padding: 0.25rem 0.32rem;
-      background-color: var(--color-light);
-      border-radius: 0.14rem;
-      &.world {
-        background-color: var(--color-primary);
-        .title {
-          color: var(--color-light);
-        }
-      }
-      .el-col {
-        margin: 0;
-      }
-      .title {
-        margin: 0;
-        .subtitle {
-          margin: 0.06rem 0 0;
-          color: #7c889b;
-        }
-      }
-      .grid-content {
-        height: calc(100% - 0.53rem);
-        margin: 0.23rem 0 0;
-        background: #edf2ff;
-      }
-    }
-    .grid-content {
-      position: relative;
-      width: calc(100% - 0.28rem);
-      height: calc(100% - 0.3rem);
-      padding: 0.18rem 0.14rem 0.12rem;
-      background: var(--color-light);
-      border-radius: 0.18rem;
-      // box-shadow: 0 0 12px #e6e7eb;
-    }
-    .chart-trends {
-      width: 100%;
-      margin: -0.4rem auto 0;
-      height: 2.8rem;
-      @media screen and (min-width: 3600px) {
-        height: 400px;
-      }
-      @media screen and (max-width: 1600px) {
-        margin: -0.43rem auto 0;
-      }
-      @media screen and (max-width: 1440px) {
-        margin: -0.5rem auto 0;
-      }
-      @media screen and (max-width: 768px) {
-        height: 280px;
-        margin: -0.3rem auto 0;
-      }
-      @media screen and (max-width: 600px) {
-        height: 250px;
       }
     }
   }

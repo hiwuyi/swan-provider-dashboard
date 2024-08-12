@@ -229,9 +229,9 @@
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
               <p class="color text-right">
-                <span class="orange">{{replaceFormat(byteStorage(machinesECP.memory.free))}}</span> free
-                <span class="orange">{{replaceFormat(byteStorage(machinesECP.memory.total))}}</span> total
-                <span class="orange">{{replaceFormat(byteStorage(machinesECP.memory.total-props.list.resources[0].memory.free))}}</span> used
+                <span class="orange">{{sizeChange(machinesECP.memory.free)}}</span> free
+                <span class="orange">{{sizeChange(machinesECP.memory.total)}}</span> total
+                <span class="orange">{{sizeChange(machinesECP.memory.total-props.list.resources[0].memory.free)}}</span> used
               </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
@@ -239,9 +239,9 @@
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
               <p class="color text-right">
-                <span class="blue">{{replaceFormat(byteStorage(machinesECP.storage.free))}}</span> free
-                <span class="blue">{{replaceFormat(byteStorage(machinesECP.storage.total))}}</span> total
-                <span class="blue">{{replaceFormat(byteStorage(machinesECP.storage.total-machinesECP.storage.free))}}</span> used
+                <span class="blue">{{sizeChange(machinesECP.storage.free)}}</span> free
+                <span class="blue">{{sizeChange(machinesECP.storage.total)}}</span> total
+                <span class="blue">{{sizeChange(machinesECP.storage.total-machinesECP.storage.free)}}</span> used
               </p>
             </el-col>
             <!-- <el-col v-show="machinesECP.MachineShow" :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
@@ -324,27 +324,27 @@
               <p class="width color text-right">
                 <span class="green">{{replaceFormat(props.list.cpu.free)}}</span> free
                 <span class="green">{{replaceFormat(props.list.cpu.total)}}</span> total
-                <span class="green">{{replaceFormat(props.list.cpu.used)}}</span> used
+                <span class="green">{{replaceFormat(props.list.cpu.total - props.list.cpu.free)}}</span> used
               </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
-              <p>Current Memory usage(GiB):</p>
+              <p>Current Memory usage (GiB):</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
               <p class="width color text-right">
-                <span class="orange">{{ sizeChange(props.list.memory.free, 'GB') }}</span> free
-                <span class="orange">{{ sizeChange(props.list.memory.total, 'GB') }}</span> total
-                <span class="orange">{{ sizeChange(props.list.memory.used, 'GB') }}</span> used
+                <span class="orange">{{ byteStorage(props.list.memory.free) }}</span> free
+                <span class="orange">{{ byteStorage(props.list.memory.total) }}</span> total
+                <span class="orange">{{ byteStorage(props.list.memory.total - props.list.memory.free) }}</span> used
               </p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" class="flex flex-ai-center baseline">
-              <p>Current Storage usage(GiB):</p>
+              <p>Current Storage usage (GiB):</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14" class="flex flex-ai-center baseline">
               <p class="width color text-right">
-                <span class="blue">{{ sizeChange(props.list.storage.free, 'GB') }}</span> free
-                <span class="blue">{{ sizeChange(props.list.storage.total, 'GB') }}</span> total
-                <span class="blue">{{ sizeChange(props.list.storage.used, 'GB') }}</span> used
+                <span class="blue">{{ byteStorage(props.list.storage.free) }}</span> free
+                <span class="blue">{{ byteStorage(props.list.storage.total) }}</span> total
+                <span class="blue">{{ byteStorage(props.list.storage.total - props.list.storage.free) }}</span> used
               </p>
             </el-col>
             <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
@@ -353,7 +353,7 @@
               </div>
             </el-col> -->
           </el-row>
-          <div class="flex flex-ai-center flex-jc-between name-title">
+          <div class="flex flex-ai-center flex-jc-between name-title mt-32">
             <b class="font-16 weight-4">GPU Source</b>
           </div>
           <el-table v-show="props.list.gpu && props.list.gpu.gpus" :data="props.list.gpu.gpus" style="width: 100%" empty-text="No Data">
@@ -397,7 +397,7 @@
 </template>
 
 <script setup lang="ts">
-import { byteStorage, dataResource, fixedformat, replaceFormat, sizeChange, timeout, unifyNumber } from '@/utils/common';
+import { sizeChange, dataResource, fixedformat, replaceFormat, byteStorage, timeout, unifyNumber } from '@/utils/common';
 import {
   Warning
 } from '@element-plus/icons-vue'
@@ -453,12 +453,12 @@ const props = withDefaults(
             var result = params[0].name + '<br/>'; // X轴的值
             params.forEach(function (item) {
               // 遍历每个系列的数据
-              const unit = item.seriesName === "CPU" ? 'CPU' : 'GiB'
-              const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : replaceFormat(sizeChange(item.data.used, 'GB'))
-              const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : replaceFormat(sizeChange(item.data.total, 'GB'))
+              const unit = item.seriesName === "CPU" ? 'CPU' : ''
+              const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : sizeChange(item.data.Used)
+              const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : sizeChange(item.data.total)
               var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
               let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
+              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp;' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
             });
             return result;
           }

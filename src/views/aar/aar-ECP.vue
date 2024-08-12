@@ -75,7 +75,7 @@
           <el-table-column prop="gpu_tags" label="GPU" min-width="140">
             <template #default="scope">
               <div class="badge">
-                <div class="flex flex-ai-center flex-jc-center machines-style">
+                <div class="flex flex-ai-center flex-jc-left machines-style">
                   <span v-for="(gpu, g) in scope.row.gpu_tags" :key="g">
                     {{gpu}}
                   </span>
@@ -126,7 +126,7 @@
         <div class="flex flex-ai-center flex-jc-center pagination-style">
           <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.ubiTableData.length : 0 + providerBody.ubiTableData.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
-          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20, 30, 40]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
+          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="paginZK.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
         </div>
       </div>
