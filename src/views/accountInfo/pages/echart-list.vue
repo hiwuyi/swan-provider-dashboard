@@ -4,11 +4,11 @@
       <div class="module-container">
         <div class="title">
           <p class="font-16 weight-4">Job Status</p>
-          <p class="font-12 subtitle">Completion total: 101</p>
+          <p class="font-12 subtitle">Completion total: {{ replaceFormat(totalJob) }}</p>
         </div>
         <div class='chart-trends' id='chart-job' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         <div class="date">
-          <el-select v-model="weekList.value" placeholder="Select" size="small">
+          <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
             <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
               <div class="flex flex-ai-center font-14">{{item.label}}</div>
             </el-option>
@@ -20,11 +20,11 @@
       <div class="module-container">
         <div class="title">
           <p class="font-16 weight-4">Reward</p>
-          <p class="font-12 subtitle">Reward total: 87</p>
+          <p class="font-12 subtitle">Reward total: {{ replaceFormat(totalReward) }}</p>
         </div>
         <div class='chart-trends' id='chart-reward' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         <div class="date">
-          <el-select v-model="weekList.value" placeholder="Select" size="small">
+          <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
             <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
               <div class="flex flex-ai-center font-14">{{item.label}}</div>
             </el-option>
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { getCPsEchartsData } from "@/api/cp-profile";
-import { getDateRange } from "@/utils/common";
+import { dataCpData, dataGPU, getDateRange, replaceFormat, sumArrays } from "@/utils/common";
 import * as echarts from "echarts"
 
 const route = useRoute()
@@ -59,10 +59,22 @@ const weekList = reactive({
       label: '1 Year'
     }]
 })
+const totalJob = ref(0)
+const totalReward = ref(0)
 
 const changetype = async (data: any) => {
   const machart_job = echarts.init(document.getElementById("chart-job"));
   const machart_reward = echarts.init(document.getElementById("chart-reward"));
+  
+  const ecpSuccessData = await dataCpData(data.ecp_task, 'active')
+  const ecpFaildData = await dataCpData(data.ecp_task, 'failed')
+  const fcpSuccessData = await dataCpData(data.fcp_job, 'active')
+  totalJob.value = sumArrays(ecpSuccessData.datum, fcpSuccessData.datum)
+
+  const rewardData = await dataGPU(data.ecp_reward, 'active')
+  const rewardTotalData = await dataGPU(data.ecp_reward, 'total')
+  totalReward.value = sumArrays(rewardTotalData.datum, [])
+
   const option1 = {
     tooltip: {
       trigger: 'axis',
@@ -111,7 +123,7 @@ const changetype = async (data: any) => {
           show: false
         },
         // prettier-ignore
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        data: ecpSuccessData.timeArr
       }
     ],
     yAxis: [
@@ -131,7 +143,7 @@ const changetype = async (data: any) => {
         // barCategoryGap: '0%',
         barGap: '0%',
         barWidth: '10',
-        data: [],
+        data: ecpFaildData.datum,
         color: '#0000bf'
       },
       {
@@ -140,7 +152,7 @@ const changetype = async (data: any) => {
         // barCategoryGap: '0%',
         barGap: '0%',
         barWidth: '10',
-        data: [],
+        data: ecpSuccessData.datum,
         color: '#56cfb2'
       },
       {
@@ -154,7 +166,7 @@ const changetype = async (data: any) => {
             return value;
           }
         },
-        data: [],
+        data: fcpSuccessData.datum,
         color: '#8ae664'
       }
     ]
@@ -172,9 +184,23 @@ const changetype = async (data: any) => {
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
+      formatter: function (params) {
+        // params 是一个数组，包含了每个系列的数据信息
+        var result = params[0].name + '<br/>'; // X轴的值
+        params.forEach(function (item) {
+          // 遍历每个系列的数据
+          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+          // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>'; // 系列名和对应的值
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+          result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; // 系列名和对应的值
+        });
+        return result;
+      }
     },
     legend: {
-      data: ['Daily reward', 'Waiting'],
+      data: ['Used Reward', 'Total Reward'],
       right: document.documentElement.clientWidth >= 1280 ? '100px' : 'auto',
       top: document.documentElement.clientWidth >= 1280 ? '5px' : '25px',
       icon: 'circle',
@@ -206,26 +232,26 @@ const changetype = async (data: any) => {
       axisTick: {
         show: false
       },
-      data: ['8/01', '8/02', '8/03', '8/04', '8/05', '8/06', '8/07']
+      data: rewardData.timeArr
     },
     yAxis: {
       type: 'value'
     },
     series: [
       {
-        name: 'Daily reward',
+        name: 'Used Reward',
         type: 'line',
         smooth: false,
         showSymbol: false,
-        data: [],
+        data: rewardData.datum,
         color: '#61a5e8'
       },
       {
-        name: 'Waiting',
+        name: 'Total Reward',
         type: 'line',
         smooth: false,
         showSymbol: false,
-        data: [],
+        data: rewardTotalData.datum,
         color: '#0000ff'
       }
     ]
@@ -267,138 +293,77 @@ async function initEcharts () {
 onMounted(async () => {
   initEcharts()
 })
+watch(route, (to:any) => {
+  if (to.name === "accountInfo") initEcharts()
+})
 </script>
 
 <style lang="less" scoped>
-#cp-container {
-  padding: 0 0 0.4rem;
-  font-size: 16px;
-  line-height: 1.6;
-  @media screen and (max-width: 1200px) {
-    font-size: 14px;
-  }
-  .copy-style {
-    cursor: pointer;
-    flex-wrap: wrap;
-    svg {
-      margin: 0 0 0 0.05rem;
+.el-row {
+  .el-col {
+    &.flex {
+      display: flex;
     }
-  }
-  .color {
-    color: #3c85ff;
-  }
-  :deep(.providers-overview),
-  :deep(.providers-network) {
-    padding: 0;
-    .s {
-      height: calc(100% - 0.4rem) !important;
-      margin: 0 !important;
+    &.m {
+      margin: 0.22rem 0;
     }
-    .providers {
-      margin: 0.08rem 0 0.18rem;
-    }
-    .providers-cp {
-      height: calc(100% - 0.8rem);
-      padding: 0.3rem 0.35rem 0.1rem;
-      margin: 0.4rem 0 0;
+    .module-container {
+      position: relative;
+      width: calc(100% - 0.64rem);
+      height: calc(100% - 0.5rem);
+      padding: 0.25rem 0.32rem;
       background-color: var(--color-light);
-      border-radius: 0.2rem;
-    }
-    .title {
-      width: 100%;
-      margin: 0.22rem 0 0;
-      line-height: 1;
-      a {
-        padding: 0.07rem 0.1rem;
-        margin: 0 0 0 0.1rem;
-        background-color: var(--color-light);
-        border: 1px solid #c1c9d8;
-        border-radius: 0.07rem;
-        color: var(--color-primary);
-        i {
-          width: 0.25rem;
-          height: 0.25rem;
-          margin: 0 0 0 0.07rem;
-          background: url(../../assets/images/icons/icon-01.png) no-repeat;
-          background-size: 100%;
+      border-radius: 0.14rem;
+      &.world {
+        background-color: var(--color-primary);
+        .title {
+          color: var(--color-light);
         }
       }
-    }
-    .el-row {
       .el-col {
-        &.flex {
-          display: flex;
-        }
-        &.m {
-          margin: 0.22rem 0;
-        }
-        .module-container {
-          position: relative;
-          width: calc(100% - 0.64rem);
-          height: calc(100% - 0.5rem);
-          padding: 0.25rem 0.32rem;
-          background-color: var(--color-light);
-          border-radius: 0.14rem;
-          &.world {
-            background-color: var(--color-primary);
-            .title {
-              color: var(--color-light);
-            }
-          }
-          .el-col {
-            margin: 0;
-          }
-          .title {
-            margin: 0;
-            .subtitle {
-              margin: 0.06rem 0 0;
-              color: #7c889b;
-            }
-          }
-          .grid-content {
-            height: calc(100% - 0.53rem);
-            margin: 0.23rem 0 0;
-            background: #edf2ff;
-          }
-        }
-        .grid-content {
-          position: relative;
-          width: calc(100% - 0.28rem);
-          height: calc(100% - 0.3rem);
-          padding: 0.18rem 0.14rem 0.12rem;
-          background: var(--color-light);
-          border-radius: 0.18rem;
-          // box-shadow: 0 0 12px #e6e7eb;
-        }
-        .chart-trends {
-          width: 100%;
-          margin: -0.4rem auto 0;
-          height: 2.8rem;
-          @media screen and (min-width: 3600px) {
-            height: 400px;
-          }
-          @media screen and (max-width: 1600px) {
-            margin: -0.43rem auto 0;
-          }
-          @media screen and (max-width: 1440px) {
-            margin: -0.5rem auto 0;
-          }
-          @media screen and (max-width: 768px) {
-            height: 280px;
-            margin: -0.3rem auto 0;
-          }
-          @media screen and (max-width: 600px) {
-            height: 250px;
-          }
+        margin: 0;
+      }
+      .title {
+        margin: 0;
+        .subtitle {
+          margin: 0.06rem 0 0;
+          color: #7c889b;
         }
       }
+      .grid-content {
+        height: calc(100% - 0.53rem);
+        margin: 0.23rem 0 0;
+        background: #edf2ff;
+      }
     }
-    .search-body {
-      margin: 0 0 0.2rem;
-      .tabs-container {
-        .tabs-button {
-          top: 0;
-        }
+    .grid-content {
+      position: relative;
+      width: calc(100% - 0.28rem);
+      height: calc(100% - 0.3rem);
+      padding: 0.18rem 0.14rem 0.12rem;
+      background: var(--color-light);
+      border-radius: 0.18rem;
+      // box-shadow: 0 0 12px #e6e7eb;
+    }
+    .chart-trends {
+      width: 100%;
+      margin: -0.4rem auto 0;
+      height: 2.8rem;
+      @media screen and (min-width: 3600px) {
+        height: 400px;
+      }
+      @media screen and (max-width: 1600px) {
+        margin: -0.43rem auto 0;
+      }
+      @media screen and (max-width: 1440px) {
+        margin: -0.5rem auto 0;
+      }
+      @media screen and (max-width: 768px) {
+        height: 280px;
+        margin: -0.3rem auto 0;
+      }
+      @media screen and (max-width: 600px) {
+        height: 250px;
       }
     }
   }

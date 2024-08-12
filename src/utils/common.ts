@@ -45,6 +45,20 @@ export function replaceFormat (value: any) {
   }
 }
 
+export function replaceDecimalsFormat (value: any) {
+  try {
+    if (String(value) === '0') return '0'
+    else if (!value) return '-'
+    const intPartArr = String(value).split('.')
+    const intPartFormat = intPartArr[0]
+      .toString()
+      .replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+    return intPartArr[1] ? `${intPartFormat}.${intPartArr[1]}` : intPartFormat
+  } catch {
+    return '-'
+  }
+}
+
 export function timeFormat (data: any) {
   if (!data) return 0
   const d = data / 60 / 60
@@ -180,6 +194,7 @@ export function dataResource (data: any, type:string) {
       datum.push({
         value: unifyNumber((item['total'] - item[type]) / item['total']),
         used: item['total'] - item[type],
+        success: item[type],
         total: item['total']
       })
     } 
@@ -188,6 +203,35 @@ export function dataResource (data: any, type:string) {
     datum: datum,
     timeArr: timeArr
   }
+}
+
+export function dataCpData (data: any, type:string) {
+  // console.log(data)
+  const datum = [], timeArr = []
+  data.sort((itema:any, itemb:any) => {
+    return itema.timestamp - itemb.timestamp
+  })
+  data.forEach((item:any) => {
+    // let time_end = momentFun(item.timestamp)
+    // let time = new Date(parseInt(item.timestamp) * 1000)
+    // let time_end = addZero(time.getFullYear()) + '-' + addZero(time.getMonth() + 1) + '-' + addZero(time.getDate())
+    const time_end = getDateTime(parseInt(item.timestamp) * 1000)
+    if (timeArr.indexOf(time_end) === -1) {
+      timeArr.push(time_end)
+      datum.push(type === 'failed' ? Number(item['total'] - item['active']) : item[type])
+    } else {
+      datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + (type === 'failed' ? Number(item['total'] - item['active']) : item[type])
+    }
+  })
+  return {
+    datum: datum,
+    timeArr: timeArr
+  }
+}
+
+
+export function sumArrays(array1:any, array2:any) {
+  return array1.map((value:any, index:number) => value + (array2[index] || 0)).reduce((a:any, b:any) => a + b, 0);
 }
 
 export function getDateTime (time: any) {

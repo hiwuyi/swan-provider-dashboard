@@ -258,7 +258,7 @@ import {
           }
           .el-select__suffix {
             .el-select__icon {
-              background: url(../assets/images/icons/icon-03.png) no-repeat
+              background: url(../../../assets/images/icons/icon-03.png) no-repeat
                 center;
               background-size: 100%;
               svg {

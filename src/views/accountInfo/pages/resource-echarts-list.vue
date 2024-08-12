@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="bodyWidth">
-    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
       <div class="module-container">
         <div class="title flex flex-ai-center">
           <i class="icon icon-gpu"></i>
@@ -16,23 +16,7 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-      <div class="module-container">
-        <div class="title flex flex-ai-center">
-          <i class="icon icon-provider"></i>
-          <span class="font-16 weight-4">Fog Computing Provider</span>
-        </div>
-        <div class='chart-trends' id='chart-Fog' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
-        <div class="date">
-          <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
-            <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-14">{{item.label}}</div>
-            </el-option>
-          </el-select>
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
       <div class="module-container">
         <div class="title flex flex-ai-center">
           <i class="icon icon-resource"></i>
@@ -48,33 +32,17 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-      <div class="module-container">
-        <div class="title flex flex-ai-center">
-          <i class="icon icon-provider"></i>
-          <span class="font-16 weight-4">Edge Computing Provider</span>
-        </div>
-        <div class='chart-trends' id='chart-Edge' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
-        <div class="date">
-          <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
-            <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-14">{{item.label}}</div>
-            </el-option>
-          </el-select>
-        </div>
-      </div>
-    </el-col>
   </el-row>
 </template>
 
 <script setup lang="ts">
+import { getCPsEchartsData } from "@/api/cp-profile";
+import { dataGPU, dataResource, getDateRange, replaceFormat, sizeChange } from "@/utils/common";
 import * as echarts from "echarts"
-import { statsEchartsData } from "@/api/overview"
-import { dataDelta, dataGPU, dataResource, getDateRange, replaceFormat, sizeChange } from '@/utils/common';
 
-const bodyWidth = ref(document.body.clientWidth > 1440 ? 42 : 28)
+const route = useRoute()
+const bodyWidth = ref(document.body.clientWidth > 1440 ? 32 : 22)
 const providersLoad = ref(false)
-const cpLoad = ref(false)
 const weekList = reactive({
   value: 'Week',
   options: [
@@ -92,25 +60,9 @@ const weekList = reactive({
     }]
 })
 
-async function initEcharts () {
-  try{
-    cpLoad.value = true
-
-    const weekRange = getDateRange(weekList.value);
-    const params = {
-      from: weekRange.start,
-      to: weekRange.end
-    }
-    const echartsRes = await statsEchartsData(params)
-    const data = echartsRes?.data ?? {}
-    changetype(data)
-  }catch{ cpLoad.value = false}
-}
 const changetype = async (data: any) => {
   const machart_resource = echarts.init(document.getElementById("chart-Resource"));
-  const machart_fog = echarts.init(document.getElementById("chart-Fog"));
-  const machart_gpu = echarts.init(document.getElementById("chart-GPU"));
-  const machart_edge = echarts.init(document.getElementById("chart-Edge"));
+  const machart_gpu = echarts.init(document.getElementById("chart-GPU"))
 
   const gpuData = await dataGPU(data.gpu, 'active')
   const gpuTotalData = await dataGPU(data.gpu, 'total')
@@ -118,12 +70,6 @@ const changetype = async (data: any) => {
   const cpuData = await dataResource(data.cpu, 'active')
   const memoryData = await dataResource(data.memory, 'active')
   const storageData = await dataResource(data.storage, 'active')
-
-  const fcpData = await dataDelta(data.fcp, 'total')
-  const fcpDeltaData = await dataDelta(data.fcp, 'delta')
-
-  const ecpData = await dataDelta(data.ecp, 'total')
-  const ecpDeltaData = await dataDelta(data.ecp, 'delta')
 
   const option1 = {
     tooltip: {
@@ -235,149 +181,6 @@ const changetype = async (data: any) => {
     ]
   }
   const option2 = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999'
-        }
-      },
-      backgroundColor: 'rgba(0, 0, 0, 1)',
-      color: '#fff',
-      borderWidth: 0,
-      borderRadius: 9,
-      textStyle: {
-        color: '#fff',
-        fontSize: 11,
-        fontFamily: 'HELVETICA-ROMAN'
-      },
-      icon: 'roundRect',
-      formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
-        params.forEach(function (item) {
-          // 遍历每个系列的数据
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
-          let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; // 系列名和对应的值
-        });
-        return result;
-      }
-    },
-    grid: {
-      left: '0',
-      right: '0',
-      bottom: '3%',
-      containLabel: true
-    },
-    legend: {
-      data: ['FCP', 'Delta'],
-      right: document.documentElement.clientWidth >= 1280 ? '110px' : 'auto',
-      top: document.documentElement.clientWidth >= 1280 ? '0' : '25px',
-      icon: 'circle',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 20,
-      textStyle: {
-        color: '#95a3bd',
-        fontSize: 11,
-        fontFamily: 'HELVETICA-ROMAN',
-        // lineHeight: 14,
-        rich: {
-          a: {
-            verticalAlign: 'middle',
-          },
-        },
-        padding: [0, 0, -2, 2]
-      }
-    },
-    xAxis: [
-      {
-        type: 'category',
-        data: fcpData.timeArr,
-        boundaryGap: false,
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          // interval: 6,
-          fontSize: 12,
-          color: '#7c889b',
-          formatter: function (value) {
-            // 使用字符串的 replace 方法将空格替换为换行符
-            return value.split(' ').join('\n');
-          }
-        },
-      }
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        // name: 'FCP',
-        // min: 0,
-        // max: 240,
-        // interval: 80,
-        axisLabel: {
-          fontSize: 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        minInterval: 150
-      },
-      {
-        type: 'value',
-        min: -300,
-        max: 300,
-        minInterval: 300,
-        axisLabel: {
-          fontSize: 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-      }
-    ],
-    series: [
-      {
-        name: 'FCP',
-        type: 'line',
-        stack: 'Total',
-        smooth: false,
-        showSymbol: false,
-        itemStyle: {
-          color: 'rgba(105,155,255,1)'
-        },
-        areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(105,155,255,1)'
-            },
-            {
-              offset: 1,
-              color: 'rgba(105,155,255,0.3)'
-            }
-          ])
-        },
-        data: fcpData.datum
-      },
-      {
-        name: 'Delta',
-        type: 'line',
-        stack: 'Total',
-        smooth: false,
-        showSymbol: false,
-        // tooltip: {
-        //   valueFormatter: function (value) {
-        //     return value + ' °C';
-        //   }
-        // },
-        color: '#52ce7c',
-        data: fcpDeltaData.datum
-      }
-    ]
-  }
-  const option3 = {
     // title: {
     //   left: '2%',
     //   text: 'GPU',
@@ -501,176 +304,45 @@ const changetype = async (data: any) => {
       }
     ]
   }
-  const option4 = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999'
-        }
-      },
-      backgroundColor: 'rgba(0, 0, 0, 1)',
-      color: '#fff',
-      borderWidth: 0,
-      borderRadius: 9,
-      textStyle: {
-        color: '#fff',
-        fontSize: 11,
-        fontFamily: 'HELVETICA-ROMAN'
-      },
-      icon: 'roundRect',
-      formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
-        params.forEach(function (item) {
-          // 遍历每个系列的数据
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
-          let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; // 系列名和对应的值
-        });
-        return result;
-      }
-    },
-    grid: {
-      left: '0',
-      right: '0',
-      bottom: '3%',
-      containLabel: true
-    },
-    legend: {
-      data: ['ECP', 'Delta'],
-      right: document.documentElement.clientWidth >= 1280 ? '110px' : 'auto',
-      top: document.documentElement.clientWidth >= 1280 ? '0' : '25px',
-      icon: 'circle',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 20,
-      textStyle: {
-        color: '#95a3bd',
-        fontSize: 11,
-        fontFamily: 'HELVETICA-ROMAN',
-        // lineHeight: 14,
-        rich: {
-          a: {
-            verticalAlign: 'middle',
-          },
-        },
-        padding: [0, 0, -2, 2]
-      }
-    },
-    xAxis: [
-      {
-        type: 'category',
-        data: ecpData.timeArr,
-        boundaryGap: false,
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          // interval: 6,
-          color: '#7c889b',
-          formatter: function (value) {
-            // 使用字符串的 replace 方法将空格替换为换行符
-            return value.split(' ').join('\n');
-          }
-        },
-      }
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        // name: 'ECP',
-        // min: 0,
-        // max: 1500,
-        // interval: 750,
-        // axisLabel: {
-        //   formatter: '{value}'
-        // }
-        minInterval: 150
-      },
-      {
-        type: 'value',
-        min: -300,
-        max: 300,
-        minInterval: 300,
-        // axisLabel: {
-        //   formatter: '{value} °C'
-        // }
-      }
-    ],
-    series: [
-      {
-        name: 'ECP',
-        type: 'line',
-        smooth: false,
-        showSymbol: false,
-        itemStyle: {
-          color: 'rgba(147,198,5,1)'
-        },
-        areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(147,198,5,1)'
-            },
-            {
-              offset: 1,
-              color: 'rgba(147,198,5,0.3)'
-            }
-          ])
-        },
-        data: ecpData.datum
-      },
-      {
-        name: 'Delta',
-        type: 'line',
-        smooth: false,
-        showSymbol: false,
-        // tooltip: {
-        //   valueFormatter: function (value) {
-        //     return value + ' °C';
-        //   }
-        // },
-        color: '#0046b7',
-        data: ecpDeltaData.datum
-      }
-    ]
-  }
   machart_resource.setOption(option1);
-  machart_fog.setOption(option2);
-  machart_gpu.setOption(option3);
-  machart_edge.setOption(option4);
-
+  machart_gpu.setOption(option2);
   if (typeof ResizeObserver !== 'undefined') {
     let observer = new ResizeObserver(entries => {
       for (let entry of entries) {
-        const width = entry.contentRect.width;
-        const height = entry.contentRect.height;
-        // console.log(`Element resized to width: ${width}, height: ${height}`);
         machart_resource.resize();
-        machart_fog.resize();
         machart_gpu.resize();
-        machart_edge.resize();
       }
     });
 
-    let element = document.getElementById('main-container');
+    let element = document.getElementById('cp-container');
     observer.observe(element);
   } else {
     console.log('ResizeObserver is not supported in this browser.');
   }
   window.addEventListener("resize", function () {
     machart_resource.resize();
-    machart_fog.resize();
     machart_gpu.resize();
-    machart_edge.resize();
   })
-  cpLoad.value = false
+}
+async function initEcharts () {
+  try{
+    providersLoad.value = true
+
+    const weekRange = getDateRange(weekList.value);
+    const params = {
+      from: weekRange.start,
+      to: weekRange.end
+    }
+    const echartsRes = await getCPsEchartsData(params, route.params.cp_addr)
+    const data = echartsRes?.data ?? {}
+    changetype(data)
+  }catch{ providersLoad.value = false}
 }
 onMounted(async () => {
-  providersLoad.value = false
   initEcharts()
+})
+watch(route, (to:any) => {
+  if (to.name === "accountInfo") initEcharts()
 })
 </script>
 
@@ -690,22 +362,6 @@ onMounted(async () => {
       border-radius: 0.14rem;
       @media screen and (max-width: 768px) {
       }
-      &.world {
-        width: 100%;
-        height: 100%;
-        min-height: 4.2rem;
-        padding: 0;
-        background-color: var(--color-primary);
-        .title {
-          position: absolute;
-          left: 0.25rem;
-          right: 0.25rem;
-          top: 0.32rem;
-          width: auto;
-          color: var(--color-light);
-          z-index: 9;
-        }
-      }
       .el-col {
         margin: 0;
       }
@@ -719,16 +375,6 @@ onMounted(async () => {
             width: 16px;
             height: 16px;
           }
-          &.icon-world {
-            background: url(../../../assets/images/icons/icon-05.png)
-              no-repeat;
-            background-size: 100%;
-          }
-          &.icon-figures {
-            background: url(../../../assets/images/icons/icon-04.png)
-              no-repeat;
-            background-size: 100%;
-          }
           &.icon-gpu {
             background: url(../../../assets/images/icons/icon-08.png)
               no-repeat;
@@ -736,16 +382,6 @@ onMounted(async () => {
           }
           &.icon-resource {
             background: url(../../../assets/images/icons/icon-06.png)
-              no-repeat;
-            background-size: 100%;
-          }
-          &.icon-provider {
-            background: url(../../../assets/images/icons/icon-07.png)
-              no-repeat;
-            background-size: 100%;
-          }
-          &.icon-list {
-            background: url(../../../assets/images/icons/icon-09.png)
               no-repeat;
             background-size: 100%;
           }

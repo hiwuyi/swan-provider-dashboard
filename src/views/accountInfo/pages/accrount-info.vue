@@ -1,10 +1,10 @@
 <template>
-  <el-row :gutter="bodyWidth">
+  <el-row :gutter="bodyWidth" class="mt-24">
     <el-col :xs="24" :sm="24" :md="24" :lg="15" :xl="15">
       <div class="providers-cp s font-14">
         <div class="flex flex-ai-center name-title">
           <b class="font-16 weight-4">Account Info</b>
-          <a @click="handleSelect('claimAccount', {}, 'claimAccount')" :class="{'is-disabled': false}">Claim Account</a>
+          <a @click="handleSelect('claimAccount', {}, 'claimAccount')" :class="{'is-disabled': true}">Claim Account</a>
         </div>
         <div class="note b">
           <el-row v-loading="props.cpsLoad">
@@ -28,8 +28,8 @@
               <p class="text-capitalize">Owner Address:</p>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-              <div class="flex flex-ai-center copy-style">
-                <a class="link-to" :href="`${explorerLink}address/${props.cpsData.owner_addr}`" target="_blank">{{props.cpsData.owner_addr}}</a>
+              <div class="flex flex-ai-center copy-style" v-if="props.cpsData.owner_addr">
+                <a class="link-to" :href="`${explorerLink}address/${props.cpsData.owner_addr}`" target="_blank">{{props.cpsData.owner_addr ?? '-'}}</a>
                 <svg @click="copyContent(props.cpsData.owner_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
@@ -37,13 +37,14 @@
                     fill="#3d3d3d" p-id="6469"></path>
                 </svg>
               </div>
+              <span v-else>-</span>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
               <p class="text-capitalize">Worker Address:</p>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-              <div class="flex flex-ai-center copy-style">
-                <a class="link-to" :href="`${explorerLink}address/${props.cpsData.worker_addr}`" target="_blank">{{props.cpsData.worker_addr}}</a>
+              <div class="flex flex-ai-center copy-style" v-if="props.cpsData.worker_addr">
+                <a class="link-to" :href="`${explorerLink}address/${props.cpsData.worker_addr}`" target="_blank">{{props.cpsData.worker_addr ?? '-'}}</a>
                 <svg @click="copyContent(props.cpsData.worker_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
@@ -51,12 +52,13 @@
                     fill="#3d3d3d" p-id="6469"></path>
                 </svg>
               </div>
+              <span v-else>-</span>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
               <p class="text-capitalize">beneficiary Address:</p>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="16" :xl="16" class="flex flex-ai-center baseline">
-              <div class="flex flex-ai-center copy-style">
+              <div class="flex flex-ai-center copy-style" v-if="props.cpsData.beneficiary_addr">
                 <a class="link-to" :href="`${explorerLink}address/${props.cpsData.beneficiary_addr}`" target="_blank">{{props.cpsData.beneficiary_addr}}</a>
                 <svg @click="copyContent(props.cpsData.beneficiary_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
@@ -65,6 +67,7 @@
                     fill="#3d3d3d" p-id="6469"></path>
                 </svg>
               </div>
+              <span v-else>-</span>
             </el-col>
           </el-row>
         </div>
@@ -77,25 +80,25 @@
           <b class="font-16 weight-4">Balance Info</b>
         </div>
         <div class="note b">
-          <el-row class="m">
+          <el-row class="m w-100">
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
-              <p class="color font-18">Available Balance: {{ balanceData?.eth?.balance }} SWANC</p>
+              <p class="color font-18">Available Balance: {{ replaceDecimalsFormat(balanceData?.eth?.balance) }} SWANC</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
               <p class="color font-16 tab-title">FCP</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="18" :xl="18" class="flex flex-ai-center baseline s">
-              <el-row class="m">
+              <el-row class="m w-100">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Collateral Balance:</span>
-                    <span class="text-right">{{balanceData?.fcp_collateral?.balance}} SWANC</span>
+                    <span class="text-right">{{ replaceDecimalsFormat(balanceData?.fcp_collateral?.balance) }} SWANC</span>
                   </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Locked Balance: </span>
-                    <span>{{balanceData?.fcp_collateral?.locked}} SWANC</span>
+                    <span>{{ replaceDecimalsFormat(balanceData?.fcp_collateral?.locked) }} SWANC</span>
                   </div>
                 </el-col>
               </el-row>
@@ -108,17 +111,17 @@
               <p class="color font-16 tab-title">ECP</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="18" :xl="18" class="flex flex-ai-center baseline s">
-              <el-row class="m">
+              <el-row class="m w-100">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Collateral Balance:</span>
-                    <span class="text-right">{{balanceData?.ecp_collateral?.balance}} SWANC</span>
+                    <span class="text-right">{{ replaceDecimalsFormat(balanceData?.ecp_collateral?.balance) }} SWANC</span>
                   </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Locked Balance: </span>
-                    <span>{{balanceData?.ecp_collateral?.locked}} SWANC</span>
+                    <span>{{ replaceDecimalsFormat(balanceData?.ecp_collateral?.locked) }} SWANC</span>
                   </div>
                 </el-col>
               </el-row>
@@ -131,11 +134,11 @@
               <p class="color font-16 tab-title">Sequencer</p>
             </el-col>
             <el-col :xs="24" :sm="24" :md="14" :lg="18" :xl="18" class="flex flex-ai-center baseline s">
-              <el-row class="m">
+              <el-row class="m w-100">
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline s">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Sequencer Balance: </span>
-                    <span>{{balanceData?.sequencer?.balance}} SWANC</span>
+                    <span>{{ replaceDecimalsFormat(balanceData?.sequencer?.balance) }} SWANC</span>
                   </div>
                 </el-col>
               </el-row>
@@ -156,7 +159,7 @@
 import vmDialog from "@/components/vmDialog.vue"
 import { explorerLink, signature } from "@/utils/storage"
 import { getCPsBalancesData } from "@/api/cp-profile"
-import { copyContent } from "@/utils/common"
+import { copyContent, replaceDecimalsFormat } from "@/utils/common"
 
 const bodyWidth = ref(document.body.clientWidth > 1440 ? 32 : 22)
 const route = useRoute()
@@ -171,10 +174,10 @@ const balanceData = ref<any>({})
 async function handleSelect (key:string, row:any, type:string) {
   switch (key) {
     case 'claimAccount':
-      vmOperate.row = row
-      vmOperate.row.type = type
-      vmOperate.type = 'dialog'
-      vmOperate.centerDrawerVisible = true
+      // vmOperate.row = row
+      // vmOperate.row.type = type
+      // vmOperate.type = 'dialog'
+      // vmOperate.centerDrawerVisible = true
       break;
     case 'cpProfile':
       vmOperate.row = row
@@ -197,6 +200,10 @@ async function getCPsBalanceData() {
 }
 
 onMounted(() => getCPsBalanceData())
+
+watch(route, (to:any) => {
+  if (to.name === "accountInfo") getCPsBalanceData()
+})
 
 const props = withDefaults(
   defineProps<{

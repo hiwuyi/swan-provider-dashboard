@@ -43,7 +43,7 @@ function searchZKProvider() {}
     white-space: nowrap;
   }
 }
-.el-input {
+:deep(.el-input) {
   width: 100%;
   // max-width: 250px;
   // min-width: 150px;

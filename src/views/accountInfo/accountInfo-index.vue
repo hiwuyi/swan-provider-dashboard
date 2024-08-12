@@ -17,6 +17,7 @@
         <div class="flex flex-ai-center flex-jc-between name-title">
           <b class="font-16 weight-4">Resource List</b>
         </div>
+        <resource-echarts-list></resource-echarts-list>
         <resource-list :cpsData="cpsData" :cpsLoad="cpsLoad"></resource-list>
       </div>
 
@@ -30,6 +31,7 @@
 <script setup lang="ts">
 import accountInfo from './pages/accrount-info.vue'
 import echartList from './pages/echart-list.vue'
+import resourceEchartsList from './pages/resource-echarts-list.vue'
 import resourceList from './pages/resource-list.vue'
 import tabList from './pages/tab-list.vue'
 import { getCPsData } from "@/api/cp-profile"
@@ -48,6 +50,10 @@ async function getAllCPsData() {
 }
 onMounted(async () => {
   getAllCPsData()
+})
+
+watch(route, (to:any) => {
+  if (to.name === "accountInfo") getAllCPsData()
 })
 </script>
 
@@ -88,7 +94,7 @@ onMounted(async () => {
     }
     .title {
       width: 100%;
-      margin: 0.22rem 0 0;
+      // margin: 0.22rem 0 0;
       line-height: 1;
       a {
         padding: 0.07rem 0.1rem;
@@ -103,83 +109,6 @@ onMounted(async () => {
           margin: 0 0 0 0.07rem;
           background: url(../../assets/images/icons/icon-01.png) no-repeat;
           background-size: 100%;
-        }
-      }
-    }
-    .el-row {
-      .el-col {
-        &.flex {
-          display: flex;
-        }
-        &.m {
-          margin: 0.22rem 0;
-        }
-        .module-container {
-          position: relative;
-          width: calc(100% - 0.64rem);
-          height: calc(100% - 0.5rem);
-          padding: 0.25rem 0.32rem;
-          background-color: var(--color-light);
-          border-radius: 0.14rem;
-          &.world {
-            background-color: var(--color-primary);
-            .title {
-              color: var(--color-light);
-            }
-          }
-          .el-col {
-            margin: 0;
-          }
-          .title {
-            margin: 0;
-            .subtitle {
-              margin: 0.06rem 0 0;
-              color: #7c889b;
-            }
-          }
-          .grid-content {
-            height: calc(100% - 0.53rem);
-            margin: 0.23rem 0 0;
-            background: #edf2ff;
-          }
-        }
-        .grid-content {
-          position: relative;
-          width: calc(100% - 0.28rem);
-          height: calc(100% - 0.3rem);
-          padding: 0.18rem 0.14rem 0.12rem;
-          background: var(--color-light);
-          border-radius: 0.18rem;
-          // box-shadow: 0 0 12px #e6e7eb;
-        }
-        .chart-trends {
-          width: 100%;
-          margin: -0.4rem auto 0;
-          height: 2.8rem;
-          @media screen and (min-width: 3600px) {
-            height: 400px;
-          }
-          @media screen and (max-width: 1600px) {
-            margin: -0.43rem auto 0;
-          }
-          @media screen and (max-width: 1440px) {
-            margin: -0.5rem auto 0;
-          }
-          @media screen and (max-width: 768px) {
-            height: 280px;
-            margin: -0.3rem auto 0;
-          }
-          @media screen and (max-width: 600px) {
-            height: 250px;
-          }
-        }
-      }
-    }
-    .search-body {
-      margin: 0 0 0.2rem;
-      .tabs-container {
-        .tabs-button {
-          top: 0;
         }
       }
     }

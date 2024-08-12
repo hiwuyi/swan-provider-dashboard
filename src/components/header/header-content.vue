@@ -697,6 +697,12 @@ const contractAddress = ref('')
     .el-button {
       font-family: inherit;
       font-size: inherit;
+      .el-icon {
+        font-size: 14px;
+        svg {
+          color: var(--color-light);
+        }
+      }
     }
   }
 }
