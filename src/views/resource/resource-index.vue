@@ -10,11 +10,11 @@
       </div>
     </div>
 
-    <div class="providers-container">
+    <!-- <div class="providers-container">
       <div class="providers-overview">
         <echarts-bar></echarts-bar>
       </div>
-    </div>
+    </div> -->
 
     <div class="providers-overview">
       <el-row :gutter="16">

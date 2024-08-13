@@ -13,8 +13,12 @@
           <div :class="`font-12 ml-10 mr-10 tab-title pointer ${activeTab === 'memory'?'active': ''}`" @click="tabProvider('memory')">Memory (TB)</div>
           <div :class="`font-12 tab-title pointer ${activeTab === 'storage'?'active': ''}`" @click="activeTab='storage'">Storage (TB)</div>
         </div>
-        <div class='chart-trends' id='chart-bar-memory' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
-        <div class='chart-trends' id='chart-bar-storage' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        <div v-if="activeTab === 'memory'">
+          <div class='chart-trends' id='chart-bar-memory' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        </div>
+        <div v-if="activeTab === 'storage'">
+          <div class='chart-trends' id='chart-bar-storage' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        </div>
       </div>
     </el-col>
   </el-row>
