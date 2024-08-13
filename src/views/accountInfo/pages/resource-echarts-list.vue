@@ -18,12 +18,12 @@
   </el-row>
   
   <el-row :gutter="12" v-loading="cpLoad">
-    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
+    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline mb-10">
       <el-row class="width">
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-12 text-center">GPU Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.gpu.used/totalAll.gpu.total))" :width="104" :stroke-width="21" color="#93c605" class="color-gpu" />
+            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.gpu.used/totalAll.gpu.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-gpu" />
             <!-- <div class='chart-trends' id='chart-gpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
             <p class="font-12 text-center desc">
               <span class="color-gpu">{{ replaceFormat(totalAll.gpu.used) }}</span> Used {{ replaceFormat(totalAll.gpu.total) }} Free</p>
@@ -32,7 +32,7 @@
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-12 text-center">CPU Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.cpu.used/totalAll.cpu.total))" :width="104" :stroke-width="21" color="#699bff" class="color-cpu" />
+            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.cpu.used/totalAll.cpu.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-cpu" />
             <!-- <div class='chart-trends' id='chart-cpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
             <p class="font-12 text-center desc">
               <span class="color-cpu">{{ replaceFormat(totalAll.cpu.used) }}</span> Used {{ replaceFormat(totalAll.cpu.total) }} Free</p>
@@ -41,7 +41,7 @@
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-12 text-center">Memory Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.memory.used/totalAll.memory.total))" :width="104" :stroke-width="21" color="#52ce7c" class="color-memory" />
+            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.memory.used/totalAll.memory.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-memory" />
             <!-- <div class='chart-trends' id='chart-memory' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
             <p class="font-12 text-center desc">
               <span class="color-memory">{{ sizeChange(totalAll.memory.used) }}</span> Used {{ sizeChange(totalAll.memory.total) }} Free</p>
@@ -50,7 +50,7 @@
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-12 text-center">Storage Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.storage.used/totalAll.storage.total))" :width="104" :stroke-width="21" color="#0046b7" class="color-storage" />
+            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.storage.used/totalAll.storage.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-storage" />
             <!-- <div class='chart-trends' id='chart-storage' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
             <p class="font-12 text-center desc">
               <span class="color-storage">{{ sizeChange(totalAll.storage.used) }}</span> Used {{ sizeChange(totalAll.storage.total) }} Free</p>
@@ -189,7 +189,7 @@ const props = withDefaults(
           }
           .el-progress-circle__track {
             // stroke: #7c889b;
-            stroke: #d7d7d7;
+            stroke: #49ad6b;
           }
           .el-progress__text {
             font-family: inherit;
@@ -266,16 +266,16 @@ const props = withDefaults(
         color: #7c889b;
       }
       .color-gpu {
-        color: #93c605;
+        color: #8c8c8c;
       }
       .color-cpu {
-        color: #699bff;
+        color: #8c8c8c;
       }
       .color-memory {
-        color: #52ce7c;
+        color: #8c8c8c;
       }
       .color-storage {
-        color: #0046b7;
+        color: #8c8c8c;
       }
     }
     .date {

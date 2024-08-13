@@ -40,7 +40,7 @@ import transactionList from './transaction-list.vue'
 import paymentHistory from "./payment-history.vue"
 import ubiHistory from "./UBI-history.vue"
 
-const activeName = ref('ECP')
+const activeName = ref('FCP')
 
 onMounted(async () => {})
 </script>

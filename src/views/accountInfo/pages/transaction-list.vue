@@ -1,26 +1,26 @@
 <template>
-  <el-row class="search-container font-14">
+  <el-row class="search-container font-14" justify="space-between">
     <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
       <div class="flex flex-ai-center nowrap child">
-        <span class="font-14">Message ID: </span>
-        <el-input class="zk-input" v-model="networkZK.contract_address" placeholder="please enter Message ID" />
+        <span class="font-14">Total: 0 Transactions</span>
       </div>
     </el-col>
     <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
       <div class="flex flex-ai-center nowrap child">
-        <el-button type="info" :disabled="!networkZK.contract_address ? true:false" round @click="clearProvider">Clear</el-button>
-        <el-button type="primary" :disabled="!networkZK.contract_address ? true:false" round @click="searchZKProvider">
-          <el-icon>
-            <Search />
-          </el-icon>
-          Search
-        </el-button>
+        <el-select v-model="searchList.value" placeholder="Select" size="small">
+          <el-option v-for="item in searchList.options" :key="item.value" :label="item.label" :value="item.value">
+            <div class="flex flex-ai-center font-16">
+              <i class="icon icon-swanProxima"></i>
+              {{item.label}}
+            </div>
+          </el-option>
+        </el-select>
       </div>
     </el-col>
   </el-row>
 
   <el-table :data="tableData" style="width: 100%">
-    <el-table-column prop="date" label="Message ID" />
+    <el-table-column prop="date" label="Transaction Hash" />
     <el-table-column prop="name" label="Height" />
     <el-table-column prop="address" label="Time" />
     <el-table-column prop="address" label="From" />
@@ -35,6 +35,15 @@
 const tableData = ref([])
 const networkZK = reactive({
   contract_address: ''
+})
+const searchList = reactive({
+  value: 'All',
+  options: [
+    {
+      value: 'All',
+      label: 'All'
+    }
+  ]
 })
 
 function clearProvider() {}

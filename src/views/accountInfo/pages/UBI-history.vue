@@ -8,16 +8,10 @@
             <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter Task ID" />
           </div>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
-          <div class="flex flex-ai-center nowrap child">
-            <span class="font-14">NodeID: </span>
-            <el-input class="zk-input" v-model="networkZK.node_id" placeholder="please enter NodeID" />
-          </div>
-        </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
           <div class="flex flex-ai-center nowrap child">
-            <el-button type="info" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id  ? true:false" round @click="clearProvider">Clear</el-button>
-            <el-button type="primary" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id ? true:false" round @click="searchZKProvider">
+            <el-button type="info" :disabled="!networkZK.owner_addr ? true:false" round @click="clearProvider">Clear</el-button>
+            <el-button type="primary" :disabled="!networkZK.owner_addr ? true:false" round @click="searchZKProvider">
               <el-icon>
                 <Search />
               </el-icon>
@@ -31,6 +25,17 @@
         <el-table-column prop="task_id" width="90">
           <template #header>
             <div class="font-14 weight-4">Task ID</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="type" column-key="Resource Type" filterable :filters="[
+            { text: 'CPU', value: 'CPU' },
+            { text: 'GPU', value: 'GPU' }
+          ]" filter-placement="bottom-end" :filter-multiple="false" min-width="90">
+          <template #header>
+            <div class="font-14 weight-4">Resource Type</div>
+          </template>
+          <template #default="scope">
+            <span>{{scope.row.type === 0 ? 'CPU': 'GPU'}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="task_contract" min-width="125">
@@ -58,30 +63,6 @@
           </template>
           <template #default="scope">
             <span>{{scope.row.type === 0 ? 'CPU': 'GPU'}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="node_id" min-width="120">
-          <template #header>
-            <div class="font-14 weight-4">NODE ID</div>
-          </template>
-          <template #default="scope">
-            <div class="flex flex-ai-center flex-jc-center copy-style">
-              {{hiddAddress(scope.row.node_id)}}
-              <svg @click="copyContent(scope.row.node_id, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
-                <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
-                  fill="#3d3d3d" p-id="6468"></path>
-                <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
-                  fill="#3d3d3d" p-id="6469"></path>
-              </svg>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="zk_type" min-width="110" column-key="zk_type" filterable :filters="[
-            { text: 'CPU', value: 'CPU' },
-            { text: 'GPU', value: 'GPU' }
-          ]" filter-placement="bottom-end" :filter-multiple="false">
-          <template #header>
-            <div class="font-14 weight-4">ZK Type</div>
           </template>
         </el-table-column>
         <el-table-column prop="started_at" min-width="135" sortable>

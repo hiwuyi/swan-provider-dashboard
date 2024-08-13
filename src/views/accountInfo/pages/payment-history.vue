@@ -8,16 +8,10 @@
             <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter Task UUID" />
           </div>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
-          <div class="flex flex-ai-center nowrap child">
-            <span class="font-14">NodeID: </span>
-            <el-input class="zk-input" v-model="networkZK.node_id" placeholder="please enter NodeID" />
-          </div>
-        </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
           <div class="flex flex-ai-center nowrap child">
-            <el-button type="info" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id  ? true:false" round @click="clearProvider">Clear</el-button>
-            <el-button type="primary" :disabled="!networkZK.contract_address && !networkZK.owner_addr && !networkZK.node_id ? true:false" round @click="searchZKProvider">
+            <el-button type="info" :disabled="!networkZK.owner_addr ? true:false" round @click="clearProvider">Clear</el-button>
+            <el-button type="primary" :disabled="!networkZK.owner_addr ? true:false" round @click="searchZKProvider">
               <el-icon>
                 <Search />
               </el-icon>

@@ -150,6 +150,12 @@
 .mlr-30 {
   margin: 0 0.3rem;
 }
+.ml-4 {
+  margin-left: 0.04rem;
+}
+.ml-8 {
+  margin-left: 0.08rem;
+}
 .ml-10 {
   margin-left: 0.1rem;
 }
@@ -167,6 +173,9 @@
 }
 .ml-32 {
   margin-left: 0.32rem;
+}
+.mr-8 {
+  margin-right: 0.08rem;
 }
 .mr-10 {
   margin-right: 0.1rem;

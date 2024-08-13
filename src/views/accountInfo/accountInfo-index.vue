@@ -13,7 +13,7 @@
       </div>
       <span v-else>-</span>
       <div class="flex name-title">
-        <a @click="handleSelect('claimAccount', {}, 'claimAccount')" :class="{'is-disabled': true}">Claim Account</a>
+        <a @click="handleSelect('claimAccount', {}, 'claimAccount')" :class="{'is-disabled': false, 'pointer': true}">Claim Account</a>
       </div>
     </div>
 
@@ -39,9 +39,12 @@
       </div>
     </div>
   </section>
+
+  <vm-dialog v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-dialog>
 </template>
 
 <script setup lang="ts">
+import vmDialog from "@/components/vmDialog.vue"
 import { explorerLink } from '@/utils/storage'
 import accountInfo from './pages/accrount-info.vue'
 import echartList from './pages/echart-list.vue'
@@ -54,14 +57,23 @@ import { copyContent } from '@/utils/common'
 const route = useRoute()
 const cpsLoad = ref(false)
 const cpsData = ref<any>({})
+const vmOperate = reactive({
+  centerDrawerVisible: false,
+  row: {},
+  type: 'dialog'
+})
+  
+function hardClose (dialog:boolean) {
+  vmOperate.centerDrawerVisible = dialog
+}
 
 async function handleSelect(key: string, row: any, type: string) {
   switch (key) {
     case 'claimAccount':
-      // vmOperate.row = row
-      // vmOperate.row.type = type
-      // vmOperate.type = 'dialog'
-      // vmOperate.centerDrawerVisible = true
+      vmOperate.row = row
+      vmOperate.row.type = type
+      vmOperate.type = 'dialog'
+      vmOperate.centerDrawerVisible = true
       break;
   }
 }

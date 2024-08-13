@@ -84,6 +84,7 @@
             </el-form-item>
           </el-form>
         </div>
+
         <el-row class="font-14 note" v-else-if="props.list.type === 'Sequencer'" v-loading="ruleForm.show">
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
             <p>Available Balance:</p>
@@ -107,6 +108,7 @@
             </div>
           </el-col>
         </el-row>
+
         <el-row class="font-14 note" v-else v-loading="ruleForm.show">
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
             <p>Available Balance:</p>
@@ -140,7 +142,7 @@
       <template #footer>
         <div class="dialog-footer flex flex-ai-center flex-end font-14">
           <el-button @click="closeHandle()">Cancel</el-button>
-          <el-button @click="cpCollateral" :disabled="!ruleForm.amount" type="primary">Submit</el-button>
+          <el-button @click="cpCollateral" :disabled="!ruleForm.amount || props.list.type === 'claimAccount'" type="primary">Submit</el-button>
         </div>
       </template>
     </el-dialog>
@@ -204,10 +206,11 @@ const props = withDefaults(
     const collateralContract = new web3Init.eth.Contract(CollateralABI, collateralAddress)
 
     const emits = defineEmits(['hardClose'])
-    function closeHandle (type) {
-      emits('hardClose', false, type)
+    function closeHandle () {
+      emits('hardClose', false)
     }
-    function cpCollateral () {
+    function cpCollateral() {
+      if(props.list.type === 'claimAccount') return
       ruleForm.show = true
       try {
         if (Number(ruleForm.amount) >= 0) cpDeposit()
@@ -438,6 +441,9 @@ const props = withDefaults(
         .el-button {
           font-family: inherit;
           font-size: inherit;
+          &.is-disabled {
+            opacity: .7;
+          }
         }
       }
     }
