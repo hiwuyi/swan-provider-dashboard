@@ -1,7 +1,7 @@
 <template>
   <section id="aarECP-container">
     <div class="flex flex-ai-center header-title">
-      <h1 class="font-24 font-bold">
+      <h1 class="font-20 font-bold">
       ECP Rankings</h1>
     </div>
 
@@ -34,11 +34,22 @@
         </el-row>
 
         <el-table :data="providerBody.ubiTableData" @filter-change="handleFilterECPChange" @expand-change="expandChange" :row-key="getRowKeys" :expand-row-keys="expands" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
+          <el-table-column type="index" min-width="70">
+            <template #header>
+              <div class="font-14 weight-4">Ranking</div>
+            </template>
+            <template #default="scope">
+              <div class="badge flex flex-ai-center flex-jc-center">
+                <img v-if="scope.$index === 0 && paginZK.pageNo <= 1" :src="badgeIcon01" alt="">
+                <img v-else-if="scope.$index === 1 && paginZK.pageNo <= 1" :src="badgeIcon02" alt="">
+                <img v-else-if="scope.$index === 2 && paginZK.pageNo <= 1" :src="badgeIcon03" alt="">
+                <span v-else>{{ scope.$index + 1 }}</span>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="contract_addr" label="CP Account Address" min-width="140">
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
-                <img v-if="scope.$index < 2 && paginZK.pageNo <= 1" :src="badgeIcon01" alt="">
-                <img v-else :src="badgeIcon02" alt="">
                 <div class="flex flex-ai-center flex-jc-center copy-style">
                   <router-link :to="{ name: 'accountInfo', params: {cp_addr: scope.row.contract_addr} }">{{hiddAddress(scope.row.contract_addr)}}</router-link>
                   <svg @click="copyContent(scope.row.contract_addr, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
@@ -75,7 +86,7 @@
           <el-table-column prop="gpu_tags" label="GPU" min-width="140">
             <template #default="scope">
               <div class="badge">
-                <div class="flex flex-ai-center flex-jc-left machines-style">
+                <div class="flex flex-ai-center flex-jc-left machines-style text-left">
                   <span v-for="(gpu, g) in scope.row.gpu_tags" :key="g">
                     {{gpu}}
                   </span>
@@ -275,7 +286,7 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
 @import url('../../assets/style/table.less');
 
 #aarECP-container {
-  padding: 0 0 0.4rem;
+  padding: 0 0 0.2rem;
   font-size: 16px;
   line-height: 1.6;
   @media screen and (max-width: 1200px) {

@@ -23,9 +23,9 @@
 }
 
 :root {
-  --font-20: 0.2rem;
-  --font-18: 0.18rem;
-  --font-16: 0.16rem;
+  --font-20: 20px;
+  --font-18: 18px;
+  --font-16: 16px;
 }
 
 .font-bold{
@@ -34,15 +34,15 @@
 }
 
 .font-10 {
-  font-size: 0.1rem;
+  font-size: 10px;
 }
 
 .font-12 {
-  font-size: 0.12rem;
+  font-size: 12px;
 }
 
 .font-14 {
-  font-size: 0.14rem;
+  font-size: 14px;
 }
 
 .font-16 {
@@ -58,63 +58,63 @@
 }
 
 .font-22 {
-  font-size: 0.22rem;
+  font-size: 22px;
 }
 
 .font-24 {
-  font-size: 0.24rem;
+  font-size: 24px;
 }
 
 .font-26 {
-  font-size: 0.26rem;
+  font-size: 26px;
 }
 
 .font-28 {
-  font-size: 0.28rem;
+  font-size: 28px;
 }
 
 .font-30 {
-  font-size: 0.3rem;
+  font-size: 30px;
 }
 
 .font-32 {
-  font-size: 0.32rem;
+  font-size: 32px;
 }
 
 .font-34 {
-  font-size: 0.34rem;
+  font-size: 34px;
 }
 
 .font-36 {
-  font-size: 0.36rem;
+  font-size: 36px;
 }
 
 .font-38 {
-  font-size: 0.38rem;
+  font-size: 38px;
 }
 
 .font-40 {
-  font-size: 0.4rem;
+  font-size: 40px;
 }
 
 .font-42 {
-  font-size: 0.42rem;
+  font-size: 42px;
 }
 
 .font-44 {
-  font-size: 0.44rem;
+  font-size: 44px;
 }
 
 .font-46 {
-  font-size: 0.46rem;
+  font-size: 46px;
 }
 
 .font-48 {
-  font-size: 0.48rem;
+  font-size: 48px;
 }
 
 .font-50 {
-  font-size: 0.5rem;
+  font-size: 50px;
 }
 
 .font-52 {

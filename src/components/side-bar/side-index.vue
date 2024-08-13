@@ -8,45 +8,45 @@
         <el-menu-item index="overview">
           <i class="icon icon-Overview"></i>
           <template #title>
-            <span class="font-16">Overview</span>
+            <span class="font-14">Overview</span>
           </template>
         </el-menu-item>
         <el-menu-item index="rankings-fcp">
           <i class="icon icon-Rankings-fcp"></i>
           <template #title>
-            <span class="font-16">FCP List</span>
+            <span class="font-14">FCP List</span>
           </template>
         </el-menu-item>
         <el-menu-item index="rankings-ecp">
           <i class="icon icon-Rankings-ecp"></i>
           <template #title>
-            <span class="font-16">ECP List</span>
+            <span class="font-14">ECP List</span>
           </template>
         </el-menu-item>
         <el-menu-item index="accountInfo" v-if="metaAddress && token">
           <i class="icon icon-AccountInfo"></i>
           <template #title>
-            <span class="font-16">CP Profile</span>
+            <span class="font-14">CP Profile</span>
           </template>
         </el-menu-item>
         <el-menu-item index="resource">
           <i class="icon icon-Resource"></i>
           <template #title>
-            <span class="font-16">Resource</span>
+            <span class="font-14">Resource</span>
           </template>
         </el-menu-item>
         <el-sub-menu index="aar">
           <template #title>
             <i class="icon icon-AAR"></i>
-            <span class="font-16">Swan Chain Mainnet Campaign
+            <span class="font-14">Swan Chain Mainnet Campaign
               <i class="icon icon-new"></i>
             </span>
           </template>
           <el-menu-item index="aar-fcp">
-            <span class="font-16">FCP Ranking</span>
+            <span class="font-14">FCP Ranking</span>
           </el-menu-item>
           <el-menu-item index="aar-ecp">
-            <span class="font-16">ECP Ranking</span>
+            <span class="font-14">ECP Ranking</span>
           </el-menu-item>
         </el-sub-menu>
       </el-menu>
@@ -78,8 +78,8 @@ import vFoot from '../footer/footer-index.vue'
       const nameMenu = row || route.name
       const nameType = route.params.type || ''
       if (nameMenu.indexOf('overview') > -1 || nameMenu.indexOf('dashboard') > -1) activeIndex.value = 'overview'
-      else if (nameMenu.indexOf('rankingsFCP') > -1 || nameMenu.indexOf('rankings/FCP') > -1) activeIndex.value = 'rankings-fcp'
-      else if (nameMenu.indexOf('rankingsECP') > -1 || nameMenu.indexOf('rankings/ECP') > -1) activeIndex.value = 'rankings-ecp'
+      else if (nameMenu.indexOf('rankingsFCP') > -1 || nameMenu.indexOf('rankings/fcp') > -1) activeIndex.value = 'rankings-fcp'
+      else if (nameMenu.indexOf('rankingsECP') > -1 || nameMenu.indexOf('rankings/ecp') > -1) activeIndex.value = 'rankings-ecp'
       else if (nameMenu.indexOf('aarFCP') > -1 || nameMenu.indexOf('aar/FCP') > -1) activeIndex.value = 'aar-fcp'
       else if (nameMenu.indexOf('aarECP') > -1 || nameMenu.indexOf('aar/ECP') > -1) activeIndex.value = 'aar-ecp'
       else if (nameMenu.indexOf('accountInfo') > -1 || nameMenu.indexOf('cp-profile') > -1) activeIndex.value = 'accountInfo'

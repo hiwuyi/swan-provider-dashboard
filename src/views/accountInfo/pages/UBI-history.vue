@@ -201,7 +201,7 @@ import {
     word-break: break-word;
     text-align: left;
     .title {
-      margin: 0 0 0.4rem;
+      margin: 0 0 0.2rem;
       font-weight: bold;
       font-size: 0.24rem;
       color: var(--color-light);

@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="bodyWidth">
-    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
+    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-10">
       <div class="module-container">
         <div class="m w-100 flex flex-ai-start flex-jc-between">
           <div class='chart-pie' id='chart-pie-fcp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
@@ -50,7 +50,7 @@
       </div>
     </el-col>
 
-    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-24">
+    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mt-10">
       <div class="module-container">
         <div class="m w-100 flex flex-ai-start flex-jc-between">
           <div class='chart-pie' id='chart-pie-ecp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
@@ -131,7 +131,7 @@ import { dataCpData, dataGPU, getDateRange, replaceDecimalsFormat, replaceFormat
 import * as echarts from "echarts"
 
 const route = useRoute()
-const bodyWidth = ref(document.body.clientWidth > 1440 ? 32 : 22)
+const bodyWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
 const providersLoad = ref(false)
 const weekList = reactive({
   value: 'Week',
@@ -294,7 +294,7 @@ const changetype = async (data: any) => {
       }
     },
     legend: {
-      data: ['Collateral', 'Escrow'],
+      data: ['Collateral (SWANC)', 'Escrow (sETH)'],
       right: 'auto',
       bottom: '0',
       // icon: 'circle',
@@ -334,7 +334,7 @@ const changetype = async (data: any) => {
     },
     series: [
       {
-        name: 'Collateral',
+        name: 'Collateral (SWANC)',
         type: 'line',
         smooth: false,
         showSymbol: true,
@@ -342,7 +342,7 @@ const changetype = async (data: any) => {
         color: '#7092b4'
       },
       {
-        name: 'Escrow',
+        name: 'Escrow (sETH)',
         type: 'line',
         smooth: false,
         showSymbol: true,
@@ -803,7 +803,7 @@ const props = withDefaults(
       }
       .grid-content {
         height: calc(100% - 0.53rem);
-        margin: 0.23rem 0 0;
+        margin: 0.1rem 0 0;
         background: #edf2ff;
       }
     }
@@ -817,11 +817,11 @@ const props = withDefaults(
       // box-shadow: 0 0 12px #e6e7eb;
     }
     .chart-pie-balance {
-      width: calc(100% - 1.6rem);
+      width: calc(100% - 2.2rem);
     }
     .chart-pie {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 2rem;
+      height: 2rem;
     }
     .chart-trends {
       width: 100%;

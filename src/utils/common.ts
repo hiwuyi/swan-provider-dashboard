@@ -348,6 +348,14 @@ export function byteStorage (limit: any) {
   }
 }
 
+export function byteTBStorage (limit: any) {
+  if (limit <= 0) {
+    return '0'
+  } else {
+    return (limit / (1024 * 1024 * 1024 * 1024)).toFixed(2) //or 1000
+  }
+}
+
 export function expiredTime (validDays: any) {
   if (String(validDays) === '0') return 'Forever'
   else if (validDays === undefined) return '-'

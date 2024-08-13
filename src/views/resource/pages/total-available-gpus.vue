@@ -108,8 +108,8 @@ import {
   Search
 } from '@element-plus/icons-vue'
 
-const bodyWidth = ref(document.body.clientWidth > 1440 ? 34 : 24)
-const childWidth = ref(document.body.clientWidth > 1440 ? 24 : 12)
+const bodyWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
+const childWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
 const chipsetList = reactive({
   value: 'A100',
   options: [
@@ -160,72 +160,72 @@ const interfaceList = reactive({
 })
 const networkInput = ref('')
 const gpuList = ref<any>([
-  // {
-  //   name: '100',
-  //   total: 54,
-  //   used: 40,
-  //   available: true,
-  //   vRAM: '80Gi',
-  //   Interface: 'PCIe',
-  //   Price: '$1.2 ～1.4',
-  //   tip: 'tip',
-  //   rentnow: false
-  // },
-  // {
-  //   name: 'RTX 3090Ti',
-  //   total: 54,
-  //   used: 40,
-  //   available: true,
-  //   vRAM: '80Gi',
-  //   Interface: 'PCIe',
-  //   Price: '$1.2 ～1.4',
-  //   tip: 'tip',
-  //   rentnow: false
-  // },
-  // {
-  //   name: 'T4',
-  //   total: 54,
-  //   used: 40,
-  //   available: true,
-  //   vRAM: '80Gi',
-  //   Interface: 'PCIe',
-  //   Price: '$1.2 ～1.4',
-  //   tip: 'tip',
-  //   rentnow: true
-  // },
-  // {
-  //   name: '100',
-  //   total: 54,
-  //   used: 40,
-  //   available: true,
-  //   vRAM: '80Gi',
-  //   Interface: 'PCIe',
-  //   Price: '$1.2 ～1.4',
-  //   tip: 'tip',
-  //   rentnow: false
-  // },
-  // {
-  //   name: 'RTX 3090Ti',
-  //   total: 54,
-  //   used: 40,
-  //   available: true,
-  //   vRAM: '80Gi',
-  //   Interface: 'PCIe',
-  //   Price: '$1.2 ～1.4',
-  //   tip: 'tip',
-  //   rentnow: false
-  // },
-  // {
-  //   name: 'T4',
-  //   total: 54,
-  //   used: 40,
-  //   available: true,
-  //   vRAM: '80Gi',
-  //   Interface: 'PCIe',
-  //   Price: '$1.2 ～1.4',
-  //   tip: 'tip',
-  //   rentnow: true
-  // }
+  {
+    name: '100',
+    total: 54,
+    used: 40,
+    available: true,
+    vRAM: '80Gi',
+    Interface: 'PCIe',
+    Price: '$1.2 ～1.4',
+    tip: 'tip',
+    rentnow: false
+  },
+  {
+    name: 'RTX 3090Ti',
+    total: 54,
+    used: 40,
+    available: true,
+    vRAM: '80Gi',
+    Interface: 'PCIe',
+    Price: '$1.2 ～1.4',
+    tip: 'tip',
+    rentnow: false
+  },
+  {
+    name: 'T4',
+    total: 54,
+    used: 40,
+    available: true,
+    vRAM: '80Gi',
+    Interface: 'PCIe',
+    Price: '$1.2 ～1.4',
+    tip: 'tip',
+    rentnow: true
+  },
+  {
+    name: '100',
+    total: 54,
+    used: 40,
+    available: true,
+    vRAM: '80Gi',
+    Interface: 'PCIe',
+    Price: '$1.2 ～1.4',
+    tip: 'tip',
+    rentnow: false
+  },
+  {
+    name: 'RTX 3090Ti',
+    total: 54,
+    used: 40,
+    available: true,
+    vRAM: '80Gi',
+    Interface: 'PCIe',
+    Price: '$1.2 ～1.4',
+    tip: 'tip',
+    rentnow: false
+  },
+  {
+    name: 'T4',
+    total: 54,
+    used: 40,
+    available: true,
+    vRAM: '80Gi',
+    Interface: 'PCIe',
+    Price: '$1.2 ～1.4',
+    tip: 'tip',
+    rentnow: true
+  }
 ])
 const providersLoad = ref(false)
 const providersData = ref([])

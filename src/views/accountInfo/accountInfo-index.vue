@@ -1,7 +1,7 @@
 <template>
   <section id="cp-container">
-    <div class="flex flex-ai-center header-title font-14">
-      <h1 class="font-24 font-bold s">CP Profile</h1>
+    <div class="flex flex-ai-center header-title font-16">
+      <h1 class="font-20 font-bold s">CP Profile</h1>
       <div class="flex flex-ai-center copy-style" v-if="route.params.cp_addr">
         <a class="link-to s" :href="`${explorerLink}address/${route.params.cp_addr}`" target="_blank">{{route.params.cp_addr ?? '-'}}</a>
         <svg @click="copyContent(route.params.cp_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="providers-network font-16">
+    <div class="providers-network font-14">
       <div class="providers mb-32">
         <echart-list :cpsData="cpsData" :cpsLoad="cpsLoad"></echart-list>
       </div>
@@ -96,7 +96,7 @@ watch(route, (to:any) => {
 
 <style lang="less" scoped>
 #cp-container {
-  padding: 0 0 0.4rem;
+  padding: 0 0 0.2rem;
   font-size: 16px;
   line-height: 1.6;
   @media screen and (max-width: 1200px) {
@@ -124,9 +124,9 @@ watch(route, (to:any) => {
     }
     .providers-cp {
       position: relative;
-      height: calc(100% - 0.8rem);
+      height: calc(100% - 0.62rem);
       padding: 0.3rem 0.35rem 0.1rem;
-      margin: 0.4rem 0 0;
+      margin: 0.22rem 0 0;
       background-color: var(--color-light);
       border-radius: 0.2rem;
     }

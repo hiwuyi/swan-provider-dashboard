@@ -1,11 +1,11 @@
 <template>
   <el-row class="re-list mb-24 font-14">
-    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
+    <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
       <p>Total Number Of Node:</p>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <p>{{ props.cpsData.resources ? replaceFormat(props.cpsData.resources.length) : '-'}}</p>
     </el-col>
-    <!-- <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
+    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8" class="flex flex-ai-center baseline">
       <p>Completed:</p>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <p>{{unifyNumber(0.9)}}%</p>
@@ -22,38 +22,26 @@
       <el-row class="width">
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-12 text-center">GPU Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.gpu.used/totalAll.gpu.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-gpu" />
-            <!-- <div class='chart-trends' id='chart-gpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
-            <p class="font-12 text-center desc">
-              <span class="color-gpu">{{ replaceFormat(totalAll.gpu.used) }}</span> Used {{ replaceFormat(totalAll.gpu.total) }} Free</p>
+            <p class="font-14 text-center mb-12">GPU Usage</p>
+            <div class='chart-trends' id='chart-gpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-12 text-center">CPU Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.cpu.used/totalAll.cpu.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-cpu" />
-            <!-- <div class='chart-trends' id='chart-cpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
-            <p class="font-12 text-center desc">
-              <span class="color-cpu">{{ replaceFormat(totalAll.cpu.used) }}</span> Used {{ replaceFormat(totalAll.cpu.total) }} Free</p>
+            <p class="font-14 text-center mb-12">CPU Usage</p>
+            <div class='chart-trends' id='chart-cpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-12 text-center">Memory Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.memory.used/totalAll.memory.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-memory" />
-            <!-- <div class='chart-trends' id='chart-memory' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
-            <p class="font-12 text-center desc">
-              <span class="color-memory">{{ sizeChange(totalAll.memory.used) }}</span> Used {{ sizeChange(totalAll.memory.total) }} Free</p>
+            <p class="font-14 text-center mb-12">Memory Usage</p>
+            <div class='chart-trends' id='chart-memory' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-12 text-center">Storage Usage</p>
-            <el-progress type="circle" stroke-linecap="butt" :percentage="Number(unifyNumber(totalAll.storage.used/totalAll.storage.total))" :width="104" :stroke-width="21" color="#01b4ff" class="color-storage" />
-            <!-- <div class='chart-trends' id='chart-storage' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div> -->
-            <p class="font-12 text-center desc">
-              <span class="color-storage">{{ sizeChange(totalAll.storage.used) }}</span> Used {{ sizeChange(totalAll.storage.total) }} Free</p>
+            <p class="font-14 text-center mb-12">Storage Usage</p>
+            <div class='chart-trends' id='chart-storage' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
       </el-row>
@@ -131,6 +119,105 @@ const changetype = async (data: any) => {
     totalAll.memory.total = memoryData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
     totalAll.storage.used = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
     totalAll.storage.total = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
+
+    const chart_gpu = echarts.init(document.getElementById("chart-gpu"));
+    const chart_cpu = echarts.init(document.getElementById("chart-cpu"));
+    const chart_memory = echarts.init(document.getElementById("chart-memory"));
+    const chart_storage = echarts.init(document.getElementById("chart-storage"));
+
+    const option1 = {
+      tooltip: {
+        trigger: 'item',
+        position: function (point: any) {
+          return [point[0] + 10, point[1] - 10]; 
+        },
+        formatter: function (params: any) {
+            return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${replaceFormat(params.data.value)}</div>`;
+        },
+        backgroundColor: 'rgba(0, 0, 0, 1)',
+        color: '#fff',
+        borderWidth: 0,
+        borderRadius: 9,
+        textStyle: {
+          color: '#fff',
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          fontFamily: 'HELVETICA-ROMAN'
+        },
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        show: false
+      },
+      series: [
+        {
+          name: 'Access From',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          data: [
+            { value: totalAll.gpu.used, name: 'Used' },
+            { value: totalAll.gpu.total-totalAll.gpu.used, name: 'Free' }
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }
+      ]
+    }
+    const option2 = JSON.parse(JSON.stringify(option1))
+    const option3 = JSON.parse(JSON.stringify(option1))
+    const option4 = JSON.parse(JSON.stringify(option1))
+    option2.series[0].data = [
+      { value: totalAll.cpu.used, name: 'Used' },
+      { value: totalAll.cpu.total-totalAll.cpu.used, name: 'Free' }
+    ]
+    option3.series[0].data = [
+      { value: totalAll.memory.used, name: 'Used' },
+      { value: totalAll.memory.total-totalAll.memory.used, name: 'Free' }
+    ]
+    option3.series[0].tooltip = {
+      formatter: function (params: any) {
+        return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;
+      }
+    }
+    option4.series[0].data = [
+      { value: totalAll.storage.used, name: 'Used' },
+      { value: totalAll.storage.total-totalAll.storage.used, name: 'Free' }
+    ]
+    option4.series[0].tooltip = {
+      formatter: function (params: any) {
+        return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;
+      }
+    }
+    chart_gpu.setOption(option1);
+    chart_cpu.setOption(option2);
+    chart_memory.setOption(option3);
+    chart_storage.setOption(option4);
+    if (typeof ResizeObserver !== 'undefined') {
+      let observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          chart_gpu.resize();
+          chart_cpu.resize();
+          chart_memory.resize();
+          chart_storage.resize();
+        }
+      });
+
+      let element = document.getElementById('cp-container');
+      observer.observe(element);
+    } else {
+      console.log('ResizeObserver is not supported in this browser.');
+    }
+    window.addEventListener("resize", function () {
+      chart_gpu.resize();
+      chart_cpu.resize();
+      chart_memory.resize();
+      chart_storage.resize();
+    })
   }catch{console.error}
   cpLoad.value = false
 }
@@ -284,12 +371,12 @@ const props = withDefaults(
     .chart-trends {
       width: 100%;
       margin: 0 auto;
-      height: 1.3rem;
+      height: 2rem;
       @media screen and (max-width: 768px) {
-        height: 150px;
+        height: 220px;
       }
       @media screen and (max-width: 600px) {
-        height: 200px;
+        height: 250px;
       }
       &.big {
         height: 2.7rem;

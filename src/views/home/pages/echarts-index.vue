@@ -72,7 +72,7 @@ import * as echarts from "echarts"
 import { statsEchartsData } from "@/api/overview"
 import { dataDelta, dataGPU, dataResource, getDateRange, replaceFormat, sizeChange } from '@/utils/common';
 
-const bodyWidth = ref(document.body.clientWidth > 1440 ? 42 : 28)
+const bodyWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
 const providersLoad = ref(false)
 const cpLoad = ref(false)
 const weekList = reactive({
@@ -655,7 +655,7 @@ onMounted(async () => {
 <style lang="less" scoped>
 .el-row {
   .el-col {
-    margin: 0.23rem 0;
+    margin: 0.1rem 0;
     &.flex {
       display: flex;
     }

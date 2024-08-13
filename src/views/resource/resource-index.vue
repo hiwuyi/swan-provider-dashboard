@@ -1,12 +1,18 @@
 <template>
   <section id="resource-container">
     <div class="flex flex-ai-center header-title">
-      <h1 class="font-24 font-bold">Resources</h1>
+      <h1 class="font-20 font-bold">Resources</h1>
     </div>
 
     <div class="providers-container">
       <div class="providers-overview">
         <echarts-use></echarts-use>
+      </div>
+    </div>
+
+    <div class="providers-container">
+      <div class="providers-overview">
+        <echarts-bar></echarts-bar>
       </div>
     </div>
 
@@ -35,6 +41,7 @@
 
 <script setup lang="ts">
 import echartsUse from './pages/echarts-use.vue'
+import echartsBar from './pages/echarts-bar.vue'
 import totalAvailableGpus from './pages/total-available-gpus.vue'
 import { getCPlistData } from '@/api/overview'
 
@@ -79,7 +86,7 @@ onMounted(async () => {})
 
 <style lang="less" scoped>
 #resource-container {
-  padding: 0 0 0.4rem;
+  padding: 0 0 0.2rem;
   font-size: 16px;
   line-height: 1.6;
   @media screen and (max-width: 1200px) {
@@ -89,7 +96,7 @@ onMounted(async () => {})
     position: relative;
     width: calc(100% - 0.64rem);
     padding: 0.25rem 0.32rem;
-    margin: 0.3rem 0;
+    margin: 0.16rem 0;
     background-color: var(--color-light);
     border-radius: 0.14rem;
     .el-col {

@@ -13,18 +13,18 @@ export function searchCPData(params: any) {
 export function getOverviewData(params: any) {
     return request({
       headers: {},
-      url: `${currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_BASEAPI : import.meta.env.VITE_BASEAPI_PROXIMA}cp/search_cp`,
+      // url: `${currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_BASEAPI : import.meta.env.VITE_BASEAPI_PROXIMA}v2/cp/overview`,
+      url: `${import.meta.env.VITE_BASEAPI_PROXIMA}v2/cp/overview`,
       method: 'get',
       params
     })
 }
 
-export function getOverviewECPData(params: any) {
+export function getOverviewECPData() {
     return request({
       headers: {},
       url: `${currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_ECP_BASEAPI : import.meta.env.VITE_ECP_BASEAPI_PROXIMA}v2/stats`,
-      method: 'get',
-      params
+      method: 'get'
     })
 }
 

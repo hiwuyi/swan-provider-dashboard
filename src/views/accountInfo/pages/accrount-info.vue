@@ -35,7 +35,7 @@
                   <div class="collateral m b-fcp">
                     <span v-if="t === 1">fil-c2-512M</span>
                     <span v-else-if="t === 2">ALEO</span>
-                    <span v-else-if="t === 3">FCP</span>
+                    <span v-else-if="t === 3">AI</span>
                     <span v-else>fil-c2-32G</span>
                   </div>
                 </div>
@@ -99,7 +99,7 @@
 import { explorerLink, signature } from "@/utils/storage"
 import { copyContent, replaceDecimalsFormat } from "@/utils/common"
 
-const bodyWidth = ref(document.body.clientWidth > 1440 ? 32 : 22)
+const bodyWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
 const route = useRoute()
 
 onMounted(() => {})
@@ -118,9 +118,9 @@ const props = withDefaults(
 
 <style lang="less" scoped>
 .providers-cp {
-  height: calc(100% - 0.8rem);
+  height: calc(100% - 0.62rem);
   padding: 0.3rem 0.35rem 0.1rem;
-  margin: 0.4rem 0 0;
+  margin: 0.22rem 0 0;
   background-color: var(--color-light);
   border-radius: 0.2rem;
   .note {

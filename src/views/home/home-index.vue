@@ -1,9 +1,9 @@
 <template>
   <section id="main-container">
     <div class="flex flex-ai-center flex-jc-between nowrap header-title">
-      <h1 class="font-24 font-bold">Swan Provider Overview</h1>
-      <div class="flex flex-ai-center nowrap search font-18">
-        <a :href="explorerLink" target="_blank" class="flex flex-ai-center nowrap font-18">
+      <h1 class="font-20 font-bold">Swan Provider Overview</h1>
+      <div class="flex flex-ai-center nowrap search font-16">
+        <a :href="explorerLink" target="_blank" class="flex flex-ai-center nowrap font-16">
           Swan Chain {{ currentNetwork }} explorer
           <i></i>
         </a>
@@ -27,7 +27,7 @@ import { currentNetwork, explorerLink } from '@/utils/storage'
 
 <style lang="less" scoped>
 #main-container {
-  padding: 0 0 0.4rem;
+  padding: 0 0 0.2rem;
   font-size: 16px;
   line-height: 1.6;
   @media screen and (max-width: 1200px) {
@@ -51,8 +51,8 @@ import { currentNetwork, explorerLink } from '@/utils/storage'
         margin: 0 0 0 0.1rem;
         color: var(--color-primary);
         i {
-          width: 0.25rem;
-          height: 0.25rem;
+          width: 0.2rem;
+          height: 0.2rem;
           margin: 0 0 0 0.07rem;
           background: url(../../assets/images/icons/icon-01.png) no-repeat;
           background-size: 100%;

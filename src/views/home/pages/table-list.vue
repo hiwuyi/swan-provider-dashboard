@@ -163,7 +163,7 @@ import { copyContent, hiddAddress, replaceFormat, unifyNumber } from '@/utils/co
 
 const route = useRoute()
 const router = useRouter()
-const bodyWidth = ref(document.body.clientWidth > 1440 ? 42 : 28)
+const bodyWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
 const providersFCPLoad = ref(false)
 const providersECPLoad = ref(false)
 const providersData = ref([])
@@ -212,7 +212,7 @@ onMounted(async () => {
 <style lang="less" scoped>
 .el-row {
   .el-col {
-    margin: 0.23rem 0;
+    margin: 0.1rem 0;
     &.flex {
       display: flex;
     }

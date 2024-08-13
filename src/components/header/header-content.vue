@@ -4,7 +4,7 @@
       <div class="flex flex-ai-center flex-jc-between swan-icon">
         <img :src="swanLogo" @click="openPage('https://www.swanchain.io/')" />
       </div>
-      <div class="flex flex-ai-center nowrap swan-right font-16">
+      <div class="flex flex-ai-center nowrap swan-right font-14">
         <div class="flex flex-ai-center flex-jc-right nowrap swan-right-search w-100">
           <!-- @change="handleClick" -->
           <el-input
@@ -20,13 +20,13 @@
           </el-input>
           <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
             <template #prefix>
-              <div class="flex flex-ai-center font-16">
+              <div class="flex flex-ai-center font-14">
                 <i class="icon icon-swanProxima"></i>
                 {{explorerList.value}}
               </div>
             </template>
             <el-option v-for="item in explorerList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-16">
+              <div class="flex flex-ai-center font-14">
                 <i class="icon icon-swanProxima"></i>
                 {{item.label}}
               </div>

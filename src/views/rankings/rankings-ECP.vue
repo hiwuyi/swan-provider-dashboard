@@ -1,7 +1,7 @@
 <template>
   <section id="rankingECP-container">
     <div class="flex flex-ai-center header-title">
-      <h1 class="font-24 font-bold">ECP Ranking List</h1>
+      <h1 class="font-20 font-bold">ECP Ranking List</h1>
     </div>
 
     <div class="providers-network font-14">
@@ -71,12 +71,12 @@
               </el-popover>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="node_id" min-width="120">
+          <el-table-column prop="node_id" min-width="120">
             <template #header>
               <div class="font-14 weight-4">nodeID</div>
             </template>
             <template #default="scope">
-              <div class="flex flex-ai-center flex-jc-center copy-style">
+              <div class="flex flex-ai-center flex-jc-center copy-style" v-if="scope.row.node_id">
                 {{hiddAddress(scope.row.node_id)}}
                 <svg @click="copyContent(scope.row.node_id, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
@@ -85,6 +85,7 @@
                     fill="#3d3d3d" p-id="6469"></path>
                 </svg>
               </div>
+              <span v-else>-</span>
             </template>
           </el-table-column>
           <el-table-column prop="gpu_tags" min-width="140">
@@ -100,30 +101,31 @@
                 </div>
               </div>
             </template>
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column prop="status" min-width="90">
             <template #header>
               <div class="font-14 weight-4">status</div>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="region" min-width="100">
+          <el-table-column prop="region" min-width="100">
             <template #header>
               <div class="font-14 weight-4">Region</div>
             </template>
             <template #default="scope">
               <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.region">
                 <template #reference>
-                  <div class="name-style black">{{scope.row.region}}</div>
+                  <div class="name-style black">{{scope.row.region ?? '-'}}</div>
                 </template>
               </el-popover>
             </template>
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column prop="uptime" min-width="140">
             <template #header>
               <div class="font-14 weight-4">Task Completion Rate</div>
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center nowrap uptime-container">
+                <el-progress :percentage="unifyNumber(scope.row.complete_rate/10000)" color="#1890ff" :stroke-width="8" />
                 <span class="uptime-text text-right task">{{ unifyNumber(scope.row.complete_rate/10000) }}%</span>
               </div>
             </template>
@@ -134,6 +136,13 @@
             </template>
             <template #default="scope">
                 <span class="uptime-text text-right task">{{replaceFormat(scope.row.tasks)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="score" label="Contribution Score" min-width="130">
+            <template #default="scope">
+              <div>
+                {{replaceFormat(scope.row.contribution_score) ?? '-'}}
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -217,7 +226,7 @@ onMounted(async () => {
 
 <style lang="less" scoped>
 #rankingECP-container {
-  padding: 0 0 0.4rem;
+  padding: 0 0 0.2rem;
   font-size: 16px;
   line-height: 1.6;
   @media screen and (max-width: 1200px) {

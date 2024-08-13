@@ -9,7 +9,7 @@ export default [
     }
   },
   {
-    path: '/rankings/FCP',
+    path: '/rankings/fcp',
     name: 'rankingsFCP',
     component: () => import("../views/rankings/rankings-FCP.vue"),
     meta: {
@@ -18,7 +18,7 @@ export default [
     }
   },
   {
-    path: '/rankings/ECP',
+    path: '/rankings/ecp',
     name: 'rankingsECP',
     component: () => import("../views/rankings/rankings-ECP.vue"),
     meta: {
