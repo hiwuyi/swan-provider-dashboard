@@ -121,9 +121,13 @@ const changetype = async (data: any) => {
 
   const fcpData = await dataDelta(data.fcp, 'total')
   const fcpDeltaData = await dataDelta(data.fcp, 'delta')
+  const fcpMax = Math.max(...fcpDeltaData.datum);
+  const fcpMin = Math.min(...fcpDeltaData.datum);
 
   const ecpData = await dataDelta(data.ecp, 'total')
   const ecpDeltaData = await dataDelta(data.ecp, 'delta')
+  const ecpMax = Math.max(...ecpDeltaData.datum);
+  const ecpMin = Math.min(...ecpDeltaData.datum);
 
   const option1 = {
     tooltip: {
@@ -134,21 +138,19 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
       formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
+        var result = params[0].name + '<br/>'; 
         params.forEach(function (item) {
-          // 遍历每个系列的数据
           const unit = item.seriesName === "CPU" ? 'CPU' : ''
           const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : sizeChange(item.data.used)
           const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : sizeChange(item.data.total)
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp; ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
+          result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp; ' + used + '/' + total + ' ' + unit + '<br/>'; 
         });
         return result;
       }
@@ -157,13 +159,13 @@ const changetype = async (data: any) => {
       data: ['CPU', 'Memory', 'Storage'],
       right: document.documentElement.clientWidth >= 1280 ? '110px' : 'auto',
       top: document.documentElement.clientWidth >= 1280 ? '0' : '25px',
-      icon: 'circle',
-      itemWidth: 10,
-      itemHeight: 10,
+      // icon: 'circle',
+      // itemWidth: 10,
+      // itemHeight: 10,
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -187,11 +189,10 @@ const changetype = async (data: any) => {
         show: false
       },
       axisLabel: {
-        fontSize: 12,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         // interval: 6,
         color: '#7c889b',
         formatter: function (value) {
-          // 使用字符串的 replace 方法将空格替换为换行符
           return value.split(' ').join('\n');
         }
       },
@@ -200,9 +201,8 @@ const changetype = async (data: any) => {
     yAxis: {
       type: 'value',
       axisLabel: {
-        fontSize: 12,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         color: '#7c889b',
-        // 使用 formatter 函数格式化标签
         formatter: '{value}%'
       },
       interval: 50
@@ -211,7 +211,7 @@ const changetype = async (data: any) => {
       {
         name: 'CPU',
         type: 'line',
-        showSymbol: false,
+        showSymbol: true,
         smooth: false,
         data: cpuData.datum,
         color: '#699bff'
@@ -219,7 +219,7 @@ const changetype = async (data: any) => {
       {
         name: 'Memory',
         type: 'line',
-        showSymbol: false,
+        showSymbol: true,
         smooth: false,
         data: memoryData.datum,
         color: '#52ce7c'
@@ -227,7 +227,7 @@ const changetype = async (data: any) => {
       {
         name: 'Storage',
         type: 'line',
-        showSymbol: false,
+        showSymbol: true,
         smooth: false,
         data: storageData.datum,
         color: '#0046b7'
@@ -249,18 +249,16 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
       formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
+        var result = params[0].name + '<br/>'; 
         params.forEach(function (item) {
-          // 遍历每个系列的数据
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color;
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; // 系列名和对应的值
+          result += colorDot + item.seriesName + ': ' + item.value + '<br/>';
         });
         return result;
       }
@@ -275,13 +273,13 @@ const changetype = async (data: any) => {
       data: ['FCP', 'Delta'],
       right: document.documentElement.clientWidth >= 1280 ? '110px' : 'auto',
       top: document.documentElement.clientWidth >= 1280 ? '0' : '25px',
-      icon: 'circle',
-      itemWidth: 10,
-      itemHeight: 10,
+      // icon: 'circle',
+      // itemWidth: 10,
+      // itemHeight: 10,
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -302,10 +300,9 @@ const changetype = async (data: any) => {
         },
         axisLabel: {
           // interval: 6,
-          fontSize: 12,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
           formatter: function (value) {
-            // 使用字符串的 replace 方法将空格替换为换行符
             return value.split(' ').join('\n');
           }
         },
@@ -319,7 +316,7 @@ const changetype = async (data: any) => {
         // max: 240,
         // interval: 80,
         axisLabel: {
-          fontSize: 12,
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
           //   formatter: '{value}'
         },
@@ -327,11 +324,11 @@ const changetype = async (data: any) => {
       },
       {
         type: 'value',
-        min: -300,
-        max: 300,
-        minInterval: 300,
+        min: fcpMin,
+        max: fcpMax,
+        minInterval: 20,
         axisLabel: {
-          fontSize: 12,
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
           //   formatter: '{value}'
         },
@@ -343,7 +340,7 @@ const changetype = async (data: any) => {
         type: 'line',
         stack: 'Total',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         itemStyle: {
           color: 'rgba(105,155,255,1)'
         },
@@ -366,7 +363,7 @@ const changetype = async (data: any) => {
         type: 'line',
         stack: 'Total',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         // tooltip: {
         //   valueFormatter: function (value) {
         //     return value + ' °C';
@@ -397,21 +394,19 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
       formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
+        var result = params[0].name + '<br/>'; 
         params.forEach(function (item) {
-          // 遍历每个系列的数据
-          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>'; // 系列名和对应的值
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>'; 
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; // 系列名和对应的值
+          result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; 
         });
         return result;
       }
@@ -420,13 +415,13 @@ const changetype = async (data: any) => {
       data: ['Used GPU', 'Total GPU'],
       right: document.documentElement.clientWidth >= 1280 ? '110px' : 'auto',
       top: document.documentElement.clientWidth >= 1280 ? '0' : '25px',
-      icon: 'circle',
-      itemWidth: 10,
-      itemHeight: 10,
+      // icon: 'circle',
+      // itemWidth: 10,
+      // itemHeight: 10,
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -450,11 +445,10 @@ const changetype = async (data: any) => {
         show: false
       },
       axisLabel: {
-        fontSize: 12,
-        interval: 6,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+        // interval: 6,
         color: '#7c889b',
         formatter: function (value) {
-          // 使用字符串的 replace 方法将空格替换为换行符
           return value.split(' ').join('\n');
         }
       },
@@ -462,31 +456,18 @@ const changetype = async (data: any) => {
     },
     yAxis: {
       type: 'value',
-      max: 100,
-      min: 0,
-      axisLine: {
-        onZero: true
-      },
       axisLabel: {
-        fontSize: 12,
-        fontWeight: 400,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         color: '#7c889b',
         formatter: '{value}'
       },
-      interval: 50,
-      splitLine: {
-        show: true,
-        lineStyle: {
-          color: '#EAEAEA',
-          width: 2
-        }
-      }
+      interval: 50
     },
     series: [
       {
         name: 'Used GPU',
         type: 'line',
-        showSymbol: false,
+        showSymbol: true,
         color: '#a801a1',
         smooth: false,
         data: gpuData.datum
@@ -494,7 +475,7 @@ const changetype = async (data: any) => {
       {
         name: 'Total GPU',
         type: 'line',
-        showSymbol: false,
+        showSymbol: true,
         color: '#93c605',
         smooth: false,
         data: gpuTotalData.datum
@@ -516,18 +497,16 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
       formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
+        var result = params[0].name + '<br/>'; 
         params.forEach(function (item) {
-          // 遍历每个系列的数据
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; // 系列名和对应的值
+          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; 
         });
         return result;
       }
@@ -542,13 +521,13 @@ const changetype = async (data: any) => {
       data: ['ECP', 'Delta'],
       right: document.documentElement.clientWidth >= 1280 ? '110px' : 'auto',
       top: document.documentElement.clientWidth >= 1280 ? '0' : '25px',
-      icon: 'circle',
-      itemWidth: 10,
-      itemHeight: 10,
+      // icon: 'circle',
+      // itemWidth: 10,
+      // itemHeight: 10,
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -571,7 +550,6 @@ const changetype = async (data: any) => {
           // interval: 6,
           color: '#7c889b',
           formatter: function (value) {
-            // 使用字符串的 replace 方法将空格替换为换行符
             return value.split(' ').join('\n');
           }
         },
@@ -591,9 +569,9 @@ const changetype = async (data: any) => {
       },
       {
         type: 'value',
-        min: -300,
-        max: 300,
-        minInterval: 300,
+        min: ecpMin,
+        max: ecpMax,
+        minInterval: 20,
         // axisLabel: {
         //   formatter: '{value} °C'
         // }
@@ -604,7 +582,7 @@ const changetype = async (data: any) => {
         name: 'ECP',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         itemStyle: {
           color: 'rgba(147,198,5,1)'
         },
@@ -626,7 +604,7 @@ const changetype = async (data: any) => {
         name: 'Delta',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         // tooltip: {
         //   valueFormatter: function (value) {
         //     return value + ' °C';

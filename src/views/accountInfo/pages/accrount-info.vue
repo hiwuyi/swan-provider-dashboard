@@ -6,7 +6,7 @@
           <b class="font-16 weight-4">Account Overview</b>
         </div>
         <div class="note b">
-          <el-row v-loading="props.cpsLoad">
+          <el-row :gutter="bodyWidth" v-loading="props.cpsLoad">
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
               <p class="text-capitalize label">Account Type:</p>
               <div class="collateral m b-ecp" :class="{'b-fcp': props.cpsData.type === 1}">

@@ -76,7 +76,7 @@ watchAccount(config, {
   },
 })
 
-let beginTime = 0; // 执行onbeforeunload的开始时间
+let beginTime = 0; 
 
 window.onbeforeunload = function () {
   beginTime = new Date().getTime();

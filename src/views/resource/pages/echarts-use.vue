@@ -141,21 +141,19 @@ const changetype = async (data: any) => {
         borderRadius: 9,
         textStyle: {
           color: '#fff',
-          fontSize: 11,
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           fontFamily: 'HELVETICA-ROMAN'
         },
         icon: 'roundRect',
         formatter: function (params: any) {
-          // params 是一个数组，包含了每个系列的数据信息
-          var result = params[0].name + '<br/>'; // X轴的值
+          var result = params[0].name + '<br/>';
           params.forEach(function (item: any) {
-            // 遍历每个系列的数据
             const unit = item.seriesName === "CPU" || item.seriesName === "GPU" ? item.seriesName : ''
             const used = item.seriesName === "CPU" || item.seriesName === "GPU" ? replaceFormat(item.data.used) : sizeChange(item.data.used)
             const total = item.seriesName === "CPU" || item.seriesName === "GPU" ? replaceFormat(item.data.total) : sizeChange(item.data.total)
-            var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+            var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
             let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-            result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp; ' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
+            result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp; ' + used + '/' + total + ' ' + unit + '<br/>';
           });
           return result;
         }
@@ -170,7 +168,7 @@ const changetype = async (data: any) => {
         itemGap: 20,
         textStyle: {
           color: '#95a3bd',
-          fontSize: 11,
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           fontFamily: 'HELVETICA-ROMAN',
           // lineHeight: 14,
           rich: {
@@ -198,7 +196,6 @@ const changetype = async (data: any) => {
       yAxis: {
         type: 'value',
         axisLabel: {
-          // 使用 formatter 函数格式化标签
           formatter: '{value}%'
         },
         minInterval: 50
@@ -209,7 +206,7 @@ const changetype = async (data: any) => {
           type: 'line',
           data: cpuData.datum,
           color: '#699bff',
-          showSymbol: false,
+          showSymbol: true,
           smooth: false
         },
         {
@@ -217,7 +214,7 @@ const changetype = async (data: any) => {
           type: 'line',
           data: memoryData.datum,
           color: '#52ce7c',
-          showSymbol: false,
+          showSymbol: true,
           smooth: false
         },
         {
@@ -225,7 +222,7 @@ const changetype = async (data: any) => {
           type: 'line',
           data: storageData.datum,
           color: '#0046b7',
-          showSymbol: false,
+          showSymbol: true,
           smooth: false
         },
         {
@@ -233,7 +230,7 @@ const changetype = async (data: any) => {
           type: 'line',
           data: gpuData.datum,
           color: '#93c605',
-          showSymbol: false,
+          showSymbol: true,
           smooth: false
         }
       ]

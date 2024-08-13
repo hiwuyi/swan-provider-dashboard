@@ -165,11 +165,11 @@ export function dataDelta (data: any, type:string) {
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
     if (timeArr.indexOf(time_end) === -1) {
       timeArr.push(time_end)
-      if(type === 'delta' && index > 0) datum.push(data[index].total - item.total)
+      if(type === 'delta' && index > 0) datum.push(data[index-1].total - item.total)
       else if(type === 'delta' && index === 0) datum.push(0)
       else datum.push(item[type])
     } else {
-      datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + item[type]
+      datum[timeArr.indexOf(time_end)] = Number(datum[timeArr.indexOf(time_end)]) + Number(type === 'delta' && index > 0 ? data[index-1].total - item.total : item[type])
     }
   })
   return {
@@ -179,13 +179,10 @@ export function dataDelta (data: any, type:string) {
 }
 
 export function dataResource (data: any, type:string) {
-  // console.log(data)
   const datum = [], timeArr = []
-  // 排序
   data.sort((itema:any, itemb:any) => {
     return itema.timestamp - itemb.timestamp
   })
-  // 循环处理数组
   data.forEach((item:any) => {
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
     if (timeArr.indexOf(time_end) === -1) {
@@ -236,20 +233,19 @@ export function sumArrays(array1:any, array2:any) {
 export function getDateTime (time: any) {
   const now = time ? new Date(time) : new Date();
   const year = now.getFullYear();
-  const month = now.getMonth() + 1; // 月份是从0开始的，所以需要加1
+  const month = now.getMonth() + 1; 
   const day = now.getDate();
   const hours = now.getHours();
   const minutes = now.getMinutes();
   const seconds = now.getSeconds();
 
-  // 格式化月份和日期，保持两位数
   const formattedMonth = month < 10 ? '0' + month : month;
   const formattedDay = day < 10 ? '0' + day : day;
   const formattedHours = hours < 10 ? '0' + hours : hours;
   const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
   const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
 
-  return time ? `${formattedMonth}/${formattedDay} ${formattedHours}:${formattedMinutes}` : `${year}-${formattedMonth}-${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  return time ? `${formattedMonth}/${formattedDay}` : `${year}-${formattedMonth}-${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
 export function AddFormat (num1:string, num2:string) {
@@ -410,7 +406,6 @@ export function copyContent(text: string, tipCont?: string) {
       (error) => {
         console.error('复制失败', error);
         messageTip('error', 'Oops, unable to copy')
-        // 这里可以添加复制失败的提示
       }
     )
       return true
@@ -431,7 +426,6 @@ export function getDateRange(unit:string) {
         end: getEchartDateTime(now.toISOString())
       };
     case 'Month':
-      // 这里的实现取决于当前月份有多少天，可能不会准确
       return {
         start: getEchartDateTime(new Date(now - 30 * oneDay).toISOString()),
         end: getEchartDateTime(now.toISOString())
@@ -449,10 +443,9 @@ export function getDateRange(unit:string) {
 export function getEchartDateTime (time: any) {
   const now = time ? new Date(time) : new Date();
   const year = now.getFullYear();
-  const month = now.getMonth() + 1; // 月份是从0开始的，所以需要加1
+  const month = now.getMonth() + 1; 
   const day = now.getDate();
 
-  // 格式化月份和日期，保持两位数
   const formattedMonth = month < 10 ? '0' + month : month;
   const formattedDay = day < 10 ? '0' + day : day;
 

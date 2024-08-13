@@ -188,7 +188,7 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
@@ -210,7 +210,7 @@ const changetype = async (data: any) => {
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -246,7 +246,7 @@ const changetype = async (data: any) => {
         name: 'Job Counts',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         yAxisIndex: 1,
         tooltip: {
           valueFormatter: function (value: any) {
@@ -276,21 +276,19 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
       formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
+        var result = params[0].name + '<br/>'; 
         params.forEach(function (item) {
-          // 遍历每个系列的数据
-          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>'; // 系列名和对应的值
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>';
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; // 系列名和对应的值
+          result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; 
         });
         return result;
       }
@@ -305,7 +303,7 @@ const changetype = async (data: any) => {
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -339,7 +337,7 @@ const changetype = async (data: any) => {
         name: 'Collateral',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         data: rewardData.datum,
         color: '#7092b4'
       },
@@ -347,7 +345,7 @@ const changetype = async (data: any) => {
         name: 'Escrow',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         data: rewardTotalData.datum,
         color: '#0000ff'
       }
@@ -362,7 +360,7 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
@@ -384,7 +382,7 @@ const changetype = async (data: any) => {
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -420,7 +418,7 @@ const changetype = async (data: any) => {
         name: 'Job Counts',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         yAxisIndex: 1,
         tooltip: {
           valueFormatter: function (value: any) {
@@ -456,18 +454,16 @@ const changetype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
       formatter: function (params) {
-        // params 是一个数组，包含了每个系列的数据信息
-        var result = params[0].name + '<br/>'; // X轴的值
+        var result = params[0].name + '<br/>'; 
         params.forEach(function (item) {
-          // 遍历每个系列的数据
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color;
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; // 系列名和对应的值
+          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; 
         });
         return result;
       }
@@ -489,7 +485,7 @@ const changetype = async (data: any) => {
       itemGap: 20,
       textStyle: {
         color: '#95a3bd',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -518,7 +514,7 @@ const changetype = async (data: any) => {
           //   formatter: '{value} SWANC'
         },
         nameTextStyle: {
-          fontSize: 10,
+          fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
           color: '#7c889b',
         }
       },
@@ -532,7 +528,7 @@ const changetype = async (data: any) => {
         //   }
         },
         nameTextStyle: {
-          fontSize: 10,
+          fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
           color: '#7c889b',
         }
       }
@@ -543,7 +539,7 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         yAxisIndex: 1,
-        showSymbol: false,
+        showSymbol: true,
         data: rewardTotalData.datum,
         tooltip: {
           valueFormatter: function (value: any) {
@@ -556,7 +552,7 @@ const changetype = async (data: any) => {
         name: 'Escrow',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         data: rewardTotalData.datum,
         color: '#56cfb2'
       },
@@ -564,7 +560,7 @@ const changetype = async (data: any) => {
         name: 'Sequencer',
         type: 'line',
         smooth: false,
-        showSymbol: false,
+        showSymbol: true,
         data: rewardTotalData.datum,
         color: '#333333'
       }
@@ -604,7 +600,7 @@ const changePietype = async (data: any) => {
     tooltip: {
       trigger: 'item',
       position: function (point: any) {
-        return [point[0] + 10, point[1] - 10]; // 右下角偏移量
+        return [point[0] + 10, point[1] - 10]; 
       },
       formatter: function (params: any) {
           return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${params.data.value}</div>`;
@@ -615,7 +611,7 @@ const changePietype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
     },
@@ -638,7 +634,7 @@ const changePietype = async (data: any) => {
         emphasis: {
           label: {
             show: false,
-            fontSize: 24,
+            fontSize: document.documentElement.clientWidth >= 1920 ? 29 : 24,
             fontWeight: 'bold'
           }
         },
@@ -646,8 +642,8 @@ const changePietype = async (data: any) => {
           show: false
         },
         data: [
-          { value: 1048, name: 'Collateral' },
-          { value: 735, name: 'Escrow' }
+          { value: replaceDecimalsFormat(balanceData.value?.fcp_collateral?.balance), name: 'Collateral' },
+          { value: replaceDecimalsFormat(balanceData.value?.fcp_collateral?.locked), name: 'Escrow' }
         ]
       }
     ]
@@ -656,7 +652,7 @@ const changePietype = async (data: any) => {
     tooltip: {
       trigger: 'item',
       position: function (point: any) {
-        return [point[0] + 10, point[1] - 10]; // 右下角偏移量
+        return [point[0] + 10, point[1] - 10]; 
       },
       formatter: function (params: any) {
           return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${params.data.value}</div>`;
@@ -667,7 +663,7 @@ const changePietype = async (data: any) => {
       borderRadius: 9,
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN'
       },
     },
@@ -690,7 +686,7 @@ const changePietype = async (data: any) => {
         emphasis: {
           label: {
             show: false,
-            fontSize: 24,
+            fontSize: document.documentElement.clientWidth >= 1920 ? 29 : 24,
             fontWeight: 'bold'
           }
         },
@@ -698,8 +694,8 @@ const changePietype = async (data: any) => {
           show: false
         },
         data: [
-          { value: 1048, name: 'Collateral' },
-          { value: 735, name: 'Escrow' }
+          { value: replaceDecimalsFormat(balanceData.value?.ecp_collateral?.balance), name: 'Collateral' },
+          { value: replaceDecimalsFormat(balanceData.value?.ecp_collateral?.locked), name: 'Escrow' }
         ]
       }
     ]

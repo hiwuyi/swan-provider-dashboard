@@ -17,7 +17,7 @@
               <div class="font-14 weight-4">Ranking</div>
             </template>
           </el-table-column>
-          <el-table-column prop="addr" min-width="120">
+          <el-table-column prop="addr" min-width="110">
             <template #header>
               <div class="font-14 weight-4">Account</div>
             </template>
@@ -33,7 +33,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="active_deployments" min-width="150">
+          <el-table-column prop="active_deployments" min-width="120">
             <template #header>
               <div class="font-14 weight-4">Active Deployments</div>
             </template>
@@ -41,7 +41,7 @@
               <div>{{ replaceFormat(scope.row.active_deployments) }}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="score" min-width="70">
+          <el-table-column prop="score" min-width="60">
             <template #header>
               <div class="font-14 weight-4">Score</div>
             </template>

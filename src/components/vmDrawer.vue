@@ -444,21 +444,19 @@ const props = withDefaults(
           borderRadius: 9,
           textStyle: {
             color: '#fff',
-            fontSize: 11,
+            fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
             fontFamily: 'HELVETICA-ROMAN'
           },
           icon: 'roundRect',
           formatter: function (params) {
-            // params 是一个数组，包含了每个系列的数据信息
-            var result = params[0].name + '<br/>'; // X轴的值
+            var result = params[0].name + '<br/>'; 
             params.forEach(function (item) {
-              // 遍历每个系列的数据
               const unit = item.seriesName === "CPU" ? 'CPU' : ''
               const used = item.seriesName === "CPU" ? replaceFormat(item.data.used) : sizeChange(item.data.Used)
               const total = item.seriesName === "CPU" ? replaceFormat(item.data.total) : sizeChange(item.data.total)
-              var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; // 获取数据点的颜色
+              var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
               let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp;' + used + '/' + total + ' ' + unit + '<br/>'; // 系列名和对应的值
+              result += colorDot + item.seriesName + ' Usage: ' + item.value + '% &nbsp;' + used + '/' + total + ' ' + unit + '<br/>'; 
             });
             return result;
           }
@@ -473,7 +471,7 @@ const props = withDefaults(
           itemGap: 20,
           textStyle: {
             color: '#95a3bd',
-            fontSize: 11,
+            fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
             fontFamily: 'HELVETICA-ROMAN',
             // lineHeight: 14,
             rich: {
@@ -497,11 +495,10 @@ const props = withDefaults(
             show: false
           },
           axisLabel: {
-            fontSize: 12,
+            fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
             // interval: 6,
             color: '#7c889b',
             formatter: function (value) {
-              // 使用字符串的 replace 方法将空格替换为换行符
               return value.split(' ').join('\n');
             }
           },
@@ -510,9 +507,8 @@ const props = withDefaults(
         yAxis: {
           type: 'value',
           axisLabel: {
-            fontSize: 12,
+            fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
             color: '#7c889b',
-            // 使用 formatter 函数格式化标签
             formatter: '{value}%'
           },
           interval: 50
@@ -521,7 +517,7 @@ const props = withDefaults(
           {
             name: 'CPU',
             type: 'line',
-            showSymbol: false,
+            showSymbol: true,
             smooth: false,
             data: cpuData.datum,
             color: '#699bff'
@@ -529,7 +525,7 @@ const props = withDefaults(
           {
             name: 'Memory',
             type: 'line',
-            showSymbol: false,
+            showSymbol: true,
             smooth: false,
             data: memoryData.datum,
             color: '#52ce7c'
@@ -537,7 +533,7 @@ const props = withDefaults(
           {
             name: 'Storage',
             type: 'line',
-            showSymbol: false,
+            showSymbol: true,
             smooth: false,
             data: storageData.datum,
             color: '#0046b7'

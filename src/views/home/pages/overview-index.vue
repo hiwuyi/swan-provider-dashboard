@@ -456,23 +456,22 @@ function drawChart (dataArr: any) {
         restore: {
           show: false,
           textStyle: {
-            color: 'transparent' // 文字颜色设置为透明
+            color: 'transparent' 
           },
           iconStyle: {
-            borderColor: '#fff', // 边框颜色
-            borderWidth: 2, // 边框宽度
-            color: 'transparent' // 填充颜色
+            borderColor: '#fff',
+            borderWidth: 2,
+            color: 'transparent' 
           },
           emphasis: {
             iconStyle: {
-              borderColor: '#fff', // 边框颜色
-              borderWidth: 2, // 边框宽度
-              color: 'transparent' // 填充颜色
+              borderColor: '#fff', 
+              borderWidth: 2, 
+              color: 'transparent' 
             }
           }
         },
 
-        // 放大缩小按钮
         // zoom: { show: true },
       },
       textStyle: {
@@ -488,7 +487,7 @@ function drawChart (dataArr: any) {
       // show: false,
       padding: 5,
       textStyle: {
-        fontSize: 12,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         lineHeight: 10,
         align: "left"
       }
@@ -501,14 +500,12 @@ function drawChart (dataArr: any) {
       itemWidth: 10,
       itemHeight: 10,
       icon: 'roundRect',
-      // 图例标签的格式器，可以定制文本
       // formatter: function (name) {
       //     return echarts.format.truncateText(name, 50);
       // },
-      // 图例文本样式
       textStyle: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         fontFamily: 'HELVETICA-ROMAN',
         // lineHeight: 14,
         rich: {
@@ -531,24 +528,21 @@ function drawChart (dataArr: any) {
         }
       },
       // aspectScale: 0.75,
-      roam: true, // 开启拖拽和缩放
+      roam: true, 
       toolbox: {
         show: true,
         feature: {
-          // 启用缩放工具
           dataZoom: {
             yAxisIndex: 'none'
           },
-          // 启用还原工具
           restore: {},
-          // 启用拖拽平移工具
           move: {}
         }
       },
       itemStyle: {
         normal: {
-          areaColor: '#b6ceff',
-          borderColor: '#9bbbff'
+          areaColor: '#565658',
+          borderColor: '#404042'
         },
         // emphasis: {
         //   areaColor: '#a467d1',
@@ -563,7 +557,7 @@ function drawChart (dataArr: any) {
       silent: true,
       zoom: 1,
       scaleLimit: {
-        min: 1 // 设置最小缩放倍数为1
+        min: 1
       },
       // left: '5%',
       // right: '5%'
@@ -577,10 +571,10 @@ function drawChart (dataArr: any) {
           // borderWidth: 1,
           // borderColor: '#fff',
           // color: 'rgba(89, 152, 14, 1)',
-          color: '#9a5aff',
+          color: '#447dff',
           shadowBlur: 2,
           // shadowColor: '#7ca3fb'
-          shadowColor: 'transparent'
+          shadowColor: '#7ca3fb'
         },
         data: dataArr,
         roam: true,
@@ -618,7 +612,7 @@ onMounted(async () => {
         height: 100%;
         min-height: 4.2rem;
         padding: 0;
-        background-color: var(--color-primary);
+        background-color: #0d0e12;
         .title {
           position: absolute;
           left: 0.25rem;

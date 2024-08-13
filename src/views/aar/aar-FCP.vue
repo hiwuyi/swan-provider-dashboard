@@ -161,7 +161,6 @@ async function init () {
     }
     if(!networkInput.contract_address) params = Object.assign({}, params, paramsFilter.data)
     const providerRes = networkInput.contract_address ? await searchCPData(params) : await getCPlistData(params)
-    console.log(providerRes)
     pagin.total = providerRes?.data?.list_providers_cnt ?? 0
     providersData.value = await getList(networkInput.contract_address ? providerRes?.data?.provider : providerRes?.data?.providers)
     if (networkInput.contract_address) singleTableRef.value?.clearFilter?.()

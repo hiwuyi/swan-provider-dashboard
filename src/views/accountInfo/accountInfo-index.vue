@@ -38,9 +38,9 @@
         <tab-list></tab-list>
       </div>
     </div>
-  </section>
 
-  <vm-dialog v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-dialog>
+    <vm-dialog v-if="vmOperate.centerDrawerVisible" :centerDrawerVisible="vmOperate.centerDrawerVisible" :list="vmOperate.row" @hardClose="hardClose"></vm-dialog>
+  </section>
 </template>
 
 <script setup lang="ts">
