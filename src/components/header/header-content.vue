@@ -489,8 +489,10 @@ const contractAddress = ref('')
   .swan-logo {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
     margin: 0;
+    @media screen and (max-width: 600px) {
+      flex-wrap: wrap !important;
+    }
     .swan-icon {
       @media screen and (max-width: 600px) {
         width: 100%;
@@ -508,16 +510,24 @@ const contractAddress = ref('')
       @media screen and (max-width: 600px) {
         flex-wrap: wrap;
         justify-content: flex-end;
+        align-items: flex-end;
         width: 100%;
         margin: 6px 0 0;
       }
       .swan-right-search {
+        @media screen and (max-width: 600px) {
+          flex-wrap: wrap !important;
+          justify-content: flex-start;
+        }
         :deep(.input-with-select) {
           width: 400px;
           background-color: var(--color-light);
           border-radius: 0.1rem;
           @media screen and (max-width: 768px) {
             width: 250px;
+          }
+          @media screen and (max-width: 600px) {
+            margin-bottom: 0.12rem;
           }
           .el-input__wrapper{
             box-shadow: none;
