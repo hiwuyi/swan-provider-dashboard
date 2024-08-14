@@ -34,13 +34,13 @@
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-14 text-center mb-12">Memory Usage</p>
+            <p class="font-14 text-center mb-12">Memory Usage (TB)</p>
             <div class='chart-trends' id='chart-memory' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-14 text-center mb-12">Storage Usage</p>
+            <p class="font-14 text-center mb-12">Storage Usage (TB)</p>
             <div class='chart-trends' id='chart-storage' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { getCPsEchartsData } from '@/api/cp-profile'
-import { dataResource, getDateRange, replaceFormat, sizeChange, unifyNumber } from '@/utils/common';
+import { byteTBStorage, dataResource, getDateRange, replaceFormat, sizeChange, unifyNumber } from '@/utils/common';
 import * as echarts from "echarts"
 
 const cpLoad = ref(false)
@@ -158,6 +158,20 @@ const changetype = async (data: any) => {
             { value: totalAll.gpu.used, name: 'Used' },
             { value: totalAll.gpu.total-totalAll.gpu.used, name: 'Free' }
           ],
+          label: {
+            normal: {
+              show: true,
+              position: 'outside',
+              formatter: function (params: any) {
+                return `${replaceFormat(params.data.value)} ${params.data.name}`;
+              },
+              fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+              alignTo: 'edge',
+              minMargin: 5,
+              edgeDistance: 10,
+              lineHeight: 15,
+            }
+          },
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -175,10 +189,16 @@ const changetype = async (data: any) => {
       { value: totalAll.cpu.used, name: 'Used' },
       { value: totalAll.cpu.total-totalAll.cpu.used, name: 'Free' }
     ]
+    option2.series[0].label.normal.formatter = function (params: any) {
+      return `${replaceFormat(params.data.value)} ${params.data.name}`
+    }
     option3.series[0].data = [
       { value: totalAll.memory.used, name: 'Used' },
       { value: totalAll.memory.total-totalAll.memory.used, name: 'Free' }
     ]
+    option3.series[0].label.normal.formatter = function (params: any) {
+      return `${ replaceFormat(byteTBStorage(params.data.value))} ${params.data.name}`;
+    }
     option3.series[0].tooltip = {
       formatter: function (params: any) {
         return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;
@@ -188,6 +208,9 @@ const changetype = async (data: any) => {
       { value: totalAll.storage.used, name: 'Used' },
       { value: totalAll.storage.total-totalAll.storage.used, name: 'Free' }
     ]
+    option4.series[0].label.normal.formatter = function (params: any) {
+      return `${ replaceFormat(byteTBStorage(params.data.value))} ${params.data.name}`;
+    }
     option4.series[0].tooltip = {
       formatter: function (params: any) {
         return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;

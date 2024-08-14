@@ -149,7 +149,7 @@
         <div class="flex flex-ai-center flex-jc-center pagination-style">
           <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + providersData.length : 0 + providersData.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
-          <el-pagination :page-size="pagin.pageSize" :page-sizes="[10, 20]" :current-page="pagin.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
+          <el-pagination :page-size="pagin.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="pagin.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="pagin.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </div>
       </div>
@@ -168,7 +168,7 @@ const router = useRouter()
 const providersTableLoad = ref(false)
 const providersData = ref([])
 const pagin = reactive({
-  pageSize: 10,
+  pageSize: 20,
   pageNo: 1,
   total: 0,
   total_deployments: 0,
@@ -206,7 +206,7 @@ async function init() {
   providersTableLoad.value = false
 }
 const searchProvider = async function () {
-  pagin.pageSize = 10
+  pagin.pageSize = 20
   pagin.pageNo = 1
   init()
 }
@@ -214,7 +214,7 @@ function clearProvider () {
   networkInput.contract_address = ''
   networkInput.owner_addr = ''
   networkInput.node_id = ''
-  pagin.pageSize = 10
+  pagin.pageSize = 20
   pagin.pageNo = 1
   init()
 }

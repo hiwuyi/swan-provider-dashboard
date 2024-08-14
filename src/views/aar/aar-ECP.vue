@@ -137,7 +137,7 @@
         <div class="flex flex-ai-center flex-jc-center pagination-style">
           <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.ubiTableData.length : 0 + providerBody.ubiTableData.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
-          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
+          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="paginZK.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
         </div>
       </div>
@@ -163,7 +163,7 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
       ubiTableData: []
     })
     const paginZK = reactive({
-      pageSize: 10,
+      pageSize: 20,
       pageNo: 1,
       total: 0,
       total_deployments: 0,
@@ -267,7 +267,7 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
       paginZK.total = 0
       paginZK.total_deployments = 0
       paginZK.active_applications = 0
-      paginZK.pageSize = 10
+      paginZK.pageSize = 20
       paginZK.pageNo = 1
       providersLoad.value = false
       providersECPLoad.value = false

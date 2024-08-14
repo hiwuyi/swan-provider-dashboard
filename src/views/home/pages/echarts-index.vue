@@ -237,12 +237,6 @@ const changetype = async (data: any) => {
   const option2 = {
     tooltip: {
       trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999'
-        }
-      },
       backgroundColor: 'rgba(0, 0, 0, 1)',
       color: '#fff',
       borderWidth: 0,
@@ -326,7 +320,7 @@ const changetype = async (data: any) => {
         type: 'value',
         min: fcpMin,
         max: fcpMax,
-        minInterval: 20,
+        // minInterval: 20,
         axisLabel: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
@@ -338,32 +332,18 @@ const changetype = async (data: any) => {
       {
         name: 'FCP',
         type: 'line',
-        stack: 'Total',
         smooth: false,
         showSymbol: true,
-        itemStyle: {
-          color: 'rgba(105,155,255,1)'
-        },
-        areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(105,155,255,1)'
-            },
-            {
-              offset: 1,
-              color: 'rgba(105,155,255,0.3)'
-            }
-          ])
-        },
+        yAxisIndex: 0,
+        color: 'rgba(105,155,255,1)',
         data: fcpData.datum
       },
       {
         name: 'Delta',
         type: 'line',
-        stack: 'Total',
         smooth: false,
         showSymbol: true,
+        yAxisIndex: 1,
         // tooltip: {
         //   valueFormatter: function (value) {
         //     return value + ' °C';
@@ -485,12 +465,6 @@ const changetype = async (data: any) => {
   const option4 = {
     tooltip: {
       trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999'
-        }
-      },
       backgroundColor: 'rgba(0, 0, 0, 1)',
       color: '#fff',
       borderWidth: 0,
@@ -548,6 +522,7 @@ const changetype = async (data: any) => {
         },
         axisLabel: {
           // interval: 6,
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
           formatter: function (value) {
             return value.split(' ').join('\n');
@@ -565,13 +540,23 @@ const changetype = async (data: any) => {
         // axisLabel: {
         //   formatter: '{value}'
         // }
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         minInterval: 150
       },
       {
         type: 'value',
         min: ecpMin,
         max: ecpMax,
-        minInterval: 20,
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
+        // minInterval: 20,
         // axisLabel: {
         //   formatter: '{value} °C'
         // }
@@ -583,21 +568,8 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         showSymbol: true,
-        itemStyle: {
-          color: 'rgba(147,198,5,1)'
-        },
-        areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(147,198,5,1)'
-            },
-            {
-              offset: 1,
-              color: 'rgba(147,198,5,0.3)'
-            }
-          ])
-        },
+        yAxisIndex: 0,
+        color: 'rgba(147,198,5,1)',
         data: ecpData.datum
       },
       {
@@ -605,6 +577,7 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         showSymbol: true,
+        yAxisIndex: 1,
         // tooltip: {
         //   valueFormatter: function (value) {
         //     return value + ' °C';

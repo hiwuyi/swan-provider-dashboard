@@ -34,10 +34,10 @@
           </div>
         </div>
 
-        <div class="module-echarts mt-32 mb-32">
-          <div class="title">
-            <p class="font-16 weight-4">Job Stats</p>
-            <p class="font-12 subtitle">Total Jobs: {{ replaceFormat(totalJob) }}</p>
+        <div class="module-echarts mt-16 mb-32">
+          <div class="title flex flex-ai-center flex-jc-between">
+            <p class="font-16 weight-4 mr-16">Job Stats</p>
+            <p class="font-14 subtitle">Total Jobs: {{ replaceFormat(totalJob) }}</p>
           </div>
           <div class='chart-trends' id='chart-job-fcp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         </div>
@@ -106,10 +106,10 @@
           </div>
         </div>
 
-        <div class="module-echarts mt-32 mb-32">
-          <div class="title">
-            <p class="font-16 weight-4">Job Stats</p>
-            <p class="font-12 subtitle">Total Jobs: {{ replaceFormat(totalJob) }}</p>
+        <div class="module-echarts mt-16 mb-32">
+          <div class="title flex flex-ai-center flex-jc-between">
+            <p class="font-16 weight-4 mr-16">Job Stats</p>
+            <p class="font-14 subtitle">Total Jobs: {{ replaceFormat(totalJob) }}</p>
           </div>
           <div class='chart-trends' id='chart-job-ecp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         </div>
@@ -227,6 +227,11 @@ const changetype = async (data: any) => {
         axisTick: {
           show: false
         },
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         // prettier-ignore
         data: ecpSuccessData.timeArr
       }
@@ -235,10 +240,20 @@ const changetype = async (data: any) => {
       {
         type: 'value',
         // name: 'Job Success'
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
       },
       {
         type: 'value',
         // name: 'Job Success'
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
       }
     ],
     series: [
@@ -327,10 +342,20 @@ const changetype = async (data: any) => {
       axisTick: {
         show: false
       },
+      axisLabel: {
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+        color: '#7c889b',
+        //   formatter: '{value}'
+      },
       data: rewardData.timeArr
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      axisLabel: {
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+        color: '#7c889b',
+        //   formatter: '{value}'
+      },
     },
     series: [
       {
@@ -399,6 +424,11 @@ const changetype = async (data: any) => {
         axisTick: {
           show: false
         },
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         // prettier-ignore
         data: ecpSuccessData.timeArr
       }
@@ -407,10 +437,20 @@ const changetype = async (data: any) => {
       {
         type: 'value',
         // name: 'Job Success'
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
       },
       {
         type: 'value',
         // name: 'Job Success'
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
       }
     ],
     series: [
@@ -502,6 +542,11 @@ const changetype = async (data: any) => {
         axisTick: {
           show: false
         },
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         // prettier-ignore
         data: rewardData.timeArr
       }
@@ -511,6 +556,8 @@ const changetype = async (data: any) => {
         type: 'value',
         name: 'SWANC',
         axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
           //   formatter: '{value} SWANC'
         },
         nameTextStyle: {
@@ -522,6 +569,8 @@ const changetype = async (data: any) => {
         type: 'value',
         name: 'sETH',
         axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
         //   formatter: function (value:any) {
         //     const v = `${value} sETH`
         //     return v.split(' ').join('\n');
@@ -625,7 +674,8 @@ const changePietype = async (data: any) => {
       {
         name: 'FCP',
         type: 'pie',
-        radius: ['40%', '70%'],
+        // center: ['50%', '50%'],
+        radius: ['60%', '90%'],
         avoidLabelOverlap: false,
         label: {
           show: false,
@@ -677,7 +727,7 @@ const changePietype = async (data: any) => {
       {
         name: 'ECP',
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['60%', '90%'],
         avoidLabelOverlap: false,
         label: {
           show: false,
@@ -792,7 +842,7 @@ const props = withDefaults(
         position: relative;
       }
       .el-col {
-        margin: 0.03rem 0;
+        margin: 0.04rem 0;
       }
       .title {
         margin: 0;
@@ -817,11 +867,11 @@ const props = withDefaults(
       // box-shadow: 0 0 12px #e6e7eb;
     }
     .chart-pie-balance {
-      width: calc(100% - 2.2rem);
+      width: calc(100% - 1.8rem);
     }
     .chart-pie {
-      width: 2rem;
-      height: 2rem;
+      width: 1.6rem;
+      height: 1.6rem;
     }
     .chart-trends {
       width: 100%;

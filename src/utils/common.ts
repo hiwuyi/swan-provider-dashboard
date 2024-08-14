@@ -165,11 +165,11 @@ export function dataDelta (data: any, type:string) {
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
     if (timeArr.indexOf(time_end) === -1) {
       timeArr.push(time_end)
-      if(type === 'delta' && index > 0) datum.push(data[index-1].total - item.total)
+      if(type === 'delta' && index > 0) datum.push(item.total - data[index-1].total)
       else if(type === 'delta' && index === 0) datum.push(0)
       else datum.push(item[type])
     } else {
-      datum[timeArr.indexOf(time_end)] = Number(datum[timeArr.indexOf(time_end)]) + Number(type === 'delta' && index > 0 ? data[index-1].total - item.total : item[type])
+      datum[timeArr.indexOf(time_end)] = Number(datum[timeArr.indexOf(time_end)]) + Number(type === 'delta' && index > 0 ? item.total - data[index-1].total : item[type])
     }
   })
   return {

@@ -54,7 +54,7 @@
 
   <el-row :gutter="bodyWidth" class="small-row" v-if="gpuList && gpuList.length > 0">
     <template v-for="gpu in gpuList" :key="gpu">
-      <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+      <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
         <div class="grid-content">
           <div class="top flex flex-ai-center flex-jc-between">
             <div class="left flex flex-ai-center font-20">
@@ -271,7 +271,7 @@ onMounted(async () => {})
 }
 .el-row {
   :deep(.el-col) {
-    margin: 0.3rem 0 0.06rem;
+    margin: 0.2rem 0 0.06rem;
     &.flex {
       display: flex;
     }

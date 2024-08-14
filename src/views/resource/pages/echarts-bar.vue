@@ -1,23 +1,23 @@
 <template>
-  <el-row :gutter="12" v-loading="cpLoad" class="width">
-    <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+  <el-row :gutter="32" class="width">
+    <el-col v-loading="gpuBarLoad" :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <div class="grid-content small-spacing text-center font-20">
-        <p class="font-14 text-center mb-12">GPU Amount</p>
-        <div class='chart-trends' id='chart-bar-gpu' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        <p class="font-14 text-center mb-24">GPU Amount</p>
+        <div class='chart-trends' id='chart-bar-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+    <el-col v-loading="cpLoad" :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <div class="grid-content small-spacing text-center font-20">
-        <div class="flex flex-ai-end flex-jc-center mb-12">
+        <div class="flex flex-ai-end flex-jc-center mb-24">
           <p class="font-14 text-center">Provider Regions</p>
           <div :class="`font-12 ml-10 mr-10 tab-title pointer ${activeTab === 'memory'?'active': ''}`" @click="tabProvider('memory')">Memory (TB)</div>
-          <div :class="`font-12 tab-title pointer ${activeTab === 'storage'?'active': ''}`" @click="activeTab='storage'">Storage (TB)</div>
+          <div :class="`font-12 tab-title pointer ${activeTab === 'storage'?'active': ''}`" @click="tabProvider('storage')">Storage (TB)</div>
         </div>
         <div v-if="activeTab === 'memory'">
-          <div class='chart-trends' id='chart-bar-memory' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+          <div class='chart-trends' id='chart-bar-memory' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         </div>
         <div v-if="activeTab === 'storage'">
-          <div class='chart-trends' id='chart-bar-storage' v-loading="cpLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+          <div class='chart-trends' id='chart-bar-storage' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         </div>
       </div>
     </el-col>
@@ -26,39 +26,23 @@
 
 <script setup lang="ts">
 import { getOverviewData, getOverviewECPData } from '@/api/overview';
-import { dataResource, getDateRange, replaceFormat, byteStorage, unifyNumber, sizeChange, dataGPU, byteTBStorage } from '@/utils/common';
+import { byteTBStorage, timeout } from '@/utils/common';
 import { currentNetwork } from '@/utils/storage';
 import * as echarts from "echarts"
 
 const activeTab = ref('memory')
 const cpLoad = ref(false)
+const gpuBarLoad = ref(false)
 const chipDataAll = ref<any>({
   all: [],
   memoryArray: [],
   storageArray: [],
   gpu: []
 })
-const totalAll = reactive({
-  gpu: {
-    used: 0,
-    total: 0
-  },
-  cpu: {
-    used: 0,
-    total: 0
-  },
-  storage: {
-    used: 0,
-    total: 0
-  },
-  memory: {
-    used: 0,
-    total: 0
-  }
-})
 
 async function initFCP () {
-  try{
+  try {
+    gpuBarLoad.value = true
     cpLoad.value = true
     const params = {
       for_prod: 1
@@ -69,7 +53,8 @@ async function initFCP () {
   }catch{ cpLoad.value = false}
 }
 async function initECP () {
-  try{
+  try {
+    gpuBarLoad.value = true
     cpLoad.value = true
     const echartsRes = await getOverviewECPData()
     const data = echartsRes?.data ?? {}
@@ -99,6 +84,7 @@ async function dataHandle(data: any, type: string) {
   // console.log(chipDataAll.value.storageArray)
   // console.log(chipDataAll.value.memoryArray)
   changetype(chipDataAll.value)
+  changeMemorytype(chipDataAll.value)
 }
 async function newArrayList (list: any) {
   try {
@@ -142,34 +128,38 @@ async function reduceMethod (arr: any, field: string, valueAmout: string) {
     }, [])
   } catch{ return [] }
 }
-function tabProvider(type: string) {
+async function tabProvider(type: string) {
   activeTab.value = type
-  changetype(chipDataAll.value)
+  cpLoad.value = true
+  await timeout(500)
+  if (activeTab.value === 'memory') changeMemorytype(chipDataAll.value)
+  else changeStoragetype(chipDataAll.value)
 }
 const changetype = async (data: any) => {
-  cpLoad.value = true
+  gpuBarLoad.value = true
   try{
     const chart_gpu = echarts.init(document.getElementById("chart-bar-gpu"));
-    const chart_memory = echarts.init(document.getElementById("chart-bar-memory"));
-    const chart_storage = echarts.init(document.getElementById("chart-bar-storage"));
-
     const gpuDataName = data.gpu.map((user:any) => user.name);
     const gpuDataValue = data.gpu.map((user: any) => user.value);
-    
-    const memoryDataName = data.memoryArray.map((user: any) => user.name);
-    const memoryValue = data.memoryArray.map((user: any) => byteTBStorage(user.value));
-    
-    const storageDataName = data.storageArray.map((user:any) => user.name);
-    const storageValue = data.storageArray.map((user: any) => byteTBStorage(user.value));
 
     const option = {
+      grid: {
+        left: '3%',
+        right: '10%',
+        top: '0',
+        bottom: '0',
+        containLabel: true
+      },
       xAxis: {
         max: 'dataMax'
       },
       yAxis: {
         type: 'category',
         data: gpuDataName,
-        inverse: true
+        inverse: true,
+        axisTick: {
+            show: false 
+        }
       },
       series: [
         {
@@ -179,8 +169,20 @@ const changetype = async (data: any) => {
           data: gpuDataValue,
           label: {
             show: true,
-            position: 'right',
-            valueAnimation: true
+            position: 'right', // inside
+            valueAnimation: true,
+            // formatter: '{c}'
+          },
+          barGap: '0%',
+          barWidth: '10',
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(
+              0, 0, 1, 0, 
+              [
+                  {offset: 0, color: '#91a8f4'},
+                  {offset: 1, color: '#567aee'}
+              ]
+            )
           }
         }
       ],
@@ -188,14 +190,48 @@ const changetype = async (data: any) => {
         show: false
       }
     }
+    chart_gpu.setOption(option);
+    if (typeof ResizeObserver !== 'undefined') {
+      let observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          chart_gpu.resize();
+        }
+      });
+
+      let element = document.getElementById('resource-container');
+      observer.observe(element);
+    }
+    window.addEventListener("resize", function () {
+      chart_gpu.resize();
+    })
+  }catch{console.error}
+  gpuBarLoad.value = false
+}
+const changeMemorytype = async (data: any) => {
+  cpLoad.value = true
+  try{
+    const chart_memory = echarts.init(document.getElementById("chart-bar-memory"));
+    const memoryDataName = data.memoryArray.map((user: any) => user.name);
+    const memoryValue = data.memoryArray.map((user: any) => byteTBStorage(user.value));
+    
     const option2 = {
+      grid: {
+        left: '3%',
+        right: '10%',
+        top: '0',
+        bottom: '0',
+        containLabel: true
+      },
       xAxis: {
         max: 'dataMax'
       },
       yAxis: {
         type: 'category',
         data: memoryDataName,
-        inverse: true
+        inverse: true,
+        axisTick: {
+            show: false 
+        }
       },
       series: [
         {
@@ -207,6 +243,17 @@ const changetype = async (data: any) => {
             show: true,
             position: 'right',
             valueAnimation: true
+          },
+          barGap: '0%',
+          barWidth: '10',
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(
+              0, 0, 1, 0, 
+              [
+                  {offset: 0, color: '#91a8f4'},
+                  {offset: 1, color: '#567aee'}
+              ]
+            )
           }
         }
       ],
@@ -214,12 +261,36 @@ const changetype = async (data: any) => {
         show: false
       }
     }
+      
+    chart_memory.setOption(option2);
+    if (typeof ResizeObserver !== 'undefined') {
+      let observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          chart_memory.resize();
+        }
+      });
+
+      let element = document.getElementById('resource-container');
+      observer.observe(element);
+    } 
+    window.addEventListener("resize", function () {
+      chart_memory.resize();
+    })
+  }catch{console.error}
+  cpLoad.value = false
+}
+const changeStoragetype = async (data: any) => {
+  cpLoad.value = true
+  try{
+    const chart_storage = echarts.init(document.getElementById("chart-bar-storage"));
+    const storageDataName = data.storageArray.map((user:any) => user.name);
+    const storageValue = data.storageArray.map((user: any) => byteTBStorage(user.value));
     const option3 = {
       grid: {
         left: '3%',
-        right: '3%',
-        top: '3%',
-        bottom: '3%',
+        right: '10%',
+        top: '0',
+        bottom: '0',
         containLabel: true
       },
       xAxis: {
@@ -228,7 +299,10 @@ const changetype = async (data: any) => {
       yAxis: {
         type: 'category',
         data: storageDataName,
-        inverse: true
+        inverse: true,
+        axisTick: {
+            show: false 
+        }
       },
       series: [
         {
@@ -240,6 +314,17 @@ const changetype = async (data: any) => {
             show: true,
             position: 'right',
             valueAnimation: true
+          },
+          barGap: '0%',
+          barWidth: '10',
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(
+              0, 0, 1, 0, 
+              [
+                  {offset: 0, color: '#91a8f4'},
+                  {offset: 1, color: '#567aee'}
+              ]
+            )
           }
         }
       ],
@@ -247,26 +332,18 @@ const changetype = async (data: any) => {
         show: false
       }
     }
-    chart_gpu.setOption(option);
-    chart_memory.setOption(option2);
     chart_storage.setOption(option3);
     if (typeof ResizeObserver !== 'undefined') {
       let observer = new ResizeObserver(entries => {
         for (let entry of entries) {
-          chart_gpu.resize();
-          chart_memory.resize();
           chart_storage.resize();
         }
       });
 
       let element = document.getElementById('resource-container');
       observer.observe(element);
-    } else {
-      console.log('ResizeObserver is not supported in this browser.');
     }
     window.addEventListener("resize", function () {
-      chart_gpu.resize();
-      chart_memory.resize();
       chart_storage.resize();
     })
   }catch{console.error}

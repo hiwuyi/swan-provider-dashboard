@@ -150,7 +150,7 @@
         <div class="flex flex-ai-center flex-jc-center pagination-style">
           <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.length : 0 + providerBody.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
-          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
+          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="paginZK.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
         </div>
       </div>
@@ -170,7 +170,7 @@ const router = useRouter()
 const providersECPLoad = ref(false)
 const providerBody = ref([])
 const paginZK = reactive({
-  pageSize: 10,
+  pageSize: 20,
   pageNo: 1,
   total: 0
 })
