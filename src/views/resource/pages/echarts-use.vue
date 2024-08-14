@@ -283,9 +283,16 @@ const changetype = async (data: any) => {
               alignTo: 'edge',
               minMargin: 5,
               edgeDistance: 10,
-              lineHeight: 15,
+              lineHeight: 10,
             }
-          }
+          },
+          labelLine: {
+            normal: {
+              length: 6,
+              length2: 6,
+              smooth: 1
+            }
+          },
         }
       ]
     }

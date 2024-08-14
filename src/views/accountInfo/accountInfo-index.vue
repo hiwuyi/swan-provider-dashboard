@@ -3,8 +3,8 @@
     <div class="flex flex-ai-center header-title font-16">
       <h1 class="font-20 font-bold s">CP Profile</h1>
       <div class="flex flex-ai-center copy-style" v-if="route.params.cp_addr">
-        <a class="link-to s" :href="`${explorerLink}address/${route.params.cp_addr}`" target="_blank">{{route.params.cp_addr ?? '-'}}</a>
-        <svg @click="copyContent(route.params.cp_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+        <a class="link-to s font-18" :href="`${explorerLink}address/${route.params.cp_addr}`" target="_blank">{{route.params.cp_addr ?? '-'}}</a>
+        <svg @click="copyContent(route.params.cp_addr, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="18" height="18">
           <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
             fill="#3d3d3d" p-id="6468"></path>
           <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"

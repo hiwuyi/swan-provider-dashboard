@@ -19,7 +19,7 @@
     <div class="providers-overview">
       <el-row :gutter="16">
         <el-col :xs="24" :sm="24" :md="24" :lg="14" :xl="14" class="flex flex-ai-center baseline mt-30">
-          <div class="usage-style flex flex-ai-center font-24 font-bold">
+          <div class="usage-style flex flex-ai-center font-20 font-bold">
             <label>Total Available GPUs: </label>
             <div class="progress flex flex-ai-center flex-jc-between nowrap">
               <el-progress :percentage="60" color="#76b900" :stroke-width="16" />

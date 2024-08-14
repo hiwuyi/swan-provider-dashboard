@@ -177,10 +177,6 @@ import { getOverViewECP, getOverviewECPData } from "@/api/overview";
       name: '',
       node_id: ''
     })
-    const vmOperate = reactive({
-      centerDrawerVisible: false,
-      row: {}
-    })
     const paramsECPFilter = reactive({
       data: {
         status: ''

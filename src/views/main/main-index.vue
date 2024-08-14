@@ -21,7 +21,7 @@
           </div>
         </el-main>
       </el-container>
-      <el-footer v-show="bodyWidth">
+      <el-footer>
         <v-foot></v-foot>
       </el-footer>
     </el-container>
@@ -34,7 +34,7 @@ import vAside from '@/components/side-bar/side-index.vue'
 import vFoot from '@/components/footer/footer-index.vue'
 
 const bodyWidth = ref(document.body.clientWidth > 768 ? false : true)
-const backtopMargin = ref(document.body.clientWidth > 768 ? 30 : 130)
+const backtopMargin = ref(document.body.clientWidth > 768 ? 50 : 150)
 </script>
 
 <style lang="less" scoped>
@@ -53,9 +53,10 @@ const backtopMargin = ref(document.body.clientWidth > 768 ? 30 : 130)
     .el-header,
     .el-footer {
       height: auto;
-      padding: 0.2rem 0.25rem;
+      padding: 0.12rem 0.25rem;
       background-color: var(--color-light);
       &.el-header {
+        padding: 0.2rem 0.25rem;
         background-color: var(--color-primary);
       }
       @media screen and (max-width: 1024px) {

@@ -51,13 +51,10 @@
         </el-sub-menu>
       </el-menu>
     </div>
-
-    <v-foot v-if="!isCollapse"></v-foot>
   </div>
 </template>
 <script setup lang="ts">
-import { metaAddress, token } from '@/utils/storage';
-import vFoot from '../footer/footer-index.vue'
+import { metaAddress, token } from '@/utils/storage'
 
     const route = useRoute()
     const router = useRouter()

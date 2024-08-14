@@ -153,6 +153,11 @@ const totalJob = ref(0)
 const totalReward = ref(0)
 const balanceLoad = ref(false)
 const balanceData = ref<any>({})
+const vmOperate = reactive({
+  centerDrawerVisible: false,
+  row: {},
+  type: 'dialog'
+})
 
 async function handleSelect (key:string, row:any, type:string) {
   switch (key) {

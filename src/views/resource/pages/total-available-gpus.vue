@@ -57,11 +57,11 @@
       <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
         <div class="grid-content">
           <div class="top flex flex-ai-center flex-jc-between">
-            <div class="left flex flex-ai-center font-20">
+            <div class="left flex flex-ai-center font-18">
               <i class="icon icon-gpu"></i>
               {{gpu.name}}
             </div>
-            <div class="right flex flex-ai-center baseline font-20">
+            <div class="right flex flex-ai-center baseline font-18">
               <div class="text">
                 <span>{{gpu.used}}</span>/{{gpu.total}}</div>
               <span class="small-text font-14">{{gpu.available ?'Available':'Occupied'}}</span>
@@ -91,7 +91,7 @@
                 </el-row>
             </el-col>
             <el-col :xs="24" :sm="24" :md="24" :lg="10" :xl="10" class="flex flex-ai-end">
-              <a :href="gpu.rentnow ? 'javascript:void(0);' : 'https://lagrangedao.org/'" target="_blank" class="font-14 text-center" :class="{'is-disabled': gpu.rentnow}">RENT NOW</a>
+              <a :href="gpu.rentnow ? 'javascript:void(0);' : 'https://lagrangedao.org/'" target="_blank" class="font-12 text-center" :class="{'is-disabled': gpu.rentnow}">RENT NOW</a>
             </el-col>
           </el-row>
         </div>

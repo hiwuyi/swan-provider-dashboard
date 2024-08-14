@@ -132,7 +132,8 @@ const changetype = async (data: any) => {
           return [point[0] + 10, point[1] - 10]; 
         },
         formatter: function (params: any) {
-            return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${replaceFormat(params.data.value)}</div>`;
+          // ${params.seriesName}<br/>
+            return `<div class="flex flex-ai-center">${params.marker}${params.data.name}: ${replaceFormat(params.data.value)}</div>`;
         },
         backgroundColor: 'rgba(0, 0, 0, 1)',
         color: '#fff',
@@ -169,7 +170,14 @@ const changetype = async (data: any) => {
               alignTo: 'edge',
               minMargin: 5,
               edgeDistance: 10,
-              lineHeight: 15,
+              lineHeight: 10,
+            }
+          },
+          labelLine: {
+            normal: {
+                length: 6,
+                length2: 6,
+                smooth: 1
             }
           },
           emphasis: {
@@ -189,6 +197,11 @@ const changetype = async (data: any) => {
       { value: totalAll.cpu.used, name: 'Used' },
       { value: totalAll.cpu.total-totalAll.cpu.used, name: 'Free' }
     ]
+    option2.series[0].tooltip = {
+      formatter: function (params: any) {
+        return `<div class="flex flex-ai-center">${params.marker}${params.data.name}: ${replaceFormat(params.data.value)}</div>`;
+      }
+    }
     option2.series[0].label.normal.formatter = function (params: any) {
       return `${replaceFormat(params.data.value)} ${params.data.name}`
     }
@@ -201,7 +214,7 @@ const changetype = async (data: any) => {
     }
     option3.series[0].tooltip = {
       formatter: function (params: any) {
-        return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;
+        return `<div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;
       }
     }
     option4.series[0].data = [
@@ -213,7 +226,7 @@ const changetype = async (data: any) => {
     }
     option4.series[0].tooltip = {
       formatter: function (params: any) {
-        return `${params.seriesName}<br/><div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;
+        return `<div class="flex flex-ai-center">${params.marker}${params.data.name}: ${sizeChange(params.data.value)}</div>`;
       }
     }
     chart_gpu.setOption(option1);

@@ -2,14 +2,23 @@
   <el-row :gutter="32" class="width">
     <el-col v-loading="gpuBarLoad" :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <div class="grid-content small-spacing text-center font-20">
-        <p class="font-14 text-center mb-24">GPU Amount</p>
-        <div class='chart-trends' id='chart-bar-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        <div class="flex flex-ai-end flex-jc-center mb-24">
+          <p class="font-16 text-center">GPU Amount</p>
+          <div :class="`font-12 ml-10 mr-10 tab-title pointer ${activeAmountTab === 'cpu'?'active': ''}`" @click="tabAmountProvider('cpu')">CPU</div>
+          <div :class="`font-12 tab-title pointer ${activeAmountTab === 'gpu'?'active': ''}`" @click="tabAmountProvider('gpu')">GPU</div>
+        </div>
+        <div v-if="activeAmountTab === 'gpu'">
+          <div class='chart-trends' id='chart-bar-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        </div>
+        <div v-if="activeAmountTab === 'cpu'">
+          <div class='chart-trends' id='chart-bar-cpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        </div>
       </div>
     </el-col>
     <el-col v-loading="cpLoad" :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <div class="grid-content small-spacing text-center font-20">
         <div class="flex flex-ai-end flex-jc-center mb-24">
-          <p class="font-14 text-center">Provider Regions</p>
+          <p class="font-16 text-center">Provider Regions</p>
           <div :class="`font-12 ml-10 mr-10 tab-title pointer ${activeTab === 'memory'?'active': ''}`" @click="tabProvider('memory')">Memory (TB)</div>
           <div :class="`font-12 tab-title pointer ${activeTab === 'storage'?'active': ''}`" @click="tabProvider('storage')">Storage (TB)</div>
         </div>
@@ -31,6 +40,7 @@ import { currentNetwork } from '@/utils/storage';
 import * as echarts from "echarts"
 
 const activeTab = ref('memory')
+const activeAmountTab = ref('cpu')
 const cpLoad = ref(false)
 const gpuBarLoad = ref(false)
 const chipDataAll = ref<any>({
@@ -83,7 +93,7 @@ async function dataHandle(data: any, type: string) {
   // console.log(chipDataAll.value.gpu)
   // console.log(chipDataAll.value.storageArray)
   // console.log(chipDataAll.value.memoryArray)
-  changetype(chipDataAll.value)
+  changeCPUtype(chipDataAll.value)
   changeMemorytype(chipDataAll.value)
 }
 async function newArrayList (list: any) {
@@ -128,6 +138,13 @@ async function reduceMethod (arr: any, field: string, valueAmout: string) {
     }, [])
   } catch{ return [] }
 }
+async function tabAmountProvider(type: string) {
+  activeAmountTab.value = type
+  gpuBarLoad.value = true
+  await timeout(500)
+  if (activeAmountTab.value === 'cpu') changeCPUtype(chipDataAll.value)
+  else changeGPUtype(chipDataAll.value)
+}
 async function tabProvider(type: string) {
   activeTab.value = type
   cpLoad.value = true
@@ -135,7 +152,92 @@ async function tabProvider(type: string) {
   if (activeTab.value === 'memory') changeMemorytype(chipDataAll.value)
   else changeStoragetype(chipDataAll.value)
 }
-const changetype = async (data: any) => {
+const changeCPUtype = async (data: any) => {
+  gpuBarLoad.value = true
+  try{
+    const chart_cpu = echarts.init(document.getElementById("chart-bar-cpu"));
+    const gpuDataName = data.gpu.map((user:any) => user.name);
+    const gpuDataValue = data.gpu.map((user: any) => user.value);
+
+    const option = {
+      grid: {
+        left: '3%',
+        right: '10%',
+        top: '0',
+        bottom: '0',
+        containLabel: true
+      },
+      xAxis: {
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
+        max: 'dataMax'
+      },
+      yAxis: {
+        type: 'category',
+        data: gpuDataName,
+        inverse: true,
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
+        axisTick: {
+            show: false 
+        }
+      },
+      series: [
+        {
+          realtimeSort: true,
+          name: 'GPU',
+          type: 'bar',
+          data: gpuDataValue,
+          label: {
+            show: true,
+            position: 'right', // inside
+            valueAnimation: true,
+            // formatter: '{c}',
+            textStyle: {
+              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
+            }
+          },
+          barGap: '0%',
+          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(
+              0, 0, 1, 0, 
+              [
+                  {offset: 0, color: '#91a8f4'},
+                  {offset: 1, color: '#567aee'}
+              ]
+            )
+          }
+        }
+      ],
+      legend: {
+        show: false
+      }
+    }
+    chart_cpu.setOption(option);
+    if (typeof ResizeObserver !== 'undefined') {
+      let observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          chart_cpu.resize();
+        }
+      });
+
+      let element = document.getElementById('resource-container');
+      observer.observe(element);
+    }
+    window.addEventListener("resize", function () {
+      chart_cpu.resize();
+    })
+  }catch{console.error}
+  gpuBarLoad.value = false
+}
+const changeGPUtype = async (data: any) => {
   gpuBarLoad.value = true
   try{
     const chart_gpu = echarts.init(document.getElementById("chart-bar-gpu"));
@@ -151,12 +253,22 @@ const changetype = async (data: any) => {
         containLabel: true
       },
       xAxis: {
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         max: 'dataMax'
       },
       yAxis: {
         type: 'category',
         data: gpuDataName,
         inverse: true,
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         axisTick: {
             show: false 
         }
@@ -164,17 +276,20 @@ const changetype = async (data: any) => {
       series: [
         {
           realtimeSort: true,
-          name: 'X',
+          name: 'GPU',
           type: 'bar',
           data: gpuDataValue,
           label: {
             show: true,
             position: 'right', // inside
             valueAnimation: true,
-            // formatter: '{c}'
+            // formatter: '{c}',
+            textStyle: {
+              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
+            }
           },
           barGap: '0%',
-          barWidth: '10',
+          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
           itemStyle: {
             color: new echarts.graphic.LinearGradient(
               0, 0, 1, 0, 
@@ -223,12 +338,22 @@ const changeMemorytype = async (data: any) => {
         containLabel: true
       },
       xAxis: {
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         max: 'dataMax'
       },
       yAxis: {
         type: 'category',
         data: memoryDataName,
         inverse: true,
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         axisTick: {
             show: false 
         }
@@ -236,16 +361,19 @@ const changeMemorytype = async (data: any) => {
       series: [
         {
           realtimeSort: true,
-          name: 'X',
+          name: 'Memory',
           type: 'bar',
           data: memoryValue,
           label: {
             show: true,
             position: 'right',
-            valueAnimation: true
+            valueAnimation: true,
+            textStyle: {
+              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
+            }
           },
           barGap: '0%',
-          barWidth: '10',
+          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
           itemStyle: {
             color: new echarts.graphic.LinearGradient(
               0, 0, 1, 0, 
@@ -294,12 +422,22 @@ const changeStoragetype = async (data: any) => {
         containLabel: true
       },
       xAxis: {
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         max: 'dataMax'
       },
       yAxis: {
         type: 'category',
         data: storageDataName,
         inverse: true,
+        axisLabel: {
+          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+          color: '#7c889b',
+          //   formatter: '{value}'
+        },
         axisTick: {
             show: false 
         }
@@ -307,16 +445,19 @@ const changeStoragetype = async (data: any) => {
       series: [
         {
           realtimeSort: true,
-          name: 'X',
+          name: 'Storage',
           type: 'bar',
           data: storageValue,
           label: {
             show: true,
             position: 'right',
-            valueAnimation: true
+            valueAnimation: true,
+            textStyle: {
+              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
+            }
           },
           barGap: '0%',
-          barWidth: '10',
+          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
           itemStyle: {
             color: new echarts.graphic.LinearGradient(
               0, 0, 1, 0, 
@@ -482,12 +623,12 @@ onMounted(async () => {
     .chart-trends {
       width: 100%;
       margin: 0 auto;
-      height: 4rem;
+      height: 4.5rem;
       @media screen and (max-width: 768px) {
-        height: 420px;
+        height: 470px;
       }
       @media screen and (max-width: 600px) {
-        height: 470px;
+        height: 500px;
       }
     }
   }
