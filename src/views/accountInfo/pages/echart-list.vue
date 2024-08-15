@@ -127,7 +127,7 @@
 <script setup lang="ts">
 import { getCPsBalancesData, getCPsEchartsData } from "@/api/cp-profile";
 import { signature } from "@/utils/storage"
-import { dataCpData, dataGPU, getDateRange, replaceDecimalsFormat, replaceFormat, sumArrays } from "@/utils/common";
+import { dataCpData, dataDelta, dataGPU, getDateRange, replaceDecimalsFormat, replaceFormat, sumArrays } from "@/utils/common";
 import * as echarts from "echarts"
 
 const route = useRoute()
@@ -177,13 +177,21 @@ const changetype = async (data: any) => {
   
   const fcpCountsData = await dataCpData(data.fcp_job, 'total')
   const fcpRunningData = await dataCpData(data.fcp_job, 'active')
+  const fcpCountsMax = Math.max(...fcpCountsData.datum);
+  const fcpCountsMin = Math.min(...fcpCountsData.datum);
+  const fcpRunningMax = Math.max(...fcpRunningData.datum);
+  const fcpRunningMin = Math.min(...fcpRunningData.datum);
   totalJob.value = sumArrays(fcpCountsData.datum, [])
 
   const fcpCollateralData = await dataCpData(data.fcp_collateral, 'total')
   const fcpEscrowData = await dataCpData(data.fcp_collateral, 'active')
 
   const ecpCountsData = await dataCpData(data.ecp_task, 'total')
-  const ecpRunningData = await dataCpData(data.ecp_task, 'active')
+  const ecpGrowthData = await dataDelta(data.ecp_task, 'delta')
+  const ecpCountMax = Math.max(...ecpCountsData.datum);
+  const ecpCountMin = Math.min(...ecpCountsData.datum);
+  const ecpGrowthMax = Math.max(...ecpGrowthData.datum);
+  const ecpGrowthMin = Math.min(...ecpGrowthData.datum);
   totalReward.value = sumArrays(ecpCountsData.datum, [])
 
   const ecpCollateralData = await dataCpData(data.ecp_collateral, 'total')
@@ -268,6 +276,8 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        min: fcpCountsMin,
+        max: fcpCountsMax
       },
       {
         type: 'value',
@@ -277,6 +287,8 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        min: fcpRunningMin,
+        max: fcpRunningMax
       }
     ],
     series: [
@@ -285,7 +297,7 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         showSymbol: true,
-        yAxisIndex: 1,
+        yAxisIndex: 0,
         tooltip: {
           valueFormatter: function (value: any) {
             return value;
@@ -300,6 +312,7 @@ const changetype = async (data: any) => {
         // barCategoryGap: '0%',
         barGap: '0%',
         barWidth: '10',
+        yAxisIndex: 1,
         data: fcpRunningData.datum,
         color: '#0000bf'
       }
@@ -477,6 +490,8 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        min: ecpCountMin,
+        max: ecpCountMax,
       },
       {
         type: 'value',
@@ -486,6 +501,8 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        min: ecpGrowthMin,
+        max: ecpGrowthMax,
       }
     ],
     series: [
@@ -494,7 +511,7 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         showSymbol: true,
-        yAxisIndex: 1,
+        yAxisIndex: 0,
         tooltip: {
           valueFormatter: function (value: any) {
             return value;
@@ -509,7 +526,8 @@ const changetype = async (data: any) => {
         // barCategoryGap: '0%',
         barGap: '0%',
         barWidth: '10',
-        data: ecpRunningData.datum,
+        yAxisIndex: 1,
+        data: ecpGrowthData.datum,
         color: '#56cfb2'
       }
     ]

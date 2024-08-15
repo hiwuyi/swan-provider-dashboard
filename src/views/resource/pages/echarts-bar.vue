@@ -558,7 +558,7 @@ onMounted(async () => {
             height: 0.4rem;
             margin: 0 0.07rem 0 0;
             &.icon-gpu {
-              background: url(../../assets/images/icons/icon-gpu.png)
+              background: url(../../../assets/images/icons/icon-gpu.png)
                 no-repeat center;
               background-size: 100%;
             }

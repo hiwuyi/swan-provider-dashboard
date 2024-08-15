@@ -118,6 +118,10 @@ const changetype = async (data: any) => {
 
   const gpuData = await dataGPU(data.gpu, 'active')
   const gpuTotalData = await dataGPU(data.gpu, 'total')
+  const gpuDataMax = Math.max(...gpuData.datum);
+  const gpuDataMin = Math.min(...gpuData.datum);
+  const gpuTotalMax = Math.max(...gpuTotalData.datum);
+  const gpuTotalMin = Math.min(...gpuTotalData.datum);
 
   const cpuData = await dataResource(data.cpu, 'active')
   const memoryData = await dataResource(data.memory, 'active')
@@ -125,13 +129,17 @@ const changetype = async (data: any) => {
 
   const fcpData = await dataDelta(data.fcp, 'total')
   const fcpDeltaData = await dataDelta(data.fcp, 'delta')
-  const fcpMax = Math.max(...fcpDeltaData.datum);
-  const fcpMin = Math.min(...fcpDeltaData.datum);
+  const fcpMax = Math.max(...fcpData.datum);
+  const fcpMin = Math.min(...fcpData.datum);
+  const fcpDeltaMax = Math.max(...fcpDeltaData.datum);
+  const fcpDeltaMin = Math.min(...fcpDeltaData.datum);
 
   const ecpData = await dataDelta(data.ecp, 'total')
   const ecpDeltaData = await dataDelta(data.ecp, 'delta')
-  const ecpMax = Math.max(...ecpDeltaData.datum);
-  const ecpMin = Math.min(...ecpDeltaData.datum);
+  const ecpMax = Math.max(...ecpData.datum);
+  const ecpMin = Math.min(...ecpData.datum);
+  const ecpDeltaMax = Math.max(...ecpDeltaData.datum);
+  const ecpDeltaMin = Math.min(...ecpDeltaData.datum);
 
   const option1 = {
     tooltip: {
@@ -318,12 +326,14 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        min: fcpMin,
+        max: fcpMax,
         minInterval: 150
       },
       {
         type: 'value',
-        min: fcpMin,
-        max: fcpMax,
+        min: fcpDeltaMin,
+        max: fcpDeltaMax,
         // minInterval: 20,
         axisLabel: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
@@ -447,7 +457,8 @@ const changetype = async (data: any) => {
         color: '#7c889b',
         formatter: '{value}'
       },
-      interval: 50
+      min: gpuTotalMin,
+      max: gpuTotalMax
     },{
       type: 'value',
       axisLabel: {
@@ -455,7 +466,8 @@ const changetype = async (data: any) => {
         color: '#7c889b',
         formatter: '{value}'
       },
-      interval: 50,
+      min: gpuDataMin,
+      max: gpuDataMax,
       position: 'right'
     }],
     series: [
@@ -463,6 +475,7 @@ const changetype = async (data: any) => {
         name: 'Used GPU',
         type: 'line',
         showSymbol: true,
+        yAxisIndex: 1,
         color: '#a801a1',
         smooth: false,
         data: gpuData.datum
@@ -471,26 +484,9 @@ const changetype = async (data: any) => {
         name: 'Total GPU',
         type: 'line',
         showSymbol: true,
+        yAxisIndex: 0,
         color: '#93c605',
         smooth: false,
-        data: gpuTotalData.datum
-      },
-      {
-        name: 'Used GPU',
-        type: 'line',
-        showSymbol: false,
-        color: '#a801a1',
-        smooth: false,
-        yAxisIndex: 1,
-        data: gpuData.datum
-      },
-      {
-        name: 'Total GPU',
-        type: 'line',
-        showSymbol: false,
-        color: '#93c605',
-        smooth: false,
-        yAxisIndex: 1,
         data: gpuTotalData.datum
       }
     ]
@@ -578,12 +574,14 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        min: ecpMin,
+        max: ecpMax,
         minInterval: 150
       },
       {
         type: 'value',
-        min: ecpMin,
-        max: ecpMax,
+        min: ecpDeltaMin,
+        max: ecpDeltaMax,
         axisLabel: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',

@@ -21,7 +21,8 @@
         </el-col>
       </el-row>
 
-      <el-table v-loading="paymentLoad" element-loading-text="Please do not refresh the page" :data="paymentData" stripe style="width: 100%" @filter-change="handleFilterChange">
+      <!-- @filter-change="handleFilterChange" -->
+      <el-table v-loading="paymentLoad" element-loading-text="Please do not refresh the page" :data="paymentData" stripe style="width: 100%">
         <!-- <el-table-column prop="chain_id" label="chain id" min-width="110" /> -->
         <el-table-column prop="task_uuid" min-width="120">
           <template #header>
@@ -273,7 +274,7 @@
         </el-table-column>
       </el-table>
       <div class="flex flex-ai-center flex-jc-center pagination-style">
-        <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + paymentData.length : 0 + paymentData.length }} /&nbsp;</span>
+        <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + 1 : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + paymentData.length : 0 + paymentData.length }} /&nbsp;</span>
         <!-- hide-on-single-page -->
         <el-pagination :page-size="pagin.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="pagin.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
           :total="pagin.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
@@ -311,6 +312,20 @@ const networkZK = reactive({
 const small = ref(false)
 const background = ref(false)
 
+
+const handleFilterChange = (filters) => {
+  for (const key in filters) {
+    if (key === 'status') {
+      const result = filters.status[0] ?? ''
+      if (result === '') paramsFilter.data.total = 1
+      else {
+        paramsFilter.data.online = result
+        paramsFilter.data.total = 0
+      }
+    }
+  }
+  handleCurrentChange(1, 1)
+}
 function handleSizeChange(val: number) {
   pagin.pageSize = val
   pagin.pageNo = 1
@@ -328,26 +343,7 @@ async function getAllData() {
       page_size: pagin.pageSize,
       page_no: page,
     }
-    // const dataRes = await getCPsfcpRewardsData(params, route.params.cp_addr)
-    const dataRes = {
-      "code": 0, "msg": "success",
-      "data": {
-        "total": 1,
-        "list": [
-          {
-            "task_uuid": "",
-            "job_uuid": "",
-            "node_id": "",
-            "created_at": 1,
-            "started_at": 0,
-            "ended_at": 0,
-            "status":"",
-            "reward_tx_hash": "",
-            "reward": "0.000000000000000000"
-          }
-        ]
-      }
-    }
+    const dataRes = await getCPsfcpRewardsData(params, route.params.cp_addr)
     paymentData.value = dataRes?.data?.list ?? []
     pagin.total = dataRes?.data?.total ?? 0
   } catch{console.error}

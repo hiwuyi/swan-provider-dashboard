@@ -5,7 +5,7 @@
         <div class="flex flex-ai-center font-24 header-title">
           <span v-if="props.list.type === 'claimAccount'">Signature Verifcation</span>
           <span v-else-if="props.list.type === 'Sequencer'">Add Sequencer</span>
-          <span v-else>{{`${props.list.type} Collateral`}}</span>
+          <span v-else>{{`${props.list.type} Deposit`}}</span>
         </div>
       </template>
 
@@ -110,26 +110,13 @@
         </el-row>
 
         <el-row class="font-14 note" v-else v-loading="ruleForm.show">
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
-            <p>Available Balance:</p>
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
+            <p v-if="props.list.type === 'FCP'">For each FCP job, you need to have at least 5 SWANC in an escrow account.</p>
+            <p v-if="props.list.type === 'ECP'">To receive ZK tasks, you need to have at least 100 SWANC in an escrow account.</p>
+            <p v-if="props.list.type === 'ECP'" class="mt-8">150 SWANC is recommended.</p> 
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
-            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
-            <p>{{props.list.type}} Collateral Balance:</p>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
-            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
-            <p>{{props.list.type}} Locked Balance:</p>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
-            <p class="color"><span class="blue">0.9984</span> SWANC</p> 
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
-            <p>Collateral Amount:</p>
+            <p>Amount:</p>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
             <div class="flex flex-ai-center nowrap">

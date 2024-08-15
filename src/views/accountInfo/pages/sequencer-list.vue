@@ -21,28 +21,50 @@
     </el-row>
 
     <el-table :data="tableData" style="width: 100%" v-loading="dataLoad">
+      <el-table-column prop="tx_hash" label="Transaction Hash">
+        <template #default="scope">
+          <a :href="`${explorerLink}tx/${scope.row.tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.tx_hash}}</a>
+        </template>
+      </el-table-column>
       <el-table-column prop="addr" label="Task Contract">
         <template #default="scope">
           <a :href="`${explorerLink}address/${scope.row.addr}`" target="_blank" class="name-style font-14">{{scope.row.addr}}</a>
         </template>
       </el-table-column>
+      <el-table-column prop="timestamp" label="Time">
+        <template #default="scope">
+          <span>
+            {{ momentFun(scope.row.timestamp) }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="from" label="From">
+        <template #default="scope">
+          <span>
+            {{ scope.row.from }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="to" label="To">
+        <template #default="scope">
+          <span>
+            {{ scope.row.to }}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column prop="blob_cid" label="Blob CID">
         <template #default="scope">
-          <div class="flex flex-ai-center flex-jc-center pointer name-style" @click="openPage(`${scope.row.gateway}/ipfs/${scope.row.blob_cid}`)">
-            {{ scope.row.blob_cid }}
-          </div>
+          <a :href="`${scope.row.gateway}/ipfs/${scope.row.blob_cid}`" target="_blank" class="name-style font-14">{{scope.row.blob_cid}}</a>
         </template>
       </el-table-column>
       <el-table-column prop="payload_cid" label="Payload CID">
         <template #default="scope">
-          <div class="flex flex-ai-center flex-jc-center pointer name-style" @click="openPage(`${scope.row.gateway}${scope.row.payload_url}`)">
-            {{ scope.row.payload_cid }}
-          </div>
+          <a :href="`${scope.row.gateway}${scope.row.payload_url}`" target="_blank" class="name-style font-14">{{scope.row.payload_cid}}</a>
         </template>
       </el-table-column>
     </el-table>
     <div class="flex flex-ai-center flex-jc-center pagination-style">
-      <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + tableData.length : 0 + tableData.length }} /&nbsp;</span>
+      <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + 1 : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + tableData.length : 0 + tableData.length }} /&nbsp;</span>
       <!-- hide-on-single-page -->
       <el-pagination :page-size="pagin.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="pagin.pageNo" :pager-count="5" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
         :total="pagin.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
@@ -53,7 +75,7 @@
 <script setup lang="ts">
 import { getCPsSequencesData } from '@/api/cp-profile';
 import { openPage } from '@/hooks/router';
-import { paginationWidth } from '@/utils/common';
+import { momentFun, paginationWidth } from '@/utils/common';
 import { explorerLink } from '@/utils/storage';
 
 const route = useRoute()

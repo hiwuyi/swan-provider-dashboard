@@ -81,9 +81,6 @@ const totalAll = reactive({
 async function initEcharts () {
   try{
     cpLoad.value = true
-
-    console.log(props.cpsData.resources)
-
     props.cpsData.resources.forEach((item: any) => {
       try{
         item.gpu.gpus.forEach((gpu: any) => { 
@@ -348,7 +345,7 @@ watch(() => props.cpsData, () => {
             height: 0.4rem;
             margin: 0 0.07rem 0 0;
             &.icon-gpu {
-              background: url(../../assets/images/icons/icon-gpu.png)
+              background: url(../../../assets/images/icons/icon-gpu.png)
                 no-repeat center;
               background-size: 100%;
             }
