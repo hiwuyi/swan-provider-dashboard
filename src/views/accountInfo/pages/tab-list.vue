@@ -28,10 +28,10 @@
       </el-tabs>
     </div>
   </div>
-  <payment-history v-if="activeName === 'FCP'"></payment-history>
-  <ubi-history v-else-if="activeName === 'ECP'"></ubi-history>
-  <sequencer-list v-else-if="activeName === 'Sequencer'"></sequencer-list>
-  <transaction-list v-else-if="activeName === 'Transaction'"></transaction-list>
+  <payment-history v-if="activeName === 'FCP'" :watchRoute="watchRoute"></payment-history>
+  <ubi-history v-else-if="activeName === 'ECP'" :watchRoute="watchRoute"></ubi-history>
+  <sequencer-list v-else-if="activeName === 'Sequencer'" :watchRoute="watchRoute"></sequencer-list>
+  <transaction-list v-else-if="activeName === 'Transaction'" :watchRoute="watchRoute"></transaction-list>
 </template>
 
 <script setup lang="ts">
@@ -41,8 +41,14 @@ import paymentHistory from "./payment-history.vue"
 import ubiHistory from "./UBI-history.vue"
 
 const activeName = ref('FCP')
+const watchRoute = ref(false)
 
 onMounted(async () => {})
+
+const route = useRoute()
+watch(route, (to: any) => {
+  if (to.name === "accountInfo") watchRoute.value = !watchRoute.value
+})
 </script>
 
 <style lang="less" scoped>

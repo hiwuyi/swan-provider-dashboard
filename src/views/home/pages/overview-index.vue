@@ -22,9 +22,9 @@
                     <h6 class="font-12 weight-4 text-center">Active FCP Number</h6>
                     <template v-if="overviewData.value.fcp.length>0">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.fcp[0].active_cps)}}
+                        {{replaceFormat(Number(overviewData.value.fcp[0].active_cps))}}
                       </b>
-                      <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_cps - overviewData.value.fcp[1].active_cps)}}</h6>
+                      <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].active_cps) >= Number(overviewData.value.fcp[1].active_cps) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].active_cps) >= Number(overviewData.value.fcp[1].active_cps)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].active_cps - overviewData.value.fcp[1].active_cps))}}</h6>
                       <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                   </div>
@@ -34,9 +34,9 @@
                     <h6 class="font-12 weight-4 text-center">Active ECP numbers</h6>
                     <template v-if="overviewData.value.ecp.length>0">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.ecp[0].cps)}}
+                        {{replaceFormat(Number(overviewData.value.ecp[0].cps))}}
                       </b>
-                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps ? 'up': 'down'}`">{{overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps?'+':''}}{{replaceFormat(overviewData.value.ecp[0].cps - overviewData.value.ecp[1].cps)}}</h6>
+                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].cps) >= Number(overviewData.value.ecp[1].cps) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].cps) >= Number(overviewData.value.ecp[1].cps)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].cps - overviewData.value.ecp[1].cps))}}</h6>
                       <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                   </div>
@@ -46,9 +46,9 @@
                     <h6 class="font-12 weight-4 text-center">Total ZK tasks</h6>
                     <template v-if="overviewData.value.ecp.length>0">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.ecp[0].tasks)}}
+                        {{replaceFormat(Number(overviewData.value.ecp[0].tasks))}}
                       </b>
-                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks - overviewData.value.ecp[1].tasks)}}</h6>
+                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].tasks) >= Number(overviewData.value.ecp[1].tasks) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].tasks) >= Number(overviewData.value.ecp[1].tasks)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].tasks - overviewData.value.ecp[1].tasks))}}</h6>
                       <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                   </div>
@@ -58,9 +58,9 @@
                     <h6 class="font-12 weight-4 text-center">Total Applications</h6>
                     <template v-if="overviewData.value.fcp.length>0">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.fcp[0].active_applications)}}
+                        {{replaceFormat(Number(overviewData.value.fcp[0].active_applications))}}
                       </b>
-                      <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_applications - overviewData.value.fcp[1].active_applications)}}</h6>
+                      <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].active_applications) >= Number(overviewData.value.fcp[1].active_applications) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].active_applications) >= Number(overviewData.value.fcp[1].active_applications)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].active_applications - overviewData.value.fcp[1].active_applications))}}</h6>
                       <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                   </div>
@@ -70,21 +70,21 @@
                     <h6 class="font-12 weight-4 text-center">Total GPU hours</h6>
                     <template v-if="overviewData.value.fcp.length>0">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.fcp[0].gpu_hours)}}
+                        {{replaceFormat(Number(overviewData.value.fcp[0].gpu_hours))}}
                       </b>
-                      <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours ? 'up': 'down'}`">{{overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours?'+':''}}{{replaceFormat(overviewData.value.fcp[0].gpu_hours - overviewData.value.fcp[1].gpu_hours)}}</h6>
+                      <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].gpu_hours) >= Number(overviewData.value.fcp[1].gpu_hours) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].gpu_hours) >= Number(overviewData.value.fcp[1].gpu_hours)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].gpu_hours - overviewData.value.fcp[1].gpu_hours))}}</h6>
                       <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                   </div>
                 </el-col>
                 <el-col :xs="12" :sm="12" :md="12" :lg="8" :xl="8">
                   <div class="grid-content">
-                    <h6 class="font-12 weight-4 text-center">Total ZK rewards (SWAN)</h6>
+                    <h6 class="font-12 weight-4 text-center">Total ZK rewards</h6>
                     <template v-if="overviewData.value.fcp.length>0">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.ecp[0].rewards)}}
+                        {{replaceFormat(Number(overviewData.value.ecp[0].rewards))}}
                       </b>
-                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards - overviewData.value.ecp[1].rewards)}}</h6>
+                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].rewards) >= Number(overviewData.value.ecp[1].rewards) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].rewards) >= Number(overviewData.value.ecp[1].rewards)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].rewards - overviewData.value.ecp[1].rewards))}}</h6>
                       <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                   </div>
@@ -100,9 +100,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Active FCP Number</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.fcp[0].active_cps)}}
+                      {{replaceFormat(Number(overviewData.value.fcp[0].active_cps))}}
                     </b>
-                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_cps >= overviewData.value.fcp[1].active_cps?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_cps - overviewData.value.fcp[1].active_cps)}}</h6>
+                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].active_cps) >= Number(overviewData.value.fcp[1].active_cps) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].active_cps) >= Number(overviewData.value.fcp[1].active_cps)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].active_cps - overviewData.value.fcp[1].active_cps))}}</h6>
                     <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -110,9 +110,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Active Applications</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.fcp[0].active_applications)}}
+                      {{replaceFormat(Number(overviewData.value.fcp[0].active_applications))}}
                     </b>
-                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications ? 'up': 'down'}`">{{overviewData.value.fcp[0].active_applications >= overviewData.value.fcp[1].active_applications?'+':''}}{{replaceFormat(overviewData.value.fcp[0].active_applications - overviewData.value.fcp[1].active_applications)}}</h6>
+                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].active_applications) >= Number(overviewData.value.fcp[1].active_applications) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].active_applications) >= Number(overviewData.value.fcp[1].active_applications)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].active_applications - overviewData.value.fcp[1].active_applications))}}</h6>
                     <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -120,9 +120,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total Deployments</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.fcp[0].deployments)}}
+                      {{replaceFormat(Number(overviewData.value.fcp[0].deployments))}}
                     </b>
-                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].deployments >= overviewData.value.fcp[1].deployments ? 'up': 'down'}`">{{overviewData.value.fcp[0].deployments >= overviewData.value.fcp[1].deployments?'+':''}}{{replaceFormat(overviewData.value.fcp[0].deployments - overviewData.value.fcp[1].deployments)}}</h6>
+                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].deployments) >= Number(overviewData.value.fcp[1].deployments) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].deployments) >= Number(overviewData.value.fcp[1].deployments)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].deployments - overviewData.value.fcp[1].deployments))}}</h6>
                     <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -130,9 +130,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total jobs</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.fcp[0].jobs)}}
+                      {{replaceFormat(Number(overviewData.value.fcp[0].jobs))}}
                     </b>
-                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].jobs >= overviewData.value.fcp[1].jobs ? 'up': 'down'}`">{{overviewData.value.fcp[0].jobs >= overviewData.value.fcp[1].jobs?'+':''}}{{replaceFormat(overviewData.value.fcp[0].jobs - overviewData.value.fcp[1].jobs)}}</h6>
+                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].jobs) >= Number(overviewData.value.fcp[1].jobs) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].jobs) >= Number(overviewData.value.fcp[1].jobs)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].jobs - overviewData.value.fcp[1].jobs))}}</h6>
                     <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -140,9 +140,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total running jobs</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.fcp[0].running_jobs)}}
+                      {{replaceFormat(Number(overviewData.value.fcp[0].running_jobs))}}
                     </b>
-                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].running_jobs >= overviewData.value.fcp[1].running_jobs ? 'up': 'down'}`">{{overviewData.value.fcp[0].running_jobs >= overviewData.value.fcp[1].running_jobs?'+':''}}{{replaceFormat(overviewData.value.fcp[0].running_jobs - overviewData.value.fcp[1].running_jobs)}}</h6>
+                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].running_jobs) >= Number(overviewData.value.fcp[1].running_jobs) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].running_jobs) >= Number(overviewData.value.fcp[1].running_jobs)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].running_jobs - overviewData.value.fcp[1].running_jobs))}}</h6>
                     <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -150,9 +150,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total GPU hours</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.fcp[0].gpu_hours)}}
+                      {{replaceFormat(Number(overviewData.value.fcp[0].gpu_hours))}}
                     </b>
-                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours ? 'up': 'down'}`">{{overviewData.value.fcp[0].gpu_hours >= overviewData.value.fcp[1].gpu_hours?'+':''}}{{replaceFormat(overviewData.value.fcp[0].gpu_hours - overviewData.value.fcp[1].gpu_hours)}}</h6>
+                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].gpu_hours) >= Number(overviewData.value.fcp[1].gpu_hours) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].gpu_hours) >= Number(overviewData.value.fcp[1].gpu_hours)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].gpu_hours - overviewData.value.fcp[1].gpu_hours))}}</h6>
                     <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -160,9 +160,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total CPU hours</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.fcp[0].cpu_hours)}}
+                      {{replaceFormat(Number(overviewData.value.fcp[0].cpu_hours))}}
                     </b>
-                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.fcp[0].cpu_hours >= overviewData.value.fcp[1].cpu_hours ? 'up': 'down'}`">{{overviewData.value.fcp[0].cpu_hours >= overviewData.value.fcp[1].cpu_hours?'+':''}}{{replaceFormat(overviewData.value.fcp[0].cpu_hours - overviewData.value.fcp[1].cpu_hours)}}</h6>
+                    <h6 v-if="overviewData.value.fcp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.fcp[0].cpu_hours) >= Number(overviewData.value.fcp[1].cpu_hours) ? 'up': 'down'}`">{{Number(overviewData.value.fcp[0].cpu_hours) >= Number(overviewData.value.fcp[1].cpu_hours)?'+':''}}{{replaceFormat(Number(overviewData.value.fcp[0].cpu_hours - overviewData.value.fcp[1].cpu_hours))}}</h6>
                     <h6 v-if="overviewData.value.fcp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -177,19 +177,19 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Active ECP Number</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.ecp[0].cps)}}
+                      {{replaceFormat(Number(overviewData.value.ecp[0].cps))}}
                     </b>
-                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps ? 'up': 'down'}`">{{overviewData.value.ecp[0].cps >= overviewData.value.ecp[1].cps?'+':''}}{{replaceFormat(overviewData.value.ecp[0].cps - overviewData.value.ecp[1].cps)}}</h6>
+                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].cps) >= Number(overviewData.value.ecp[1].cps) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].cps) >= Number(overviewData.value.ecp[1].cps)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].cps - overviewData.value.ecp[1].cps))}}</h6>
                     <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
                 <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="grid-content">
-                    <h6 class="font-12 weight-4 text-center">Total ZK rewards (SWAN)</h6>
+                    <h6 class="font-12 weight-4 text-center">Total ZK rewards</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.ecp[0].rewards)}}
+                      {{replaceFormat(Number(overviewData.value.ecp[0].rewards))}}
                     </b>
-                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards >= overviewData.value.ecp[1].rewards?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards - overviewData.value.ecp[1].rewards)}}</h6>
+                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].rewards) >= Number(overviewData.value.ecp[1].rewards) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].rewards) >= Number(overviewData.value.ecp[1].rewards)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].rewards - overviewData.value.ecp[1].rewards))}}</h6>
                     <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -197,9 +197,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total ZK tasks</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.ecp[0].tasks)}}
+                      {{replaceFormat(Number(overviewData.value.ecp[0].tasks))}}
                     </b>
-                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks >= overviewData.value.ecp[1].tasks?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks - overviewData.value.ecp[1].tasks)}}</h6>
+                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].tasks) >= Number(overviewData.value.ecp[1].tasks) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].tasks) >= Number(overviewData.value.ecp[1].tasks)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].tasks - overviewData.value.ecp[1].tasks))}}</h6>
                     <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -207,9 +207,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">GPU ZK task</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.ecp[0].tasks_gpu)}}
+                      {{replaceFormat(Number(overviewData.value.ecp[0].tasks_gpu))}}
                     </b>
-                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks_gpu >= overviewData.value.ecp[1].tasks_gpu ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks_gpu >= overviewData.value.ecp[1].tasks_gpu?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks_gpu - overviewData.value.ecp[1].tasks_gpu)}}</h6>
+                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].tasks_gpu) >= Number(overviewData.value.ecp[1].tasks_gpu) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].tasks_gpu) >= Number(overviewData.value.ecp[1].tasks_gpu)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].tasks_gpu - overviewData.value.ecp[1].tasks_gpu))}}</h6>
                     <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -217,9 +217,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">CPU ZK task</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.ecp[0].tasks_cpu)}}
+                      {{replaceFormat(Number(overviewData.value.ecp[0].tasks_cpu))}}
                     </b>
-                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks_cpu >= overviewData.value.ecp[1].tasks_cpu ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks_cpu >= overviewData.value.ecp[1].tasks_cpu?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks_cpu - overviewData.value.ecp[1].tasks_cpu)}}</h6>
+                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].tasks_cpu) >= Number(overviewData.value.ecp[1].tasks_cpu) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].tasks_cpu) >= Number(overviewData.value.ecp[1].tasks_cpu)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].tasks_cpu - overviewData.value.ecp[1].tasks_cpu))}}</h6>
                     <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -227,9 +227,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Verified ZK task</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.ecp[0].tasks_verified)}}
+                      {{replaceFormat(Number(overviewData.value.ecp[0].tasks_verified))}}
                     </b>
-                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].tasks_verified >= overviewData.value.ecp[1].tasks_verified ? 'up': 'down'}`">{{overviewData.value.ecp[0].tasks_verified >= overviewData.value.ecp[1].tasks_verified?'+':''}}{{replaceFormat(overviewData.value.ecp[0].tasks_verified - overviewData.value.ecp[1].tasks_verified)}}</h6>
+                    <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].tasks_verified) >= Number(overviewData.value.ecp[1].tasks_verified) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].tasks_verified) >= Number(overviewData.value.ecp[1].tasks_verified)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].tasks_verified - overviewData.value.ecp[1].tasks_verified))}}</h6>
                     <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -245,30 +245,30 @@
                     </h6>
                     <template v-if="AvgZKRewards.value === 'Daily'">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.ecp[0].rewards_avg_day)}}
+                        {{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_day))}}
                       </b>
-                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_day >= overviewData.value.ecp[1].rewards_avg_day ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_day >= overviewData.value.ecp[1].rewards_avg_day?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_day - overviewData.value.ecp[1].rewards_avg_day)}}</h6>
+                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].rewards_avg_day) >= Number(overviewData.value.ecp[1].rewards_avg_day) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].rewards_avg_day) >= Number(overviewData.value.ecp[1].rewards_avg_day)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_day - overviewData.value.ecp[1].rewards_avg_day))}}</h6>
                       <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                     <template v-else-if="AvgZKRewards.value === 'Weekly'">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.ecp[0].rewards_avg_week)}}
+                        {{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_week))}}
                       </b>
-                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_week >= overviewData.value.ecp[1].rewards_avg_week ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_week >= overviewData.value.ecp[1].rewards_avg_week?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_week - overviewData.value.ecp[1].rewards_avg_week)}}</h6>
+                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].rewards_avg_week) >= Number(overviewData.value.ecp[1].rewards_avg_week) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].rewards_avg_week) >= Number(overviewData.value.ecp[1].rewards_avg_week)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_week - overviewData.value.ecp[1].rewards_avg_week))}}</h6>
                       <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                     <template v-else-if="AvgZKRewards.value === 'Monthly'">
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.ecp[0].rewards_avg_month)}}
+                        {{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_month))}}
                       </b>
-                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_month >= overviewData.value.ecp[1].rewards_avg_month ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_month >= overviewData.value.ecp[1].rewards_avg_month?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_month - overviewData.value.ecp[1].rewards_avg_month)}}</h6>
+                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].rewards_avg_month) >= Number(overviewData.value.ecp[1].rewards_avg_month) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].rewards_avg_month) >= Number(overviewData.value.ecp[1].rewards_avg_month)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_month - overviewData.value.ecp[1].rewards_avg_month))}}</h6>
                       <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                     <template v-else>
                       <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                        {{replaceFormat(overviewData.value.ecp[0].rewards_avg_year)}}
+                        {{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_year))}}
                       </b>
-                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.ecp[0].rewards_avg_year >= overviewData.value.ecp[1].rewards_avg_year ? 'up': 'down'}`">{{overviewData.value.ecp[0].rewards_avg_year >= overviewData.value.ecp[1].rewards_avg_year?'+':''}}{{replaceFormat(overviewData.value.ecp[0].rewards_avg_year - overviewData.value.ecp[1].rewards_avg_year)}}</h6>
+                      <h6 v-if="overviewData.value.ecp.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.ecp[0].rewards_avg_year) >= Number(overviewData.value.ecp[1].rewards_avg_year) ? 'up': 'down'}`">{{Number(overviewData.value.ecp[0].rewards_avg_year) >= Number(overviewData.value.ecp[1].rewards_avg_year)?'+':''}}{{replaceFormat(Number(overviewData.value.ecp[0].rewards_avg_year - overviewData.value.ecp[1].rewards_avg_year))}}</h6>
                       <h6 v-if="overviewData.value.ecp.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                     </template>
                   </div>
@@ -284,9 +284,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total Addresses</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.swan[0].total_addresses)}}
+                      {{replaceFormat(Number(overviewData.value.swan[0].total_addresses))}}
                     </b>
-                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_addresses >= overviewData.value.swan[1].total_addresses ? 'up': 'down'}`">{{overviewData.value.swan[0].total_addresses >= overviewData.value.swan[1].total_addresses?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_addresses - overviewData.value.swan[1].total_addresses)}}</h6>
+                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.swan[0].total_addresses) >= Number(overviewData.value.swan[1].total_addresses) ? 'up': 'down'}`">{{Number(overviewData.value.swan[0].total_addresses) >= Number(overviewData.value.swan[1].total_addresses)?'+':''}}{{replaceFormat(Number(overviewData.value.swan[0].total_addresses - overviewData.value.swan[1].total_addresses))}}</h6>
                     <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -294,9 +294,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total Contracts(24H)</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.swan[0].total_contracts)}}
+                      {{replaceFormat(Number(overviewData.value.swan[0].total_contracts))}}
                     </b>
-                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_contracts >= overviewData.value.swan[1].total_contracts ? 'up': 'down'}`">{{overviewData.value.swan[0].total_contracts >= overviewData.value.swan[1].total_contracts?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_contracts - overviewData.value.swan[1].total_contracts)}}</h6>
+                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.swan[0].total_contracts) >= Number(overviewData.value.swan[1].total_contracts) ? 'up': 'down'}`">{{Number(overviewData.value.swan[0].total_contracts) >= Number(overviewData.value.swan[1].total_contracts)?'+':''}}{{replaceFormat(Number(overviewData.value.swan[0].total_contracts - overviewData.value.swan[1].total_contracts))}}</h6>
                     <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -304,7 +304,7 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Transactions Today</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{overviewData.value.swan.length>1 ? replaceFormat(overviewData.value.swan[0].total_txns - overviewData.value.swan[1].total_txns) : replaceFormat(overviewData.value.swan[0].total_txns)}}
+                      {{overviewData.value.swan.length>1 ? replaceFormat(Number(overviewData.value.swan[0].total_txns - overviewData.value.swan[1].total_txns)) : replaceFormat(Number(overviewData.value.swan[0].total_txns))}}
                     </b>
                   </div>
                 </el-col>
@@ -312,9 +312,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total Transactions</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.swan[0].total_txns)}}
+                      {{replaceFormat(Number(overviewData.value.swan[0].total_txns))}}
                     </b>
-                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_txns >= overviewData.value.swan[1].total_txns ? 'up': 'down'}`">{{overviewData.value.swan[0].total_txns >= overviewData.value.swan[1].total_txns?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_txns - overviewData.value.swan[1].total_txns)}}</h6>
+                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.swan[0].total_txns) >= Number(overviewData.value.swan[1].total_txns) ? 'up': 'down'}`">{{Number(overviewData.value.swan[0].total_txns) >= Number(overviewData.value.swan[1].total_txns)?'+':''}}{{replaceFormat(Number(overviewData.value.swan[0].total_txns - overviewData.value.swan[1].total_txns))}}</h6>
                     <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -322,9 +322,9 @@
                   <div class="grid-content">
                     <h6 class="font-12 weight-4 text-center">Total Accounts</h6>
                     <b v-loading="overviewLoad" class="flex flex-ai-center flex-jc-center font-24 weight-4 text-center">
-                      {{replaceFormat(overviewData.value.swan[0].total_accounts)}}
+                      {{replaceFormat(Number(overviewData.value.swan[0].total_accounts))}}
                     </b>
-                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${overviewData.value.swan[0].total_accounts >= overviewData.value.swan[1].total_accounts ? 'up': 'down'}`">{{overviewData.value.swan[0].total_accounts >= overviewData.value.swan[1].total_accounts?'+':''}}{{replaceFormat(overviewData.value.swan[0].total_accounts - overviewData.value.swan[1].total_accounts)}}</h6>
+                    <h6 v-if="overviewData.value.swan.length>1" class="font-18 weight-4 text-right t" :class="`${Number(overviewData.value.swan[0].total_accounts) >= Number(overviewData.value.swan[1].total_accounts) ? 'up': 'down'}`">{{Number(overviewData.value.swan[0].total_accounts) >= Number(overviewData.value.swan[1].total_accounts)?'+':''}}{{replaceFormat(Number(overviewData.value.swan[0].total_accounts - overviewData.value.swan[1].total_accounts))}}</h6>
                     <h6 v-if="overviewData.value.swan.length>1" class="font-12 weight-4 text-right t">24h change</h6>
                   </div>
                 </el-col>
@@ -600,9 +600,9 @@ onMounted(async () => {
     }
     .module-container {
       position: relative;
-      width: calc(100% - 0.64rem);
-      height: calc(100% - 0.5rem);
-      padding: 0.25rem 0.32rem;
+      width: calc(100% - 0.4rem);
+      height: calc(100% - 0.4rem);
+      padding: 0.2rem;
       background-color: var(--color-light);
       border-radius: 0.14rem;
       @media screen and (max-width: 768px) {

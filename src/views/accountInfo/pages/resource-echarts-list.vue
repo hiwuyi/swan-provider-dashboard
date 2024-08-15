@@ -23,25 +23,25 @@
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">GPU Usage</p>
-            <div class='chart-trends' id='chart-gpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <div class='chart-trends' id='chart-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">CPU Usage</p>
-            <div class='chart-trends' id='chart-cpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <div class='chart-trends' id='chart-cpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-14 text-center mb-12">Memory Usage (TB)</p>
-            <div class='chart-trends' id='chart-memory' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <p class="font-14 text-center mb-12">Memory Usage (GiB)</p>
+            <div class='chart-trends' id='chart-memory' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
-            <p class="font-14 text-center mb-12">Storage Usage (TB)</p>
-            <div class='chart-trends' id='chart-storage' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <p class="font-14 text-center mb-12">Storage Usage (GiB)</p>
+            <div class='chart-trends' id='chart-storage' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
       </el-row>
@@ -50,43 +50,30 @@
 </template>
 
 <script setup lang="ts">
-import { getCPsEchartsData } from '@/api/cp-profile'
-import { byteTBStorage, dataResource, getDateRange, replaceFormat, sizeChange, unifyNumber } from '@/utils/common';
+import { byteStorage, replaceFormat, sizeChange } from '@/utils/common';
 import * as echarts from "echarts"
 
+const route = useRoute()
 const cpLoad = ref(false)
-const providersLoad = ref(false)
-const weekList = reactive({
-  value: 'Week',
-  options: [
-    {
-      value: 'Week',
-      label: '1 Week'
-    },
-    {
-      value: 'Month',
-      label: '1 Month'
-    },
-    {
-      value: 'Year',
-      label: '1 Year'
-    }]
-})
 const totalAll = reactive({
   gpu: {
     used: 0,
+    free: 0,
     total: 0
   },
   cpu: {
     used: 0,
+    free: 0,
     total: 0
   },
   storage: {
     used: 0,
+    free: 0,
     total: 0
   },
   memory: {
     used: 0,
+    free: 0,
     total: 0
   }
 })
@@ -95,31 +82,32 @@ async function initEcharts () {
   try{
     cpLoad.value = true
 
-    const weekRange = getDateRange(weekList.value);
-    const params = {
-      from: weekRange.start,
-      to: weekRange.end
-    }
-    const echartsRes = await getCPsEchartsData(params)
-    const data = echartsRes?.data ?? {}
-    changetype(data)
+    console.log(props.cpsData.resources)
+
+    props.cpsData.resources.forEach((item: any) => {
+      try{
+        item.gpu.gpus.forEach((gpu: any) => { 
+          totalAll.gpu.used += Number(gpu.total - gpu.free)
+          totalAll.gpu.free += Number(gpu.free)
+          totalAll.gpu.total += Number(gpu.total)
+        })
+      } catch { console.error }
+      totalAll.cpu.used += Number(item.cpu.total - item.cpu.free)
+      totalAll.cpu.free += Number(item.cpu.free)
+      totalAll.cpu.total += Number(item.cpu.total)
+      totalAll.memory.used += Number(item.memory.total - item.memory.free)
+      totalAll.memory.free += Number(item.memory.free)
+      totalAll.memory.total += Number(item.memory.total)
+      totalAll.storage.used += Number(item.storage.total - item.storage.free)
+      totalAll.storage.free += Number(item.storage.free)
+      totalAll.storage.total += Number(item.storage.total)
+    })
+
+    changetype()
   }catch{ cpLoad.value = false}
 }
-const changetype = async (data: any) => {
+const changetype = async () => {
   try{
-    const gpuData = await dataResource(data.gpu, 'active')
-    const cpuData = await dataResource(data.cpu, 'active')
-    const memoryData = await dataResource(data.memory, 'active')
-    const storageData = await dataResource(data.storage, 'active')
-    totalAll.gpu.used = gpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.gpu.total = gpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-    totalAll.cpu.used = cpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.cpu.total = cpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-    totalAll.memory.used = memoryData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.memory.total = memoryData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-    totalAll.storage.used = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.storage.total = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-
     const chart_gpu = echarts.init(document.getElementById("chart-gpu"));
     const chart_cpu = echarts.init(document.getElementById("chart-cpu"));
     const chart_memory = echarts.init(document.getElementById("chart-memory"));
@@ -150,6 +138,7 @@ const changetype = async (data: any) => {
         left: 'left',
         show: false
       },
+      color: ['#02a7f1', '#56cfb2'],
       series: [
         {
           name: 'Access From',
@@ -157,7 +146,7 @@ const changetype = async (data: any) => {
           radius: ['40%', '70%'],
           data: [
             { value: totalAll.gpu.used, name: 'Used' },
-            { value: totalAll.gpu.total-totalAll.gpu.used, name: 'Free' }
+            { value: totalAll.gpu.free, name: 'Free' }
           ],
           label: {
             normal: {
@@ -195,7 +184,7 @@ const changetype = async (data: any) => {
     const option4 = JSON.parse(JSON.stringify(option1))
     option2.series[0].data = [
       { value: totalAll.cpu.used, name: 'Used' },
-      { value: totalAll.cpu.total-totalAll.cpu.used, name: 'Free' }
+      { value: totalAll.cpu.free, name: 'Free' }
     ]
     option2.series[0].tooltip = {
       formatter: function (params: any) {
@@ -207,10 +196,10 @@ const changetype = async (data: any) => {
     }
     option3.series[0].data = [
       { value: totalAll.memory.used, name: 'Used' },
-      { value: totalAll.memory.total-totalAll.memory.used, name: 'Free' }
+      { value: totalAll.memory.free, name: 'Free' }
     ]
     option3.series[0].label.normal.formatter = function (params: any) {
-      return `${ replaceFormat(byteTBStorage(params.data.value))} ${params.data.name}`;
+      return `${ replaceFormat(byteStorage(params.data.value))} ${params.data.name}`;
     }
     option3.series[0].tooltip = {
       formatter: function (params: any) {
@@ -219,10 +208,10 @@ const changetype = async (data: any) => {
     }
     option4.series[0].data = [
       { value: totalAll.storage.used, name: 'Used' },
-      { value: totalAll.storage.total-totalAll.storage.used, name: 'Free' }
+      { value: totalAll.storage.free, name: 'Free' }
     ]
     option4.series[0].label.normal.formatter = function (params: any) {
-      return `${ replaceFormat(byteTBStorage(params.data.value))} ${params.data.name}`;
+      return `${ replaceFormat(byteStorage(params.data.value))} ${params.data.name}`;
     }
     option4.series[0].tooltip = {
       formatter: function (params: any) {
@@ -257,18 +246,35 @@ const changetype = async (data: any) => {
   }catch{console.error}
   cpLoad.value = false
 }
-onMounted(async () => {
+const reset = () => {
+  totalAll.gpu.used = 0
+  totalAll.gpu.free = 0
+  totalAll.gpu.total = 0
+  totalAll.cpu.used = 0
+  totalAll.cpu.free = 0
+  totalAll.cpu.total = 0
+  totalAll.memory.used = 0
+  totalAll.memory.free = 0
+  totalAll.memory.total = 0
+  totalAll.storage.used = 0
+  totalAll.storage.free = 0
+  totalAll.storage.total = 0
   initEcharts()
-})
+}
 
 const props = withDefaults(
   defineProps<{
     cpsData?: any
+    cpsLoad?: boolean
   }>(),
   {
-    cpsData: {}
+    cpsData: {},
+    cpsLoad: false
   }
 )
+watch(() => props.cpsData, () => {
+  reset()
+})
 </script>
 
 <style lang="less" scoped>

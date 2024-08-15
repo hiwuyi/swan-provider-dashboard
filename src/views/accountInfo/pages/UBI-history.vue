@@ -22,47 +22,44 @@
       </el-row>
 
       <el-table v-loading="paymentLoad" ref="tableRef" :data="paymentData" stripe style="width: 100%">
-        <el-table-column prop="task_id" width="90">
+        <el-table-column prop="id" width="90">
           <template #header>
             <div class="font-14 weight-4">Task ID</div>
           </template>
         </el-table-column>
-        <el-table-column prop="type" column-key="Resource Type" filterable :filters="[
+        <!-- column-key="resource_type" filterable :filters="[
             { text: 'CPU', value: 'CPU' },
             { text: 'GPU', value: 'GPU' }
-          ]" filter-placement="bottom-end" :filter-multiple="false" min-width="90">
+          ]" filter-placement="bottom-end" :filter-multiple="false" -->
+        <el-table-column prop="resource_type" min-width="90">
           <template #header>
             <div class="font-14 weight-4">Resource Type</div>
           </template>
           <template #default="scope">
-            <span>{{scope.row.type === 0 ? 'CPU': 'GPU'}}</span>
+            <span>{{scope.row.resource_type === 0 ? 'CPU' : 'GPU'}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="task_contract" min-width="125">
+        <el-table-column prop="addr" min-width="125">
           <template #header>
             <div class="font-14 weight-4">Task Contract</div>
           </template>
           <template #default="scope">
-            <div class="flex flex-ai-center flex-jc-center copy-style">
-              {{hiddAddress(scope.row.task_contract)}}
-              <svg @click="copyContent(scope.row.task_contract, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
-                <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
-                  fill="#3d3d3d" p-id="6468"></path>
-                <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
-                  fill="#3d3d3d" p-id="6469"></path>
-              </svg>
-            </div>
+            <a :href="`${explorerLink}address/${scope.row.addr}`" target="_blank" class="name-style font-14">{{scope.row.addr}}</a>
           </template>
         </el-table-column>
-        <el-table-column prop="type" column-key="type" filterable :filters="[
+        <!-- column-key="type" filterable :filters="[
             { text: 'CPU', value: 'CPU' },
             { text: 'GPU', value: 'GPU' }
-          ]" filter-placement="bottom-end" :filter-multiple="false" min-width="90">
+          ]" filter-placement="bottom-end" :filter-multiple="false" -->
+        <el-table-column prop="type" min-width="90">
           <template #header>
             <div class="font-14 weight-4">Task Type</div>
           </template>
           <template #default="scope">
-            <span>{{scope.row.type === 0 ? 'CPU': 'GPU'}}</span>
+            <span v-if="scope.row.type === 1">fil-c2-512M</span>
+            <span v-else-if="scope.row.type === 2">ALEO</span>
+            <span v-else-if="scope.row.type === 3">AI</span>
+            <span v-else>fil-c2-32G</span>
           </template>
         </el-table-column>
         <el-table-column prop="started_at" min-width="135" sortable>
@@ -81,16 +78,15 @@
             <span>{{momentFun(scope.row.ended_at)}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="tx_hash" min-width="120">
+        <el-table-column prop="reward_tx_hash" min-width="120">
           <template #header>
             <div class="font-14 weight-4">Reward TX Hash</div>
           </template>
           <template #default="scope">
-            <!-- <a :href="`${scope.row.url_tx}${scope.row.tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.tx_hash}}</a> -->
-            <a target="_blank" class="name-style font-14"></a>
+            <a :href="`${explorerLink}tx/${scope.row.reward_tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.reward_tx_hash}}</a>
           </template>
         </el-table-column>
-        <el-table-column prop="amount">
+        <el-table-column prop="reward">
           <template #header>
             <div class="font-14 weight-4">reward</div>
           </template>
@@ -100,96 +96,75 @@
         <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + paymentData.length : 0 + paymentData.length }} /&nbsp;</span>
         <!-- hide-on-single-page -->
         <el-pagination :page-size="pagin.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="pagin.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
-          :total="pagin.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+          :total="pagin.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { getCPsZKProofData } from '@/api/cp-profile';
+import { openPage } from '@/hooks/router';
 import { copyContent, debounce, getUnit, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
-import { metaAddress } from '@/utils/storage';
+import { explorerLink, metaAddress } from '@/utils/storage';
 import {
   Search
 } from '@element-plus/icons-vue'
 
-    const route = useRoute()
-    const router = useRouter()
-    const paymentData = ref([])
-    const paymentLoad = ref(false)
-    const prevType = ref(true)
-    const pagin = reactive({
-      pageSize: 20,
-      pageNo: 1,
-      total: 0
-    })
-    const networkZK = reactive({
-      contract_address: '',
-      owner_addr: '',
-      node_id: ''
-    })
-    const small = ref(false)
-    const background = ref(false)
-    const tableRef = ref(null)
+const route = useRoute()
+const paymentData = ref([])
+const paymentLoad = ref(false)
+const pagin = reactive({
+  pageSize: 20,
+  pageNo: 1,
+  total: 0
+})
+const networkZK = reactive({
+  contract_address: '',
+  owner_addr: '',
+  node_id: ''
+})
+const small = ref(false)
+const background = ref(false)
+const tableRef = ref(null)
 
-    async function handleSizeChange (val) {
-      // console.log('handleSizeChange:', val)
+function handleSizeChange(val: number) {
+  pagin.pageSize = val
+  pagin.pageNo = 1
+  getAllData()
+}
+async function handleZKCurrentChange (currentPage: number) {
+  pagin.pageNo = currentPage
+  getAllData()
+}
+async function getAllData() {
+  paymentLoad.value = true
+  try {
+    const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
+    let params = {
+      page_size: pagin.pageSize,
+      page_no: page,
     }
-    async function handleCurrentChange (currentPage) {
-      // console.log('handleCurrentChange:', currentPage)
-      pagin.pageNo = currentPage
-      init()
-    }
-    async function init (params) {
-      paymentLoad.value = true
-      const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
-      const paramsCont = {
-        "owner_addr": metaAddress.value,
-        // "owner_addr": '0xFbc1d38a2127D81BFe3EA347bec7310a1cfa2373',
-        "page_no": page,
-        "page_size": pagin.pageSize
-      }
-      const paymentsRes = {
-        "code": 0,
-        "msg": "success",
-        "data": {
-          "total": 0,
-          "list": []
-        }
-      }
+    const dataRes = await getCPsZKProofData(params, route.params.cp_addr)
+    paymentData.value = dataRes?.data?.list ?? []
+    pagin.total = dataRes?.data?.total ?? 0
+  } catch{console.error}
+  paymentLoad.value = false
+}
+function clearProvider() {}
+function searchZKProvider() { }
+onMounted(() => {
+  getAllData()
+})
 
-
-      if (paymentsRes && paymentsRes.code === 0) {
-        for (let p = 0; p < paymentsRes.data.list.length; p++) {
-          let { url_tx } = await getUnit(parseInt(paymentsRes.data.list[p].chain_id), 16)
-          paymentsRes.data.list[p].url_tx = url_tx
-          const amount = Number(paymentsRes.data.list[p].amount).toFixed(2)
-          paymentsRes.data.list[p].amount = amount
-        }
-        pagin.total = paymentsRes.data.total
-        paymentData.value = paymentsRes.data.list || []
-
-        nextTick(() => {
-          tableRef.value.doLayout();
-        });
-      } else {
-        pagin.total = 0
-        paymentData.value = []
-      }
-      paymentLoad.value = false
-    }
-    const searchZKProvider = debounce(async function () {
-      pagin.pageNo = 1
-      getUBITable()
-    }, 700)
-    function clearProvider () {
-      networkZK.contract_address = ''
-      networkZK.owner_addr = ''
-      networkZK.node_id = ''
-      pagin.pageSize = 20
-      pagin.pageNo = 1
-      // init()
-    }
-    onMounted(async () => init())
+const props = withDefaults(
+  defineProps<{
+    watchRoute?: boolean
+  }>(),
+  {
+    watchRoute: false
+  }
+)
+watch(() => props.watchRoute, () => getAllData())
 </script>
 <style  lang="less" scoped>
 #payment {

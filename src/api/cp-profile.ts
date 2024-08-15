@@ -34,3 +34,39 @@ export function getCPsEchartsData(params: any, addr: any) {
       params
   })
 }
+
+export function getCPsSequencesData(params: any, addr: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/cps/${addr}/sequences`,
+      method: 'get',
+      params
+  })
+}
+
+export function getCPsTxnsData(params: any, addr: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/cps/${addr}/txns`,
+      method: 'get',
+      params
+  })
+}
+
+export function getCPsZKProofData(params: any, addr: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/cps/${addr}/zk_proofs`,
+      method: 'get',
+      params
+  })
+}
+
+export function getCPsfcpRewardsData(params: any, addr: any) {
+  return request({
+      headers: {},
+      url: `${import.meta.env.VITE_BASE_URL}v1/cps/${addr}/fcp_rewards`,
+      method: 'get',
+      params
+  })
+}

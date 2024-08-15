@@ -42,6 +42,9 @@
             <template #header>
               <div class="font-14 weight-4">Ranking</div>
             </template>
+            <template #default="scope">
+              {{ pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + scope.$index + 1 : scope.$index + 1 }}
+            </template>
           </el-table-column>
           <el-table-column prop="addr" min-width="140">
             <template #header>
@@ -140,14 +143,14 @@
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center nowrap uptime-container">
-                <el-progress :percentage="unifyNumber(scope.row.uptime/10000)" color="#1890ff" :stroke-width="8" />
+                <el-progress :percentage="Number(unifyNumber(scope.row.uptime/10000))" color="#1890ff" :stroke-width="8" />
                 <span class="uptime-text text-right">{{unifyNumber(scope.row.uptime/10000)}}%</span>
               </div>
             </template>
           </el-table-column>
         </el-table>
         <div class="flex flex-ai-center flex-jc-center pagination-style">
-          <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + providersData.length : 0 + providersData.length }} /&nbsp;</span>
+          <span class="showing">Showing {{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize+1 : 0 }}-{{pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + providersData.length : 0 + providersData.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
           <el-pagination :page-size="pagin.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="pagin.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="pagin.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />

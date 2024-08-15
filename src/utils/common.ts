@@ -443,6 +443,11 @@ export function getDateRange(unit:string) {
         start: getEchartDateTime(new Date(now - 365 * oneDay).toISOString()),
         end: getEchartDateTime(now.toISOString())
       };
+    case 'all':
+      return {
+        start: '',
+        end: ''
+      };
     default:
       throw new Error('Invalid time unit');
   }

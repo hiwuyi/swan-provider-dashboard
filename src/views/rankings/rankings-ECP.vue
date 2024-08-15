@@ -42,6 +42,9 @@
             <template #header>
               <div class="font-14 weight-4">Ranking</div>
             </template>
+            <template #default="scope">
+              {{ paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + scope.$index + 1 : scope.$index + 1 }}
+            </template>
           </el-table-column>
           <el-table-column prop="addr" min-width="140">
             <template #header>
@@ -125,7 +128,7 @@
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center nowrap uptime-container">
-                <el-progress :percentage="unifyNumber(scope.row.complete_rate/10000)" color="#1890ff" :stroke-width="8" />
+                <el-progress :percentage="Number(unifyNumber(scope.row.complete_rate/10000))" color="#1890ff" :stroke-width="8" />
                 <span class="uptime-text text-right task">{{ unifyNumber(scope.row.complete_rate/10000) }}%</span>
               </div>
             </template>
@@ -138,17 +141,10 @@
                 <span class="uptime-text text-right task">{{replaceFormat(scope.row.tasks)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="score" label="Contribution Score" min-width="130">
-            <template #default="scope">
-              <div>
-                {{replaceFormat(scope.row.contribution_score) ?? '-'}}
-              </div>
-            </template>
-          </el-table-column>
         </el-table>
 
         <div class="flex flex-ai-center flex-jc-center pagination-style">
-          <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.length : 0 + providerBody.length }} /&nbsp;</span>
+          <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + 1 : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.length : 0 + providerBody.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
           <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="paginZK.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />

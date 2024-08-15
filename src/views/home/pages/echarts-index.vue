@@ -89,6 +89,10 @@ const weekList = reactive({
     {
       value: 'Year',
       label: '1 Year'
+    },
+    {
+      value: 'all',
+      label: 'All'
     }]
 })
 
@@ -205,7 +209,7 @@ const changetype = async (data: any) => {
         color: '#7c889b',
         formatter: '{value}%'
       },
-      interval: 50
+      // interval: 10
     },
     series: [
       {
@@ -378,15 +382,17 @@ const changetype = async (data: any) => {
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
-      formatter: function (params) {
+      formatter: function (params: any) {
         var result = params[0].name + '<br/>'; 
-        params.forEach(function (item) {
-          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
+        params.forEach(function (item: any, i: number) {
+          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color;
           // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
           // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>'; 
-          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
-          let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; 
+          if(i < 2) {
+            var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
+            let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+            result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; 
+          }
         });
         return result;
       }
@@ -434,7 +440,7 @@ const changetype = async (data: any) => {
       },
       data: gpuData.timeArr
     },
-    yAxis: {
+    yAxis: [{
       type: 'value',
       axisLabel: {
         fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
@@ -442,7 +448,16 @@ const changetype = async (data: any) => {
         formatter: '{value}'
       },
       interval: 50
-    },
+    },{
+      type: 'value',
+      axisLabel: {
+        fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
+        color: '#7c889b',
+        formatter: '{value}'
+      },
+      interval: 50,
+      position: 'right'
+    }],
     series: [
       {
         name: 'Used GPU',
@@ -458,6 +473,24 @@ const changetype = async (data: any) => {
         showSymbol: true,
         color: '#93c605',
         smooth: false,
+        data: gpuTotalData.datum
+      },
+      {
+        name: 'Used GPU',
+        type: 'line',
+        showSymbol: false,
+        color: '#a801a1',
+        smooth: false,
+        yAxisIndex: 1,
+        data: gpuData.datum
+      },
+      {
+        name: 'Total GPU',
+        type: 'line',
+        showSymbol: false,
+        color: '#93c605',
+        smooth: false,
+        yAxisIndex: 1,
         data: gpuTotalData.datum
       }
     ]

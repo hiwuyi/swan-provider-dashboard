@@ -27,7 +27,7 @@ export default [
     }
   },
   {
-    path: '/aar/fcp',
+    path: '/campaign/fcp',
     name: 'aarFCP',
     component: () => import("../views/aar/aar-FCP.vue"),
     meta: {
@@ -36,7 +36,7 @@ export default [
     }
   },
   {
-    path: '/aar/ecp',
+    path: '/campaign/ecp',
     name: 'aarECP',
     component: () => import("../views/aar/aar-ECP.vue"),
     meta: {

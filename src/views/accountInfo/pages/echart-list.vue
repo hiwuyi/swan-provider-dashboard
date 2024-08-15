@@ -35,14 +35,14 @@
         </div>
 
         <div class="module-echarts mt-16 mb-32">
-          <div class="title flex flex-ai-center flex-jc-between">
+          <div class="title flex flex-ai-center flex-jc-between mb-16">
             <p class="font-16 weight-4 mr-16">Job Stats</p>
             <p class="font-14 subtitle">Total Jobs: {{ replaceFormat(totalJob) }}</p>
           </div>
           <div class='chart-trends' id='chart-job-fcp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         </div>
         <div class="module-echarts">
-          <div class="title">
+          <div class="title mb-16">
             <p class="font-16 weight-4">Collateral</p>
           </div>
           <div class='chart-trends' id='chart-collateral-fcp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
@@ -107,14 +107,14 @@
         </div>
 
         <div class="module-echarts mt-16 mb-32">
-          <div class="title flex flex-ai-center flex-jc-between">
+          <div class="title flex flex-ai-center flex-jc-between mb-16">
             <p class="font-16 weight-4 mr-16">Job Stats</p>
             <p class="font-14 subtitle">Total Jobs: {{ replaceFormat(totalJob) }}</p>
           </div>
           <div class='chart-trends' id='chart-job-ecp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         </div>
         <div class="module-echarts">
-          <div class="title">
+          <div class="title mb-16">
             <p class="font-16 weight-4">Collateral</p>
           </div>
           <div class='chart-trends' id='chart-collateral-ecp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
@@ -175,14 +175,20 @@ const changetype = async (data: any) => {
   const machart_collateral_fcp = echarts.init(document.getElementById("chart-collateral-fcp"));
   const machart_collateral_ecp = echarts.init(document.getElementById("chart-collateral-ecp"));
   
-  const ecpSuccessData = await dataCpData(data.ecp_task, 'active')
-  const ecpFaildData = await dataCpData(data.ecp_task, 'failed')
-  const fcpSuccessData = await dataCpData(data.fcp_job, 'active')
-  totalJob.value = sumArrays(ecpSuccessData.datum, fcpSuccessData.datum)
+  const fcpCountsData = await dataCpData(data.fcp_job, 'total')
+  const fcpRunningData = await dataCpData(data.fcp_job, 'active')
+  totalJob.value = sumArrays(fcpCountsData.datum, [])
 
-  const rewardData = await dataGPU(data.ecp_reward, 'active')
-  const rewardTotalData = await dataGPU(data.ecp_reward, 'total')
-  totalReward.value = sumArrays(rewardTotalData.datum, [])
+  const fcpCollateralData = await dataCpData(data.fcp_collateral, 'total')
+  const fcpEscrowData = await dataCpData(data.fcp_collateral, 'active')
+
+  const ecpCountsData = await dataCpData(data.ecp_task, 'total')
+  const ecpRunningData = await dataCpData(data.ecp_task, 'active')
+  totalReward.value = sumArrays(ecpCountsData.datum, [])
+
+  const ecpCollateralData = await dataCpData(data.ecp_collateral, 'total')
+  const ecpEscrowData = await dataCpData(data.ecp_collateral, 'active')
+  const ecpSequencerData = await dataCpData(data.sequencer, 'total')
 
   const option1 = {
     tooltip: {
@@ -197,6 +203,18 @@ const changetype = async (data: any) => {
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
+      formatter: function (params) {
+        var result = params[0].name + '<br/>'; 
+        params.forEach(function (item) {
+          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
+          // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+          // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>';
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
+          let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+          result += colorDot + item.seriesName + ': ' + replaceFormat(item.value) + '<br/>'; 
+        });
+        return result;
+      }
     },
     grid: {
       left: '3%',
@@ -238,7 +256,7 @@ const changetype = async (data: any) => {
           //   formatter: '{value}'
         },
         // prettier-ignore
-        data: ecpSuccessData.timeArr
+        data: fcpCountsData.timeArr
       }
     ],
     yAxis: [
@@ -273,7 +291,7 @@ const changetype = async (data: any) => {
             return value;
           }
         },
-        data: fcpSuccessData.datum,
+        data: fcpCountsData.datum,
         color: '#597cee'
       },
       {
@@ -282,7 +300,7 @@ const changetype = async (data: any) => {
         // barCategoryGap: '0%',
         barGap: '0%',
         barWidth: '10',
-        data: ecpFaildData.datum,
+        data: fcpRunningData.datum,
         color: '#0000bf'
       }
     ]
@@ -308,13 +326,13 @@ const changetype = async (data: any) => {
           // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>';
           var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value  + '<br/>'; 
+          result += colorDot + item.seriesName + ': ' + replaceFormat(item.value) + '<br/>'; 
         });
         return result;
       }
     },
     legend: {
-      data: ['Collateral (SWANC)', 'Escrow (sETH)'],
+      data: ['Collateral (SWANC)', 'Escrow (SWANC)'],
       right: 'auto',
       bottom: '0',
       // icon: 'circle',
@@ -352,7 +370,7 @@ const changetype = async (data: any) => {
         color: '#7c889b',
         //   formatter: '{value}'
       },
-      data: rewardData.timeArr
+      data: fcpCollateralData.timeArr
     },
     yAxis: {
       type: 'value',
@@ -368,15 +386,15 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         showSymbol: true,
-        data: rewardData.datum,
+        data: fcpCollateralData.datum,
         color: '#7092b4'
       },
       {
-        name: 'Escrow (sETH)',
+        name: 'Escrow (SWANC)',
         type: 'line',
         smooth: false,
         showSymbol: true,
-        data: rewardTotalData.datum,
+        data: fcpEscrowData.datum,
         color: '#0000ff'
       }
     ]
@@ -394,6 +412,18 @@ const changetype = async (data: any) => {
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
+      formatter: function (params) {
+        var result = params[0].name + '<br/>'; 
+        params.forEach(function (item) {
+          // var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
+          // let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+          // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>';
+          var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
+          let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
+          result += colorDot + item.seriesName + ': ' + replaceFormat(item.value) + '<br/>'; 
+        });
+        return result;
+      }
     },
     grid: {
       left: '3%',
@@ -435,7 +465,7 @@ const changetype = async (data: any) => {
           //   formatter: '{value}'
         },
         // prettier-ignore
-        data: ecpSuccessData.timeArr
+        data: ecpCountsData.timeArr
       }
     ],
     yAxis: [
@@ -470,7 +500,7 @@ const changetype = async (data: any) => {
             return value;
           }
         },
-        data: fcpSuccessData.datum,
+        data: ecpCountsData.datum,
         color: '#03a7f0'
       },
       {
@@ -479,7 +509,7 @@ const changetype = async (data: any) => {
         // barCategoryGap: '0%',
         barGap: '0%',
         barWidth: '10',
-        data: ecpFaildData.datum,
+        data: ecpRunningData.datum,
         color: '#56cfb2'
       }
     ]
@@ -508,7 +538,7 @@ const changetype = async (data: any) => {
         params.forEach(function (item) {
           var color = item.color.colorStops ? item.color.colorStops[0].color : item.color;
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + item.value + '<br/>'; 
+          result += colorDot + item.seriesName + ': ' + replaceFormat(item.value) + '<br/>'; 
         });
         return result;
       }
@@ -521,7 +551,7 @@ const changetype = async (data: any) => {
       containLabel: true
     },
     legend: {
-      data: ['Collateral', 'Escrow', 'Sequencer'],
+      data: ['Collateral (SWANC)', 'Escrow (SWANC)', 'Sequencer (sETH)'],
       right: 'auto',
       bottom: '0',
       // icon: 'circle',
@@ -553,7 +583,7 @@ const changetype = async (data: any) => {
           //   formatter: '{value}'
         },
         // prettier-ignore
-        data: rewardData.timeArr
+        data: ecpCollateralData.timeArr
       }
     ],
     yAxis: [
@@ -589,12 +619,12 @@ const changetype = async (data: any) => {
     ],
     series: [
       {
-        name: 'Collateral',
+        name: 'Collateral (SWANC)',
         type: 'line',
         smooth: false,
         yAxisIndex: 1,
         showSymbol: true,
-        data: rewardTotalData.datum,
+        data: ecpCollateralData.datum,
         tooltip: {
           valueFormatter: function (value: any) {
             return value;
@@ -603,19 +633,19 @@ const changetype = async (data: any) => {
         color: '#02a7f0'
       },
       {
-        name: 'Escrow',
+        name: 'Escrow (SWANC)',
         type: 'line',
         smooth: false,
         showSymbol: true,
-        data: rewardTotalData.datum,
+        data: ecpEscrowData.datum,
         color: '#56cfb2'
       },
       {
-        name: 'Sequencer',
+        name: 'Sequencer (sETH)',
         type: 'line',
         smooth: false,
         showSymbol: true,
-        data: rewardTotalData.datum,
+        data: ecpSequencerData.datum,
         color: '#333333'
       }
     ]
@@ -781,8 +811,10 @@ async function initEcharts () {
 
     const weekRange = getDateRange(weekList.value);
     const params = {
-      from: weekRange.start,
-      to: weekRange.end
+      from: '',
+      to: ''
+      // from: weekRange.start,
+      // to: weekRange.end
     }
     const echartsRes = await getCPsEchartsData(params, route.params.cp_addr)
     const data = echartsRes?.data ?? {}
@@ -850,9 +882,7 @@ const props = withDefaults(
         margin: 0.04rem 0;
       }
       .title {
-        margin: 0;
         .subtitle {
-          margin: 0.06rem 0 0;
           color: #7c889b;
         }
       }

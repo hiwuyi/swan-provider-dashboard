@@ -64,6 +64,10 @@ const weekList = reactive({
     {
       value: 'Year',
       label: '1 Year'
+    },
+    {
+      value: 'all',
+      label: 'All'
     }]
 })
 const totalAll = reactive({

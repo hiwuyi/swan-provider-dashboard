@@ -43,7 +43,7 @@
                 <img v-if="scope.$index === 0 && paginZK.pageNo <= 1" :src="badgeIcon01" alt="">
                 <img v-else-if="scope.$index === 1 && paginZK.pageNo <= 1" :src="badgeIcon02" alt="">
                 <img v-else-if="scope.$index === 2 && paginZK.pageNo <= 1" :src="badgeIcon03" alt="">
-                <span v-else>{{ scope.$index + 1 }}</span>
+                <span v-else>{{ paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + scope.$index + 1 : scope.$index + 1 }}</span>
               </div>
             </template>
           </el-table-column>
@@ -70,7 +70,7 @@
             </template>
           </el-table-column>
           <!-- <el-table-column prop="country" label="Country" /> -->
-          <el-table-column prop="node_id" label="nodeID" min-width="140">
+          <el-table-column prop="node_id" label="nodeID" min-width="130">
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center copy-style" @click="copyContent(scope.row.node_id, 'Copied')">
                 {{hiddAddress(scope.row.node_id)}}
@@ -83,7 +83,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="gpu_tags" label="GPU" min-width="140">
+          <el-table-column prop="gpu_tags" label="GPU" min-width="120">
             <template #default="scope">
               <div class="badge">
                 <div class="flex flex-ai-center flex-jc-left machines-style text-left">
@@ -94,8 +94,8 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="region" label="Region" min-width="100" />
-          <el-table-column prop="work_status" label="Status" min-width="105"
+          <el-table-column prop="region" label="Region" min-width="90" />
+          <el-table-column prop="work_status" label="Status" min-width="90"
             column-key="status" filterable :filters="[
               { text: 'Inactive', value: 'Inactive' },
               { text: 'Offline', value: 'Offline' },
@@ -119,7 +119,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="task" label="Completed(%)" min-width="120">
+          <el-table-column prop="task" label="Completed(%)" min-width="110">
             <template #default="scope">
               <div>
                 {{fixedformat(scope.row.completion_rate,10000)}}%
@@ -135,9 +135,9 @@
           </el-table-column>
         </el-table>
         <div class="flex flex-ai-center flex-jc-center pagination-style">
-          <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.ubiTableData.length : 0 + providerBody.ubiTableData.length }} /&nbsp;</span>
+          <span class="showing">Showing {{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + 1 : 0 }}-{{paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + providerBody.ubiTableData.length : 0 + providerBody.ubiTableData.length }} /&nbsp;</span>
           <!-- hide-on-single-page -->
-          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20, 50, 100]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
+          <el-pagination :page-size="paginZK.pageSize" :page-sizes="[10, 20]" :current-page="paginZK.pageNo" :pager-count="5" :small="small" :background="background" :layout="paginationWidth ? 'total, prev, pager, next, sizes, jumper' : 'total, prev, pager, next'"
             :total="paginZK.total" @size-change="handleSizeChange" @current-change="handleZKCurrentChange" />
         </div>
       </div>
