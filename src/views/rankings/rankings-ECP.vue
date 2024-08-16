@@ -111,9 +111,14 @@
             </template>
           </el-table-column>
           <el-table-column prop="status" column-key="status" filterable :filters="[
-                { text: 'Online', value: 'Online' },
-                { text: 'Suspended', value: 'Suspended' },
-                { text: 'Offline', value: 'Offline' }]" filter-placement="bottom-end" :filter-multiple="false" min-width="90">
+              { text: 'Inactive', value: 'Inactive' },
+              { text: 'Offline', value: 'Offline' },
+              { text: 'Online', value: 'Online' },
+              { text: 'Inconsistent', value: 'Inconsistent' },
+              { text: 'NSC', value: 'NSC' },
+              { text: 'NSR', value: 'NSR' },
+              { text: 'Declined', value: 'Declined' },
+              { text: 'Suspended', value: 'Suspended' }]" filter-placement="bottom-end" :filter-multiple="false" min-width="90">
             <template #header>
               <div class="font-14 weight-4">status</div>
             </template>
