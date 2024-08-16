@@ -77,7 +77,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="Status" min-width="100" v-if="networkInput.contract_address">
+          <el-table-column prop="status" label="Status" min-width="100" v-if="networkInput.contract_address && networkInput.searchFor">
             <template #default="scope">
               <div>
                 {{scope.row.online ? 'Active' : 'Inactive'}}
@@ -140,7 +140,8 @@ const small = ref(false)
 const background = ref(false)
 const networkInput = reactive({
   contract_address: '',
-  name: ''
+  name: '',
+  searchFor: false
 })
 const paramsFilter = reactive({
   data: {
@@ -150,12 +151,12 @@ const paramsFilter = reactive({
 })
 const expands = ref([])
 
-function handleSizeChange (val) {
+function handleSizeChange (val:number) {
   pagin.pageSize = val
   pagin.pageNo = 1
   init()
 }
-async function handleCurrentChange (currentPage) {
+async function handleCurrentChange (currentPage:number) {
   pagin.pageNo = currentPage
   init()
 }
@@ -178,7 +179,7 @@ async function init () {
   } catch { console.error }
   providersTableLoad.value = false
 }
-const handleFilterChange = (filters) => {
+const handleFilterChange = (filters:any) => {
   for (const key in filters) {
     if (key === 'status') {
       const result = filters.status[0] ?? ''
@@ -191,17 +192,17 @@ const handleFilterChange = (filters) => {
   }
   handleCurrentChange(1, 1)
 }
-function expandV2Change (row, expandedRows) {
+function expandV2Change (row:any, expandedRows:any) {
   // console.log(row, expandedRows)
   if (expandedRows.length) {
     expands.value = [];
     if (row) expands.value.push(row.cp_account_address);
   } else expands.value = [];
 }
-let getRowKeysV2 = (row) => {
+let getRowKeysV2 = (row:any) => {
   return row.cp_account_address;
 }
-async function getList (list) {
+async function getList (list:any) {
   let l = Array.isArray(list) ? list : [list]
   l.forEach((element) => {
     element.gpu_list = []
@@ -231,22 +232,20 @@ async function getList (list) {
           })
         }
       })
-    } catch{ }
+    } catch{console.error}
   })
   return l
 }
 const searchProvider = async function () {
-  pagin.pageSize = 20
-  pagin.pageNo = 1
-  init()
+  networkInput.searchFor = true
+  handleCurrentChange(1)
 }
 function clearProvider () {
   networkInput.contract_address = ''
-  pagin.pageSize = 20
-  pagin.pageNo = 1
-  init()
+  if (networkInput.searchFor) handleCurrentChange(1)
+  networkInput.searchFor = false
 }
-function reset (type) {
+function reset (type:string) {
   pagin.total = 0
   pagin.total_deployments = 0
   pagin.active_applications = 0

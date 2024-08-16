@@ -118,28 +118,32 @@ const changetype = async (data: any) => {
 
   const gpuData = await dataGPU(data.gpu, 'active')
   const gpuTotalData = await dataGPU(data.gpu, 'total')
-  const gpuDataMax = Math.max(...gpuData.datum);
-  const gpuDataMin = Math.min(...gpuData.datum);
-  const gpuTotalMax = Math.max(...gpuTotalData.datum);
-  const gpuTotalMin = Math.min(...gpuTotalData.datum);
-
+  const gpuDataMax = Math.ceil(Math.max(...gpuData.datum));
+  const gpuDataMin = Math.floor(Math.min(...gpuData.datum)*0.8);
+  const gpuDataInterval = Math.ceil((gpuDataMax-gpuDataMin)/(gpuDataMin===0?4:5))
+  const gpuTotalMax = Math.ceil(Math.max(...gpuTotalData.datum));
+  const gpuTotalMin = Math.floor(Math.min(...gpuTotalData.datum)*0.8);
+  const gpuTotalInterval = Math.ceil((gpuTotalMax - gpuTotalMin) / 5)
+  
   const cpuData = await dataResource(data.cpu, 'active')
   const memoryData = await dataResource(data.memory, 'active')
   const storageData = await dataResource(data.storage, 'active')
 
   const fcpData = await dataDelta(data.fcp, 'total')
   const fcpDeltaData = await dataDelta(data.fcp, 'delta')
-  const fcpMax = Math.max(...fcpData.datum);
-  const fcpMin = Math.min(...fcpData.datum);
-  const fcpDeltaMax = Math.max(...fcpDeltaData.datum);
-  const fcpDeltaMin = Math.min(...fcpDeltaData.datum);
+  const fcpMax = Math.ceil(Math.max(...fcpData.datum));
+  const fcpMin = Math.floor(Math.min(...fcpData.datum)*0.8);
+  const fcpInterval = Math.ceil((fcpMax-fcpMin)/(fcpMin===0?4:5))
+  const fcpDeltaMax = Math.ceil(Math.max(...fcpDeltaData.datum));
+  const fcpDeltaMin = Math.floor(Math.min(...fcpDeltaData.datum)*0.8);
 
   const ecpData = await dataDelta(data.ecp, 'total')
   const ecpDeltaData = await dataDelta(data.ecp, 'delta')
-  const ecpMax = Math.max(...ecpData.datum);
-  const ecpMin = Math.min(...ecpData.datum);
-  const ecpDeltaMax = Math.max(...ecpDeltaData.datum);
-  const ecpDeltaMin = Math.min(...ecpDeltaData.datum);
+  const ecpMax = Math.ceil(Math.max(...ecpData.datum));
+  const ecpMin = Math.floor(Math.min(...ecpData.datum)*0.8);
+  const ecpInterval = Math.ceil((ecpMax-ecpMin)/(ecpMin===0?4:5))
+  const ecpDeltaMax = Math.ceil(Math.max(...ecpDeltaData.datum));
+  const ecpDeltaMin = Math.floor(Math.min(...ecpDeltaData.datum)*0.8);
 
   const option1 = {
     tooltip: {
@@ -217,6 +221,7 @@ const changetype = async (data: any) => {
         color: '#7c889b',
         formatter: '{value}%'
       },
+      splitNumber: 4
       // interval: 10
     },
     series: [
@@ -328,7 +333,8 @@ const changetype = async (data: any) => {
         },
         min: fcpMin,
         max: fcpMax,
-        minInterval: 150
+        interval: fcpInterval,
+        // minInterval: 150,
       },
       {
         type: 'value',
@@ -340,6 +346,9 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        splitLine: {
+            show: false 
+        }
       }
     ],
     series: [
@@ -457,6 +466,7 @@ const changetype = async (data: any) => {
         color: '#7c889b',
         formatter: '{value}'
       },
+      interval: gpuTotalInterval,
       min: gpuTotalMin,
       max: gpuTotalMax
     },{
@@ -468,7 +478,11 @@ const changetype = async (data: any) => {
       },
       min: gpuDataMin,
       max: gpuDataMax,
-      position: 'right'
+      interval: gpuDataInterval,
+      position: 'right',
+      splitLine: {
+          show: false 
+      }
     }],
     series: [
       {
@@ -576,7 +590,8 @@ const changetype = async (data: any) => {
         },
         min: ecpMin,
         max: ecpMax,
-        minInterval: 150
+        interval: ecpInterval
+        // minInterval: 150
       },
       {
         type: 'value',
@@ -586,6 +601,9 @@ const changetype = async (data: any) => {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
           //   formatter: '{value}'
+        },
+        splitLine: {
+            show: false 
         },
         // minInterval: 20,
         // axisLabel: {

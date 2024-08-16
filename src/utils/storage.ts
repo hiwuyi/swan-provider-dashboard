@@ -6,6 +6,7 @@ export const isLogin = computed(() => !!token.value)
 export const currentNetwork = ref('Mainnet')
 export const metaAddress = ref('')
 export const signature = ref('')
+export const locationAll = ref([])
 export const explorerLink = ref(currentNetwork.value === 'Proxima' ? ELINK.PROXIMAEXPLORER : ELINK.MAINNETEXPLORER)
 export const baseurl = currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_BASEAPI : import.meta.env.VITE_BASEAPI_PROXIMA
 
@@ -46,6 +47,15 @@ export function clearSignature() {
 export function setSignature(tok: string) {
   signature.value = tok
   localStorage.setItem(EStorage.Signature, tok)
+}
+
+export function setLocation(tok: any) {
+  locationAll.value = tok
+  localStorage.setItem(EStorage.locationAll, JSON.stringify(tok))
+}
+
+export function getLocation() {
+  return JSON.parse(JSON.stringify(localStorage.getItem(EStorage.locationAll))) ?? []
 }
 
 export function getToken() {

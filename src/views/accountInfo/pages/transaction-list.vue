@@ -8,12 +8,9 @@
       </el-col>
       <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
         <div class="flex flex-ai-center nowrap child">
-          <el-select v-model="searchList.value" placeholder="Select" size="small">
-            <el-option v-for="item in searchList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-16">
-                <i class="icon icon-swanProxima"></i>
-                {{item.label}}
-              </div>
+          <el-select v-model="searchList.value" placeholder="Select" size="small" @change="handleZKCurrentChange(1)">
+            <el-option v-for="item in searchList.options" :key="item" :label="item" :value="item">
+              <div class="flex flex-ai-center font-14">{{item}}</div>
             </el-option>
           </el-select>
         </div>
@@ -23,12 +20,12 @@
     <el-table :data="tableData" style="width: 100%" v-loading="dataLoad">
       <el-table-column prop="hash" label="Transaction Hash">
         <template #default="scope">
-          <a :href="`${explorerLink}tx/${scope.row.hash}`" target="_blank" class="name-style font-14">{{scope.row.hash}}</a>
+          <a :href="`${explorerLink}tx/${scope.row.hash}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.hash)}}</a>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="Height">
+      <el-table-column prop="height" label="Height">
         <template #default="scope">
-          <a :href="`${explorerLink}tx/${scope.row.hash}`" target="_blank" class="name-style font-14">{{scope.row.hash}}</a>
+          <span>{{scope.row.height ?? '-'}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="timestamp" label="Time">
@@ -40,21 +37,37 @@
       </el-table-column>
       <el-table-column prop="from" label="From">
         <template #default="scope">
-          <span>
-            {{ scope.row.from }}
-          </span>
+          <div class="flex flex-ai-center flex-jc-center nowrap copy-style" v-if="scope.row.from">
+            <a :href="`${explorerLink}address/${scope.row.from}`" target="_blank" class="name-style w font-14">{{hiddAddress(scope.row.from)}}</a>
+            <svg @click="copyContent(scope.row.from, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+              <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
+                fill="#3d3d3d" p-id="6468"></path>
+              <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
+                fill="#3d3d3d" p-id="6469"></path>
+            </svg>
+          </div>
+          <span v-else>-</span>
         </template>
       </el-table-column>
       <el-table-column prop="to" label="To">
         <template #default="scope">
           <span>
-            {{ scope.row.to }}
+          <div class="flex flex-ai-center flex-jc-center nowrap copy-style" v-if="scope.row.to">
+            <a :href="`${explorerLink}address/${scope.row.to}`" target="_blank" class="name-style w font-14">{{hiddAddress(scope.row.to)}}</a>
+            <svg @click="copyContent(scope.row.to, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+              <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
+                fill="#3d3d3d" p-id="6468"></path>
+              <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
+                fill="#3d3d3d" p-id="6469"></path>
+            </svg>
+          </div>
+          <span v-else>-</span>
           </span>
         </template>
       </el-table-column>
       <el-table-column prop="method" label="Method">
         <template #default="scope">
-          <span>
+          <span :class="`${scope.row.method?'method-style':''}`">
             {{ scope.row.method }}
           </span>
         </template>
@@ -85,7 +98,7 @@
 <script setup lang="ts">
 import { getCPsTxnsData } from '@/api/cp-profile';
 import { openPage } from '@/hooks/router';
-import { momentFun, paginationWidth } from '@/utils/common';
+import { copyContent, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
 import { explorerLink } from '@/utils/storage';
 
 const route = useRoute()
@@ -93,12 +106,7 @@ const dataLoad = ref(false)
 const tableData = ref<any>([])
 const searchList = reactive({
   value: 'All',
-  options: [
-    {
-      value: 'All',
-      label: 'All'
-    }
-  ]
+  options: ['All']
 })
 const pagin = reactive({
   pageSize: 20,
@@ -106,8 +114,11 @@ const pagin = reactive({
   total: 0
 })
 
-function clearProvider() {}
-function searchZKProvider() { }
+function compact(array: any) {
+  return array.filter(function(item: any) {
+    return item !== null && item !== undefined && item !== '';
+  });
+}
 function handleSizeChange(val: number) {
   pagin.pageSize = val
   pagin.pageNo = 1
@@ -124,10 +135,13 @@ async function getAllData() {
     let params = {
       page_size: pagin.pageSize,
       page_no: page,
+      method: searchList.value === 'All' ? '' : searchList.value
     }
     const dataRes = await getCPsTxnsData(params, route.params.cp_addr)
     tableData.value = dataRes?.data?.list ?? []
     pagin.total = dataRes?.data?.total ?? 0
+    const method = compact(dataRes?.data?.methods)
+    searchList.options = ['All'].concat(method)
   } catch{console.error}
   dataLoad.value = false
 }

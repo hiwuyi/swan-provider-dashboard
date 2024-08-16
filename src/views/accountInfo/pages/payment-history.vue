@@ -11,7 +11,7 @@
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
           <div class="flex flex-ai-center nowrap child">
             <el-button type="info" :disabled="!networkZK.owner_addr ? true:false" round @click="clearProvider">Clear</el-button>
-            <el-button type="primary" :disabled="!networkZK.owner_addr ? true:false" round @click="searchZKProvider">
+            <el-button type="primary" :disabled="!networkZK.owner_addr ? true:false" round @click="handleZKCurrentChange(1)">
               <el-icon>
                 <Search />
               </el-icon>
@@ -284,21 +284,15 @@
 </template>
 <script setup lang="ts">
 import { getCPsfcpRewardsData } from '@/api/cp-profile';
-import { NumFormat, copyContent, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
+import { copyContent, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
 import { explorerLink } from '@/utils/storage';
 import {
   Search
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
-const router = useRouter()
-const bodyWidth = ref(document.body.clientWidth > 600 ? '450px' : '95%')
 const paymentData = ref([])
 const paymentLoad = ref(false)
-const prevType = ref(true)
-const txhashVisible = ref(false)
-const txHash = ref('')
-const rowAll = ref({})
 const pagin = reactive({
   pageSize: 20,
   pageNo: 1,
@@ -311,9 +305,14 @@ const networkZK = reactive({
 })
 const small = ref(false)
 const background = ref(false)
+const paramsFilter = reactive({
+  data: {
+    total: 1,
+    online: 0
+  }
+})
 
-
-const handleFilterChange = (filters) => {
+const handleFilterChange = (filters: any) => {
   for (const key in filters) {
     if (key === 'status') {
       const result = filters.status[0] ?? ''
@@ -324,7 +323,7 @@ const handleFilterChange = (filters) => {
       }
     }
   }
-  handleCurrentChange(1, 1)
+  handleZKCurrentChange(1)
 }
 function handleSizeChange(val: number) {
   pagin.pageSize = val
@@ -342,6 +341,7 @@ async function getAllData() {
     let params = {
       page_size: pagin.pageSize,
       page_no: page,
+      uuid: networkZK.owner_addr
     }
     const dataRes = await getCPsfcpRewardsData(params, route.params.cp_addr)
     paymentData.value = dataRes?.data?.list ?? []
@@ -349,8 +349,10 @@ async function getAllData() {
   } catch{console.error}
   paymentLoad.value = false
 }
-function clearProvider() {}
-function searchZKProvider() { }
+function clearProvider() {
+  networkZK.owner_addr = ''
+  handleZKCurrentChange(1)
+}
 onMounted(() => {
   getAllData()
 })

@@ -5,25 +5,25 @@
         <div class="title flex flex-ai-center flex-jc-between">
           <div class="flex flex-ai-center">
             <i class="icon icon-provider"></i>
-            <span class="font-16 weight-4">FCP List</span>
+            <span class="font-16 weight-4">Top FCP</span>
           </div>
           <router-link :to="{name: 'rankingsFCP'}" class="font-12 flex flex-ai-center">more &nbsp;
             <small>&gt;&gt;</small>
           </router-link>
         </div>
         <el-table :data="providersData" empty-text="No Data" v-loading="providersFCPLoad">
-          <el-table-column type="index" min-width="70">
+          <el-table-column type="index" min-width="40">
             <template #header>
-              <div class="font-14 weight-4">Ranking</div>
+              <div class="font-14 weight-4">Rank</div>
             </template>
           </el-table-column>
-          <el-table-column prop="addr" min-width="110">
+          <el-table-column prop="addr" min-width="130">
             <template #header>
               <div class="font-14 weight-4">Account</div>
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center nowrap copy-style">
-                <span class="name-style" @click="handleCP(scope.row.addr)">{{hiddAddress(scope.row.addr)}}</span>
+                <span class="name-style w t" @click="handleCP(scope.row.addr)">{{hiddAddress(scope.row.addr)}}</span>
                 <svg @click="copyContent(scope.row.addr, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
                   <path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z"
                     p-id="2310" fill="#b5b7c8"></path>
@@ -79,7 +79,7 @@
         <div class="title flex flex-ai-center flex-jc-between">
           <div class="flex flex-ai-center">
             <i class="icon icon-provider"></i>
-            <span class="font-16 weight-4">ECP List</span>
+            <span class="font-16 weight-4">Top ECP</span>
           </div>
           <router-link :to="{name: 'rankingsECP'}" class="font-12 flex flex-ai-center">more &nbsp;
             <small>&gt;&gt;</small>
@@ -87,18 +87,18 @@
         </div>
         
         <el-table :data="providersECPData" empty-text="No Data" v-loading="providersECPLoad">
-          <el-table-column type="index" min-width="70">
+          <el-table-column type="index" min-width="40">
             <template #header>
-              <div class="font-14 weight-4">Ranking</div>
+              <div class="font-14 weight-4">Rank</div>
             </template>
           </el-table-column>
-          <el-table-column prop="name" min-width="120">
+          <el-table-column prop="name" min-width="130">
             <template #header>
               <div class="font-14 weight-4">Account</div>
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center nowrap copy-style">
-                <span class="name-style" @click="handleCP(scope.row.addr)">{{hiddAddress(scope.row.addr)}}</span>
+                <span class="name-style w t" @click="handleCP(scope.row.addr)">{{hiddAddress(scope.row.addr)}}</span>
                 <svg @click="copyContent(scope.row.addr, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2309" width="18" height="18">
                   <path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z"
                     p-id="2310" fill="#b5b7c8"></path>

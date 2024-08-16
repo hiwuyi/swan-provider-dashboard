@@ -142,12 +142,12 @@ export function dataGPU (data: any, type:string) {
     // let time = new Date(parseInt(item.timestamp) * 1000)
     // let time_end = addZero(time.getFullYear()) + '-' + addZero(time.getMonth() + 1) + '-' + addZero(time.getDate())
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
-    if (timeArr.indexOf(time_end) === -1) {
+    // if (timeArr.indexOf(time_end) === -1) {
       timeArr.push(time_end)
       datum.push(type === 'active' ? item['total'] - item[type] : item[type])
-    } else {
-      datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + (type === 'active' ? item['total'] - item[type] : item[type])
-    }
+    // } else {
+    //   datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + (type === 'active' ? item['total'] - item[type] : item[type])
+    // }
   })
   return {
     datum: datum,
@@ -163,14 +163,14 @@ export function dataDelta (data: any, type:string) {
   })
   data.forEach((item:any, index:number) => {
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
-    if (timeArr.indexOf(time_end) === -1) {
+    // if (timeArr.indexOf(time_end) === -1) {
       timeArr.push(time_end)
       if(type === 'delta' && index > 0) datum.push(item.total - data[index-1].total)
       else if(type === 'delta' && index === 0) datum.push(0)
       else datum.push(item[type])
-    } else {
-      datum[timeArr.indexOf(time_end)] = Number(datum[timeArr.indexOf(time_end)]) + Number(type === 'delta' && index > 0 ? item.total - data[index-1].total : item[type])
-    }
+    // } else {
+    //   datum[timeArr.indexOf(time_end)] = Number(datum[timeArr.indexOf(time_end)]) + Number(type === 'delta' && index > 0 ? item.total - data[index-1].total : item[type])
+    // }
   })
   return {
     datum: datum,
@@ -185,7 +185,7 @@ export function dataResource (data: any, type:string) {
   })
   data.forEach((item:any) => {
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
-    if (timeArr.indexOf(time_end) === -1) {
+    // if (timeArr.indexOf(time_end) === -1) {
       timeArr.push(time_end)
       datum.push({
         value: unifyNumber((item['total'] - item[type]) / item['total']),
@@ -193,7 +193,7 @@ export function dataResource (data: any, type:string) {
         success: item[type],
         total: item['total']
       })
-    } 
+    // } 
   })
   return {
     datum: datum,
@@ -212,12 +212,12 @@ export function dataCpData (data: any, type:string) {
     // let time = new Date(parseInt(item.timestamp) * 1000)
     // let time_end = addZero(time.getFullYear()) + '-' + addZero(time.getMonth() + 1) + '-' + addZero(time.getDate())
     const time_end = getDateTime(parseInt(item.timestamp) * 1000)
-    if (timeArr.indexOf(time_end) === -1) {
+    // if (timeArr.indexOf(time_end) === -1) {
       timeArr.push(time_end)
       datum.push(type === 'failed' ? Number(item['total'] - item['active']) : item[type])
-    } else {
-      datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + (type === 'failed' ? Number(item['total'] - item['active']) : item[type])
-    }
+    // } else {
+    //   datum[timeArr.indexOf(time_end)] = datum[timeArr.indexOf(time_end)] + (type === 'failed' ? Number(item['total'] - item['active']) : item[type])
+    // }
   })
   return {
     datum: datum,

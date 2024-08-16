@@ -1,36 +1,36 @@
 <template>
-  <el-row :gutter="12" v-loading="cpLoad">
-    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+  <el-row :gutter="12">
+    <el-col v-loading="providersLoad" :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <el-row class="width">
         <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">GPU Usage</p>
-            <div class='chart-trends' id='chart-gpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <div class='chart-trends' id='chart-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">CPU Usage</p>
-            <div class='chart-trends' id='chart-cpu' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <div class='chart-trends' id='chart-cpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">Memory Usage (TB)</p>
-            <div class='chart-trends' id='chart-memory' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <div class='chart-trends' id='chart-memory' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">Storage Usage (TB)</p>
-            <div class='chart-trends' id='chart-storage' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+            <div class='chart-trends' id='chart-storage' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
       </el-row>
     </el-col>
-    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+    <el-col v-loading="cpLoad" :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <div :class="`grid-content ${false? 'none' : ''}`">
-        <div class='chart-trends big' id='chart-Resource' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        <div class='chart-trends big' id='chart-Resource' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         <div class="date">
           <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
             <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
@@ -45,6 +45,7 @@
 
 <script setup lang="ts">
 import { statsEchartsData } from '@/api/overview';
+import { getStatsResourceData } from '@/api/resource';
 import { dataResource, getDateRange, replaceFormat, byteStorage, unifyNumber, sizeChange, byteTBStorage } from '@/utils/common';
 import * as echarts from "echarts"
 
@@ -103,26 +104,22 @@ async function initEcharts () {
     changetype(data)
   }catch{ cpLoad.value = false}
 }
+async function initResource () {
+  try{
+    providersLoad.value = true
+    const echartsRes = await getStatsResourceData()
+    const data = echartsRes?.data ?? {}
+    changePietype(data)
+  }catch{providersLoad.value = false}
+}
 const changetype = async (data: any) => {
   try{
     const machart_resource = echarts.init(document.getElementById("chart-Resource"));
-    const chart_gpu = echarts.init(document.getElementById("chart-gpu"));
-    const chart_cpu = echarts.init(document.getElementById("chart-cpu"));
-    const chart_memory = echarts.init(document.getElementById("chart-memory"));
-    const chart_storage = echarts.init(document.getElementById("chart-storage"));
 
     const gpuData = await dataResource(data.gpu, 'active')
     const cpuData = await dataResource(data.cpu, 'active')
     const memoryData = await dataResource(data.memory, 'active')
     const storageData = await dataResource(data.storage, 'active')
-    totalAll.gpu.used = gpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.gpu.total = gpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-    totalAll.cpu.used = cpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.cpu.total = cpuData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-    totalAll.memory.used = memoryData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.memory.total = memoryData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-    totalAll.storage.used = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.used, 0);
-    totalAll.storage.total = storageData.datum.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
 
     const option1 = {
       tooltip: {
@@ -236,6 +233,39 @@ const changetype = async (data: any) => {
         }
       ]
     }
+    machart_resource.setOption(option1);
+    if (typeof ResizeObserver !== 'undefined') {
+      let observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          machart_resource.resize();
+        }
+      });
+
+      let element = document.getElementById('resource-container');
+      observer.observe(element);
+    }
+    window.addEventListener("resize", function () {
+      machart_resource.resize();
+    })
+  }catch{console.error}
+  cpLoad.value = false
+}
+const changePietype = async (data: any) => {
+  try{
+    const chart_gpu = echarts.init(document.getElementById("chart-gpu"));
+    const chart_cpu = echarts.init(document.getElementById("chart-cpu"));
+    const chart_memory = echarts.init(document.getElementById("chart-memory"));
+    const chart_storage = echarts.init(document.getElementById("chart-storage"));
+
+    totalAll.gpu.used = Number(data.gpu.total - data.gpu.active)
+    totalAll.gpu.total = Number(data.gpu.total)
+    totalAll.cpu.used = Number(data.cpu.total - data.cpu.active)
+    totalAll.cpu.total = Number(data.cpu.total)
+    totalAll.memory.used = Number(data.memory.total - data.memory.active)
+    totalAll.memory.total = Number(data.memory.total)
+    totalAll.storage.used = Number(data.storage.total - data.storage.active)
+    totalAll.storage.total = Number(data.storage.total)
+
     const option = {
       tooltip: {
         trigger: 'item',
@@ -307,6 +337,11 @@ const changetype = async (data: any) => {
       { value: totalAll.cpu.used, name: 'Used' },
       { value: totalAll.cpu.total-totalAll.cpu.used, name: 'Free' }
     ]
+    option2.series[0].tooltip = {
+      formatter: function (params: any) {
+        return `<div class="flex flex-ai-center">${params.marker}${params.data.name}: ${replaceFormat(params.data.value)}</div>`;
+      }
+    }
     option2.series[0].label.normal.formatter = function (params: any) {
       return `${replaceFormat(params.data.value)} ${params.data.name}`
     }
@@ -338,11 +373,9 @@ const changetype = async (data: any) => {
     chart_cpu.setOption(option2);
     chart_memory.setOption(option3);
     chart_storage.setOption(option4);
-    machart_resource.setOption(option1);
     if (typeof ResizeObserver !== 'undefined') {
       let observer = new ResizeObserver(entries => {
         for (let entry of entries) {
-          machart_resource.resize();
           chart_gpu.resize();
           chart_cpu.resize();
           chart_memory.resize();
@@ -356,17 +389,17 @@ const changetype = async (data: any) => {
       console.log('ResizeObserver is not supported in this browser.');
     }
     window.addEventListener("resize", function () {
-      machart_resource.resize();
       chart_gpu.resize();
       chart_cpu.resize();
       chart_memory.resize();
       chart_storage.resize();
     })
   }catch{console.error}
-  cpLoad.value = false
+  providersLoad.value = false
 }
 onMounted(async () => {
   initEcharts()
+  initResource()
 })
 </script>
 

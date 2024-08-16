@@ -37,10 +37,10 @@
             </div>
           </el-col>
         </el-row>
-        <el-table :data="providerBody" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
-          <el-table-column type="index" min-width="70">
+        <el-table :data="providerBody" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad" @filter-change="handleFilterChange">
+          <el-table-column type="index" min-width="40">
             <template #header>
-              <div class="font-14 weight-4">Ranking</div>
+              <div class="font-14 weight-4">Rank</div>
             </template>
             <template #default="scope">
               {{ paginZK.pageNo > 0 ? (paginZK.pageNo - 1) * paginZK.pageSize + scope.$index + 1 : scope.$index + 1 }}
@@ -67,14 +67,15 @@
               <div class="font-14 weight-4">Name</div>
             </template>
             <template #default="scope">
-              <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.name">
+              <el-popover v-if="scope.row.name" placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.name">
                 <template #reference>
                   <div>{{scope.row.name}}</div>
                 </template>
               </el-popover>
+              <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column prop="node_id" min-width="120">
+          <el-table-column prop="node_id" min-width="130">
             <template #header>
               <div class="font-14 weight-4">nodeID</div>
             </template>
@@ -91,26 +92,29 @@
               <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column prop="gpu_tags" min-width="140">
+          <el-table-column prop="gpus" min-width="140">
             <template #header>
               <div class="font-14 weight-4">GPU</div>
             </template>
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
                 <div class="flex flex-ai-center flex-jc-center machines-style">
-                  <span v-for="(gpu, g) in scope.row.gpu_tags" :key="g">
+                  <span v-for="(gpu, g) in scope.row.gpus" :key="g">
                     {{gpu}}
                   </span>
                 </div>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="status" min-width="90">
+          <el-table-column prop="status" column-key="status" filterable :filters="[
+                { text: 'Online', value: 'Online' },
+                { text: 'Suspended', value: 'Suspended' },
+                { text: 'Offline', value: 'Offline' }]" filter-placement="bottom-end" :filter-multiple="false" min-width="90">
             <template #header>
               <div class="font-14 weight-4">status</div>
             </template>
           </el-table-column>
-          <el-table-column prop="region" min-width="100">
+          <el-table-column prop="region" column-key="region" filterable :filters="regionFilters" filter-placement="bottom-end" :filter-multiple="false" min-width="100">
             <template #header>
               <div class="font-14 weight-4">Region</div>
             </template>
@@ -155,8 +159,10 @@
 </template>
 
 <script setup lang="ts">
-import { getCPsECPListData } from "@/api/overview";
+import { getCPsECPListData, statsOverviewData } from "@/api/overview";
+import { EStorage } from "@/constant/storage";
 import { copyContent, hiddAddress, paginationWidth, replaceFormat, unifyNumber } from "@/utils/common";
+import { getLocation, setLocation } from "@/utils/storage";
 import {
   Search
 } from '@element-plus/icons-vue'
@@ -175,9 +181,29 @@ const background = ref(false)
 const networkZK = reactive({
   contract_address: '',
   owner_addr: '',
-  node_id: ''
+  node_id: '',
+  searchFor: false
 })
+const paramsFilter = reactive({
+  data: {
+    status: '',
+    region: ''
+  }
+})
+const regionFilters = ref<any>([])
 
+const handleFilterChange = (filters: any) => {
+  for (const key in filters) {
+    if (key === 'status') {
+      const result = filters.status[0] ?? ''
+      paramsFilter.data.status = result
+    } else if (key === 'region') {
+      const result = filters.region[0] ?? ''
+      paramsFilter.data.region = result
+    }
+  }
+  handleZKCurrentChange(1)
+}
 function handleSizeChange (val: number) {
   paginZK.pageSize = val
   paginZK.pageNo = 1
@@ -193,7 +219,12 @@ async function getUBITable () {
     const page = paginZK.pageNo > 0 ? paginZK.pageNo - 1 : 0
     const paramsCont = {
       "page_no": page,
-      "page_size": paginZK.pageSize
+      "page_size": paginZK.pageSize,
+      "addr": networkZK.contract_address,
+      "name": networkZK.owner_addr,
+      "node_id": networkZK.node_id,
+      "region": paramsFilter.data.region,
+      "status": paramsFilter.data.status
     }
     const providerECPRes = await getCPsECPListData(paramsCont)
     providerBody.value = providerECPRes?.data?.list ?? []
@@ -202,22 +233,44 @@ async function getUBITable () {
   providersECPLoad.value = false
 }
 const searchZKProvider = async function () {
-  paginZK.pageNo = 1
-  getUBITable()
+  networkZK.searchFor = true
+  handleZKCurrentChange(1)
 }
 function clearProvider () {
   networkZK.owner_addr = ''
   networkZK.contract_address = ''
   networkZK.node_id = ''
-  paginZK.pageNo = 1
-  getUBITable()
+  if(networkZK.searchFor) handleZKCurrentChange(1)
+  networkZK.searchFor = false
 }
 async function handleSelect (type:string) {
   router.push({ name: 'accountInfo', params: { cp_addr: type } })
 }
-onMounted(async () => {
+async function getLocationList () {
+  try{
+    providersECPLoad.value = true
+    const overviewRes = await statsOverviewData()
+    const location = overviewRes?.data?.location ?? []
+    setLocation(location)
+    regionList(JSON.stringify(location))
+  }catch{providersECPLoad.value = false}
+}
+function regionList(data: any) {
+  const location = JSON.parse(data)
+  location.map((item: any) => {
+    regionFilters.value.push({
+      text: item.name ?? '',
+      value: item.name ?? ''
+    })
+  })
   getUBITable()
-})
+}
+async function init() {
+  let l = await getLocation()
+  if (l.toString() === '[]' || l.toString() === '') getLocationList()
+  else regionList(l)
+}
+onMounted(() => init())
 </script>
 
 <style lang="less" scoped>

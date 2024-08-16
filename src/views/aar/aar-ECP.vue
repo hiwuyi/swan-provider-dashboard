@@ -155,127 +155,127 @@ import badgeIcon03 from "@/assets/images/icons/badge-3.png"
 import { copyContent, debounce, fixedformat, hiddAddress, paginationWidth, replaceFormat, sizeChange } from "@/utils/common";
 import { getOverViewECP, getOverviewECPData } from "@/api/overview";
 
-    const route = useRoute()
-    const router = useRouter()
-    const providersLoad = ref(false)
-    const providersECPLoad = ref(false)
-    const providerBody = reactive({
-      ubiTableData: []
-    })
-    const paginZK = reactive({
-      pageSize: 20,
-      pageNo: 1,
-      total: 0,
-      total_deployments: 0,
-      active_applications: 0
-    })
-    const small = ref(false)
-    const background = ref(false)
-    const cpLoad = ref(false)
-    const networkZK = reactive({
-      cp_addr: '',
-      name: '',
-      node_id: ''
-    })
-    const paramsECPFilter = reactive({
-      data: {
-        status: ''
-      }
-    })
-    const expands = ref([])
+const route = useRoute()
+const router = useRouter()
+const providersLoad = ref(false)
+const providersECPLoad = ref(false)
+const providerBody = reactive({
+  ubiTableData: []
+})
+const paginZK = reactive({
+  pageSize: 20,
+  pageNo: 1,
+  total: 0,
+  total_deployments: 0,
+  active_applications: 0
+})
+const small = ref(false)
+const background = ref(false)
+const cpLoad = ref(false)
+const networkZK = reactive({
+  cp_addr: '',
+  name: '',
+  node_id: '',
+  searchFor: false
+})
+const paramsECPFilter = reactive({
+  data: {
+    status: ''
+  }
+})
+const expands = ref([])
 
-    function handleSizeChange(val) {
-      paginZK.pageSize = val
-      paginZK.pageNo = 1
-      getUBITable()
+function handleSizeChange(val:number) {
+  paginZK.pageSize = val
+  paginZK.pageNo = 1
+  getUBITable()
+}
+async function handleZKCurrentChange (currentPage:number) {
+  paginZK.pageNo = currentPage
+  getUBITable()
+}
+async function getUBITable () {
+  providersECPLoad.value = true
+  try{
+    const page = paginZK.pageNo > 0 ? paginZK.pageNo - 1 : 0
+    let params = {
+      page_size: paginZK.pageSize,
+      page_no: page,
+      cp_addr: networkZK.cp_addr,
+      name: networkZK.name,
+      node_id: networkZK.node_id
     }
-    async function handleZKCurrentChange (currentPage) {
-      paginZK.pageNo = currentPage
-      getUBITable()
+    params = Object.assign({}, params, paramsECPFilter.data)
+    const providerRes = await getOverViewECP(params)
+    paginZK.total = providerRes?.data?.total ?? 0
+    providerBody.ubiTableData = await getList(providerRes.data.list)
+  } catch { console.error }
+  providersECPLoad.value = false
+}
+const handleFilterECPChange = (filters:any) => {
+  for (const key in filters) {
+    if (key === 'status') {
+      const result = filters.status[0] ?? ''
+      paramsECPFilter.data.status = result
     }
-    async function getUBITable () {
-      providersECPLoad.value = true
-      try{
-        const page = paginZK.pageNo > 0 ? paginZK.pageNo - 1 : 0
-        let params = {
-          page_size: paginZK.pageSize,
-          page_no: page,
-          cp_addr: networkZK.cp_addr,
-          name: networkZK.name,
-          node_id: networkZK.node_id
-        }
-        params = Object.assign({}, params, paramsECPFilter.data)
-        const providerRes = await getOverViewECP(params)
-        paginZK.total = providerRes?.data?.total ?? 0
-        providerBody.ubiTableData = await getList(providerRes.data.list)
-      } catch { console.error }
-      providersECPLoad.value = false
-    }
-    const handleFilterECPChange = (filters) => {
-      for (const key in filters) {
-        if (key === 'status') {
-          const result = filters.status[0] ?? ''
-          paramsECPFilter.data.status = result
-        }
-      }
-      handleZKCurrentChange(1)
-    }
-    let getRowKeys = (row) => {
-      return row.node_id;
-    }
-    function expandChange (row, expandedRows) {
-      // console.log(row, expandedRows)
-      if (expandedRows.length) {
-        expands.value = [];
-        if (row) expands.value.push(row.node_id);
-      } else expands.value = [];
-    }
-    async function getList (list) {
-      let l = list || []
-      l.forEach((element) => {
-        element.gpu_list = []
-        try {
-          if (element.computer_provider.machines && element.computer_provider.machines.length > 0) {
-            element.computer_provider.machines.forEach((machines) => {
-              if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
-                machines.specs.gpu.details.forEach((gpu) => {
-                  if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
-                })
-              }
+  }
+  handleZKCurrentChange(1)
+}
+let getRowKeys = (row:any) => {
+  return row.node_id;
+}
+function expandChange (row:any, expandedRows:any) {
+  // console.log(row, expandedRows)
+  if (expandedRows.length) {
+    expands.value = [];
+    if (row) expands.value.push(row.node_id);
+  } else expands.value = [];
+}
+async function getList (list:any) {
+  let l = list || []
+  l.forEach((element:any) => {
+    element.gpu_list = []
+    try {
+      if (element.computer_provider.machines && element.computer_provider.machines.length > 0) {
+        element.computer_provider.machines.forEach((machines:any) => {
+          if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
+            machines.specs.gpu.details.forEach((gpu:any) => {
+              if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
             })
           }
-        } catch{ }
-      })
-      return l
-    }
-    const searchZKProvider = debounce(async function () {
-      paginZK.pageNo = 1
-      getUBITable()
-    }, 700)
-    function clearProvider () {
-      networkZK.name = ''
-      networkZK.cp_addr = ''
-      networkZK.node_id = ''
-      paginZK.pageNo = 1
-      getUBITable()
-    }
-    function reset (type) {
-      paginZK.total = 0
-      paginZK.total_deployments = 0
-      paginZK.active_applications = 0
-      paginZK.pageSize = 20
-      paginZK.pageNo = 1
-      providersLoad.value = false
-      providersECPLoad.value = false
-      networkZK.name = ''
-      networkZK.cp_addr = ''
-      networkZK.node_id = ''
-      getUBITable()
-    }
-    onMounted(async () => {
-      reset('init')
-    })
-  
+        })
+      }
+    } catch{console.error}
+  })
+  return l
+}
+const searchZKProvider = debounce(async function () {
+  networkZK.searchFor = true
+  handleZKCurrentChange(1)
+}, 700)
+function clearProvider () {
+  networkZK.name = ''
+  networkZK.cp_addr = ''
+  networkZK.node_id = ''
+  if(networkZK.searchFor) handleZKCurrentChange(1)
+  networkZK.searchFor = false
+}
+function reset () {
+  paginZK.total = 0
+  paginZK.total_deployments = 0
+  paginZK.active_applications = 0
+  paginZK.pageSize = 20
+  paginZK.pageNo = 1
+  providersLoad.value = false
+  providersECPLoad.value = false
+  networkZK.name = ''
+  networkZK.cp_addr = ''
+  networkZK.node_id = ''
+  getUBITable()
+}
+onMounted(async () => {
+  reset()
+})
 </script>
 
 <style lang="less" scoped>

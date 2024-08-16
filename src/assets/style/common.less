@@ -491,11 +491,11 @@ body {
     }
   }
   .uptime-text {
-    min-width: 45px;
+    min-width: 60px;
     margin: 0 0 0 0.06rem;
     white-space: nowrap;
     @media screen and (min-width: 1800px) {
-      min-width: 55px;
+      min-width: 70px;
     }
     // &.task {
     //   min-width: 70px;
@@ -528,6 +528,9 @@ body {
   &.w {
     width: auto;
   }
+  &.t {
+    text-overflow: unset;
+  }
   &.black {
     color: inherit;
     cursor: text;
@@ -551,6 +554,13 @@ body {
   }
 }
 
+.method-style {
+  display: inline-block;
+  padding: 3px 6px;
+  background-color: var(--color-primary-opacity-10);
+  color: var(--color-primary);
+  border-radius: 4px;
+}
 
 .machines-style {
   flex-wrap: wrap;
@@ -1064,4 +1074,9 @@ body {
       }
     }
   }
+}
+
+.el-table-filter__list{
+  max-height: 300px;
+  overflow-y: auto;
 }

@@ -37,10 +37,10 @@
             </div>
           </el-col>
         </el-row>
-        <el-table :data="providersData" empty-text="No Data" v-loading="providersTableLoad">
-          <el-table-column type="index" min-width="70">
+        <el-table :data="providersData" empty-text="No Data" v-loading="providersTableLoad" @sort-change="handleSortChange" @filter-change="handleFilterChange">
+          <el-table-column type="index" min-width="40">
             <template #header>
-              <div class="font-14 weight-4">Ranking</div>
+              <div class="font-14 weight-4">Rank</div>
             </template>
             <template #default="scope">
               {{ pagin.pageNo > 0 ? (pagin.pageNo - 1) * pagin.pageSize + scope.$index + 1 : scope.$index + 1 }}
@@ -74,7 +74,7 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column prop="node_id" min-width="120">
+          <el-table-column prop="node_id" min-width="130">
             <template #header>
               <div class="font-14 weight-4">NodeID</div>
             </template>
@@ -88,11 +88,10 @@
                     fill="#3d3d3d" p-id="6469"></path>
                 </svg>
               </div>
-              <span>-</span>
+              <span v-else>-</span>
             </template>
           </el-table-column>
-          <!-- sortable -->
-          <el-table-column prop="active_deployments" min-width="130">
+          <el-table-column prop="deployments" sortable min-width="130">
             <template #header>
               <div class="font-14 weight-4">Active deployment</div>
             </template>
@@ -100,8 +99,7 @@
               <div>{{ replaceFormat(scope.row.active_deployments) }}</div>
             </template>
           </el-table-column>
-          <!-- sortable -->
-          <el-table-column prop="score" min-width="80">
+          <el-table-column prop="score" sortable min-width="80">
             <template #header>
               <div class="font-14 weight-4">Score</div>
             </template>
@@ -116,16 +114,14 @@
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
                 <div class="flex flex-ai-center flex-jc-center machines-style">
-                  <span v-for="(gpu, g) in scope.row.gpu_list" :key="g">
+                  <span v-for="(gpu, g) in scope.row.gpus" :key="g">
                     {{gpu}}
                   </span>
                 </div>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="region" min-width="100" column-key="region" filterable :filters="[
-            { text: 'Active', value: 'Active' }
-          ]" filter-placement="bottom-end" :filter-multiple="false">
+          <el-table-column prop="region" min-width="100" column-key="region" filterable :filters="regionFilters" filter-placement="bottom-end" :filter-multiple="false">
             <template #header>
               <div class="font-14 weight-4">Region</div>
             </template>
@@ -137,7 +133,7 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column prop="uptime" min-width="140">
+          <el-table-column prop="uptime" min-width="150">
             <template #header>
               <div class="font-14 weight-4">Uptime</div>
             </template>
@@ -161,8 +157,9 @@
 </template>
 
 <script setup lang="ts">
-import { getCPsFCPListData } from "@/api/overview";
+import { getCPsFCPListData, statsOverviewData } from "@/api/overview";
 import { copyContent, hiddAddress, paginationWidth, replaceFormat, unifyNumber } from "@/utils/common";
+import { getLocation, setLocation } from "@/utils/storage";
 import {
   Search
 } from '@element-plus/icons-vue'
@@ -182,9 +179,29 @@ const background = ref(false)
 const networkInput = reactive({
   contract_address: '',
   owner_addr: '',
-  node_id: ''
+  node_id: '',
+  order: '',
+  desc: false,
+  region: '',
+  searchFor: false
 })
+const regionFilters = ref<any>([])
 
+const handleFilterChange = (filters: any) => {
+  for (const key in filters) {
+    if (key === 'region') {
+      const result = filters.region[0] ?? ''
+      networkInput.region = result
+    }
+  }
+  handleCurrentChange(1)
+}
+function handleSortChange({ prop, order }) {
+  // const sortOrder = { prop, order };
+  networkInput.order = prop
+  networkInput.desc = order === 'descending' ? true : false
+  init()
+}
 function handleSizeChange(val: number) {
   pagin.pageSize = val
   pagin.pageNo = 1
@@ -200,7 +217,13 @@ async function init() {
     const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
     const paramsCont = {
       "page_no": page,
-      "page_size": pagin.pageSize
+      "page_size": pagin.pageSize,
+      "addr": networkInput.contract_address,
+      "name": networkInput.owner_addr,
+      "node_id": networkInput.node_id,
+      "order": networkInput.order,
+      "desc": networkInput.desc,
+      "region": networkInput.region
     }
     const providerFCPRes = await getCPsFCPListData(paramsCont)
     providersData.value = providerFCPRes?.data?.list ?? []
@@ -209,24 +232,44 @@ async function init() {
   providersTableLoad.value = false
 }
 const searchProvider = async function () {
-  pagin.pageSize = 20
-  pagin.pageNo = 1
-  init()
+  networkInput.searchFor = true
+  handleCurrentChange(1)
 }
 function clearProvider () {
   networkInput.contract_address = ''
   networkInput.owner_addr = ''
   networkInput.node_id = ''
-  pagin.pageSize = 20
-  pagin.pageNo = 1
-  init()
+  if (networkInput.searchFor) handleCurrentChange(1)
+  networkInput.searchFor = false
 }
 async function handleSelect (type: string) {
   router.push({ name: 'accountInfo', params: { cp_addr: type } })
 }
-onMounted(async () => {
+async function getLocationList () {
+  try{
+    providersTableLoad.value = true
+    const overviewRes = await statsOverviewData()
+    const location = overviewRes?.data?.location ?? []
+    setLocation(location)
+    regionList(JSON.stringify(location))
+  }catch{providersTableLoad.value = false}
+}
+function regionList(data: any) {
+  const location = JSON.parse(data)
+  location.map((item: any) => {
+    regionFilters.value.push({
+      text: item.name ?? '',
+      value: item.name ?? ''
+    })
+  })
   init()
-})
+}
+async function getData() {
+  let l = await getLocation()
+  if (l.toString() === '[]' || l.toString() === '') getLocationList()
+  else regionList(l)
+}
+onMounted(() => getData())
 </script>
 
 <style lang="less" scoped>

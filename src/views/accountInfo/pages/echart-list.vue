@@ -109,7 +109,7 @@
         <div class="module-echarts mt-16 mb-32">
           <div class="title flex flex-ai-center flex-jc-between mb-16">
             <p class="font-16 weight-4 mr-16">Job Stats</p>
-            <p class="font-14 subtitle">Total Jobs: {{ replaceFormat(totalJob) }}</p>
+            <p class="font-14 subtitle">Total Jobs: {{ replaceFormat(totalReward) }}</p>
           </div>
           <div class='chart-trends' id='chart-job-ecp' v-loading="providersLoad" element-loading-background="rgba(255, 255, 255, 0.8)"></div>
         </div>
@@ -176,11 +176,13 @@ const changetype = async (data: any) => {
   const machart_collateral_ecp = echarts.init(document.getElementById("chart-collateral-ecp"));
   
   const fcpCountsData = await dataCpData(data.fcp_job, 'total')
-  const fcpRunningData = await dataCpData(data.fcp_job, 'active')
-  const fcpCountsMax = Math.max(...fcpCountsData.datum);
-  const fcpCountsMin = Math.min(...fcpCountsData.datum);
-  const fcpRunningMax = Math.max(...fcpRunningData.datum);
-  const fcpRunningMin = Math.min(...fcpRunningData.datum);
+  const fcpRunningData = await dataDelta(data.fcp_job, 'delta')
+  const fcpCountsMax = Math.ceil(Math.max(...fcpCountsData.datum));
+  const fcpCountsMin = Math.floor(Math.min(...fcpCountsData.datum)*0.8);
+  const fcpCountsInterval = Math.ceil((fcpCountsMax-fcpCountsMin)/(fcpCountsMin===0?4:5))
+  const fcpRunningMax = Math.ceil(Math.max(...fcpRunningData.datum));
+  const fcpRunningMin = Math.floor(Math.min(...fcpRunningData.datum)*0.8);
+  const fcpRunningInterval = Math.ceil((fcpRunningMax-fcpRunningMin)/(fcpRunningMin===0?4:5))
   totalJob.value = sumArrays(fcpCountsData.datum, [])
 
   const fcpCollateralData = await dataCpData(data.fcp_collateral, 'total')
@@ -188,15 +190,19 @@ const changetype = async (data: any) => {
 
   const ecpCountsData = await dataCpData(data.ecp_task, 'total')
   const ecpGrowthData = await dataDelta(data.ecp_task, 'delta')
-  const ecpCountMax = Math.max(...ecpCountsData.datum);
-  const ecpCountMin = Math.min(...ecpCountsData.datum);
-  const ecpGrowthMax = Math.max(...ecpGrowthData.datum);
-  const ecpGrowthMin = Math.min(...ecpGrowthData.datum);
+  const ecpCountMax = Math.ceil(Math.max(...ecpCountsData.datum));
+  const ecpCountMin = Math.floor(Math.min(...ecpCountsData.datum)*0.8);
+  const ecpGrowthMax = Math.ceil(Math.max(...ecpGrowthData.datum));
+  const ecpGrowthMin = Math.floor(Math.min(...ecpGrowthData.datum)*0.8);
+  const ecpCountsInterval = Math.ceil((ecpCountMax-ecpCountMin)/(ecpCountMin===0?4:5))
+  const ecpGrowthInterval = Math.ceil((ecpGrowthMax-ecpGrowthMin)/(ecpGrowthMin===0?4:5))
   totalReward.value = sumArrays(ecpCountsData.datum, [])
 
   const ecpCollateralData = await dataCpData(data.ecp_collateral, 'total')
   const ecpEscrowData = await dataCpData(data.ecp_collateral, 'active')
   const ecpSequencerData = await dataCpData(data.sequencer, 'total')
+  const ecpSequencerMax = Math.ceil(Math.max(...ecpSequencerData.datum));
+  const ecpSequencerMin = Math.floor(Math.min(...ecpSequencerData.datum)*0.8);
 
   const option1 = {
     tooltip: {
@@ -276,8 +282,10 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        // splitNumber: 5,
         min: fcpCountsMin,
-        max: fcpCountsMax
+        max: fcpCountsMax,
+        interval: fcpCountsInterval
       },
       {
         type: 'value',
@@ -287,8 +295,13 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        // splitNumber: 5,
         min: fcpRunningMin,
-        max: fcpRunningMax
+        max: fcpRunningMax,
+        interval: fcpRunningInterval,
+        splitLine: {
+          show: false 
+        },
       }
     ],
     series: [
@@ -490,8 +503,10 @@ const changetype = async (data: any) => {
           color: '#7c889b',
           //   formatter: '{value}'
         },
+        interval: ecpCountsInterval,
         min: ecpCountMin,
         max: ecpCountMax,
+        // splitNumber: 5,
       },
       {
         type: 'value',
@@ -503,6 +518,11 @@ const changetype = async (data: any) => {
         },
         min: ecpGrowthMin,
         max: ecpGrowthMax,
+        // splitNumber: 5,
+        interval: ecpGrowthInterval,
+        splitLine: {
+          show: false 
+        },
       }
     ],
     series: [
@@ -535,12 +555,6 @@ const changetype = async (data: any) => {
   const option4 = {
     tooltip: {
       trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        crossStyle: {
-          color: '#999'
-        }
-      },
       backgroundColor: 'rgba(0, 0, 0, 1)',
       color: '#fff',
       borderWidth: 0,
@@ -632,7 +646,12 @@ const changetype = async (data: any) => {
         nameTextStyle: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
           color: '#7c889b',
-        }
+        },
+        min: ecpSequencerMin,
+        max: ecpSequencerMax,
+        splitLine: {
+          show: false 
+        },
       }
     ],
     series: [
@@ -640,7 +659,7 @@ const changetype = async (data: any) => {
         name: 'Collateral (SWANC)',
         type: 'line',
         smooth: false,
-        yAxisIndex: 1,
+        yAxisIndex: 0,
         showSymbol: true,
         data: ecpCollateralData.datum,
         tooltip: {
@@ -655,6 +674,7 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         showSymbol: true,
+        yAxisIndex: 0,
         data: ecpEscrowData.datum,
         color: '#56cfb2'
       },
@@ -663,6 +683,7 @@ const changetype = async (data: any) => {
         type: 'line',
         smooth: false,
         showSymbol: true,
+        yAxisIndex: 1,
         data: ecpSequencerData.datum,
         color: '#333333'
       }
@@ -698,6 +719,11 @@ const changePietype = async (data: any) => {
   const machart_pie_fcp = echarts.init(document.getElementById("chart-pie-fcp"));
   const machart_pie_ecp = echarts.init(document.getElementById("chart-pie-ecp"));
 
+  const fcpBalance = String(balanceData.value?.fcp_collateral?.balance) ?? '0'
+  const fcpLocked = String(balanceData.value?.fcp_collateral?.locked) ?? '0'
+  const ecpBalance = String(balanceData.value?.ecp_collateral?.balance) ?? '0'
+  const ecpLocked = String(balanceData.value?.ecp_collateral?.locked) ?? '0'
+
   const option1 = {
     tooltip: {
       trigger: 'item',
@@ -722,7 +748,7 @@ const changePietype = async (data: any) => {
       left: 'center',
       show: false
     },
-    color: ['#0000bf', '#5579ee'],
+    color: [fcpBalance === '0'?'#727272':'#0000bf', fcpLocked === '0'?'#989898':'#5579ee'],
     series: [
       {
         name: 'FCP',
@@ -745,8 +771,8 @@ const changePietype = async (data: any) => {
           show: false
         },
         data: [
-          { value: replaceDecimalsFormat(balanceData.value?.fcp_collateral?.balance), name: 'Collateral' },
-          { value: replaceDecimalsFormat(balanceData.value?.fcp_collateral?.locked), name: 'Escrow' }
+          { value: replaceDecimalsFormat(fcpBalance), name: 'Collateral' },
+          { value: replaceDecimalsFormat(fcpLocked), name: 'Escrow' }
         ]
       }
     ]
@@ -775,7 +801,7 @@ const changePietype = async (data: any) => {
       left: 'center',
       show: false
     },
-    color: ['#02a7f0', '#56cfb2'],
+    color: [ecpBalance === '0'?'#727272':'#02a7f0', ecpLocked === '0'?'#989898':'#56cfb2'],
     series: [
       {
         name: 'ECP',
@@ -797,8 +823,8 @@ const changePietype = async (data: any) => {
           show: false
         },
         data: [
-          { value: replaceDecimalsFormat(balanceData.value?.ecp_collateral?.balance), name: 'Collateral' },
-          { value: replaceDecimalsFormat(balanceData.value?.ecp_collateral?.locked), name: 'Escrow' }
+          { value: replaceDecimalsFormat(ecpBalance), name: 'Collateral' },
+          { value: replaceDecimalsFormat(ecpLocked), name: 'Escrow' }
         ]
       }
     ]

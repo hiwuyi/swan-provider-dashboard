@@ -364,6 +364,7 @@ import * as echarts from "echarts"
 import worldGeoJSON from '@/assets/js/world.ts'
 import { statsOverviewData } from "@/api/overview"
 import { replaceFormat } from '@/utils/common';
+import { locationAll, setLocation } from "@/utils/storage";
 
 const bodyWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
 const overviewData = reactive({
@@ -406,6 +407,7 @@ async function init () {
     overviewData.value = overviewRes?.data ?? {}
     overviewLoad.value = false
     const location = overviewRes?.data?.location ?? []
+    setLocation(location)
     drawChart(location)
   }catch{overviewLoad.value = false}
 }

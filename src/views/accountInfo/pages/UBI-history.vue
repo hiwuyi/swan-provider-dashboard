@@ -11,7 +11,7 @@
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
           <div class="flex flex-ai-center nowrap child">
             <el-button type="info" :disabled="!networkZK.owner_addr ? true:false" round @click="clearProvider">Clear</el-button>
-            <el-button type="primary" :disabled="!networkZK.owner_addr ? true:false" round @click="searchZKProvider">
+            <el-button type="primary" :disabled="!networkZK.owner_addr ? true:false" round @click="handleZKCurrentChange(1)">
               <el-icon>
                 <Search />
               </el-icon>
@@ -44,7 +44,8 @@
             <div class="font-14 weight-4">Task Contract</div>
           </template>
           <template #default="scope">
-            <a :href="`${explorerLink}address/${scope.row.addr}`" target="_blank" class="name-style font-14">{{scope.row.addr}}</a>
+            <a v-if="scope.row.addr" :href="`${explorerLink}address/${scope.row.addr}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.addr)}}</a>
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <!-- column-key="type" filterable :filters="[
@@ -83,7 +84,8 @@
             <div class="font-14 weight-4">Reward TX Hash</div>
           </template>
           <template #default="scope">
-            <a :href="`${explorerLink}tx/${scope.row.reward_tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.reward_tx_hash}}</a>
+            <a v-if="scope.row.reward_tx_hash" :href="`${explorerLink}tx/${scope.row.reward_tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.reward_tx_hash}}</a>
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column prop="reward">
@@ -143,6 +145,7 @@ async function getAllData() {
     let params = {
       page_size: pagin.pageSize,
       page_no: page,
+      id: networkZK.owner_addr
     }
     const dataRes = await getCPsZKProofData(params, route.params.cp_addr)
     paymentData.value = dataRes?.data?.list ?? []
@@ -150,8 +153,10 @@ async function getAllData() {
   } catch{console.error}
   paymentLoad.value = false
 }
-function clearProvider() {}
-function searchZKProvider() { }
+function clearProvider() {
+  networkZK.owner_addr = ''
+  handleZKCurrentChange(1)
+}
 onMounted(() => {
   getAllData()
 })
