@@ -387,7 +387,7 @@ const changetype = async (data: any) => {
     },
     xAxis: {
       type: 'category',
-      boundaryGap: false,
+      boundaryGap: true,
       axisTick: {
         show: false
       },
@@ -606,6 +606,7 @@ const changetype = async (data: any) => {
     xAxis: [
       {
         type: 'category',
+        boundaryGap: true,
         axisTick: {
           show: false
         },

@@ -6,13 +6,13 @@
 
     <div class="providers-container">
       <div class="providers-overview">
-        <echarts-use></echarts-use>
+        <echarts-use :echartData="echartData"></echarts-use>
       </div>
     </div>
 
     <div class="providers-container">
       <div class="providers-overview">
-        <echarts-bar></echarts-bar>
+        <echarts-bar :echartData="echartData"></echarts-bar>
       </div>
     </div>
 
@@ -43,45 +43,19 @@
 import echartsUse from './pages/echarts-use.vue'
 import echartsBar from './pages/echarts-bar.vue'
 import totalAvailableGpus from './pages/total-available-gpus.vue'
-import { getCPlistData } from '@/api/overview'
+import { getStatsResourceData } from '@/api/resource'
 
-const networkInput = ref('')
+const echartData = ref<any>({})
 const providersLoad = ref(false)
 
-async function init () {
-  providersLoad.value = true
+async function initResource () {
   try{
-    const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
-    const params = {
-      limit: pagin.pageSize,
-      offset: page * pagin.pageSize,
-      search_string: networkInput.value
-    }
-    const providerRes = await getCPlistData(params)
-    pagin.total = providerRes?.data?.list_providers_cnt ?? 0
-    providersData.value = await getList(providerRes?.data?.providers)
-    providersLoad.value = false
+    providersLoad.value = true
+    const echartsRes = await getStatsResourceData()
+    echartData.value = echartsRes?.data ?? {}
   }catch{providersLoad.value = false}
 }
-async function getList (list) {
-  let l = list || []
-  l.forEach((element) => {
-    element.gpu_list = []
-    try {
-      if (element.computer_provider.machines && element.computer_provider.machines.length > 0) {
-        element.computer_provider.machines.forEach((machines) => {
-          if (machines.specs.gpu.details && machines.specs.gpu.details.length > 0) {
-            machines.specs.gpu.details.forEach((gpu) => {
-              if (element.gpu_list.indexOf(gpu.product_name) < 0) element.gpu_list.push(gpu.product_name)
-            })
-          }
-        })
-      }
-    } catch{ }
-  })
-  return l
-}
-onMounted(async () => {})
+onMounted(() => initResource())
 </script>
 
 <style lang="less" scoped>

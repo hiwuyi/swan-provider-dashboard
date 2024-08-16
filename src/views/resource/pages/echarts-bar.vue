@@ -5,7 +5,22 @@
         <div class="flex flex-ai-end flex-jc-center mb-24">
           <p class="font-16 text-center">GPU Amount</p>
         </div>
-        <div class='chart-trends' id='chart-bar-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+        
+        <div class="chip-data">
+          <div class="cont-flex">
+            <div class="no-result flex-row center" v-if="chipDataAll.gpu && chipDataAll.gpu.length === 0">No Data</div>
+            <template v-for="chip in chipDataAll.gpu" :key="chip">
+              <div class="cont flex-row space-between">
+                <div class="absolute" :style="'width:' + (chip.value / chipDataAll.gpuMaxData * 100) + '%;'"></div>
+                <div class="flex-row items-center">
+                  <!-- <div class="point"></div> -->
+                  <div class="text-region">{{chip.name}}</div>
+                </div>
+                <div class="text-data">{{replaceFormat(chip.value)}}</div>
+              </div>
+            </template>
+          </div>
+        </div>
       </div>
     </el-col>
     <el-col v-loading="cpLoad" :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
@@ -17,13 +32,55 @@
           <div :class="`font-12 tab-title pointer ${activeTab === 'storage'?'active': ''}`" @click="tabProvider('storage')">Storage (TB)</div>
         </div>
         <div v-if="activeTab === 'cpu'">
-          <div class='chart-trends' id='chart-bar-cpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+          <div class="chip-data">
+            <div class="cont-flex">
+              <div class="no-result flex-row center" v-if="chipDataAll.cpu && chipDataAll.cpu.length === 0">No Data</div>
+              <template v-for="chip in chipDataAll.cpu" :key="chip">
+                <div class="cont flex-row space-between">
+                  <div class="absolute" :style="'width:' + (chip.value / chipDataAll.cpuMaxData * 100) + '%;'"></div>
+                  <div class="flex-row items-center">
+                    <!-- <div class="point"></div> -->
+                    <div class="text-region">{{chip.name}}</div>
+                  </div>
+                  <div class="text-data">{{replaceFormat(chip.value)}}</div>
+                </div>
+              </template>
+            </div>
+          </div>
         </div>
         <div v-if="activeTab === 'memory'">
-          <div class='chart-trends' id='chart-bar-memory' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+          <div class="chip-data">
+            <div class="cont-flex">
+              <div class="no-result flex-row center" v-if="chipDataAll.memory && chipDataAll.memory.length === 0">No Data</div>
+              <template v-for="chip in chipDataAll.memory" :key="chip">
+                <div class="cont flex-row space-between">
+                  <div class="absolute" :style="'width:' + (chip.value / chipDataAll.memoryMaxData * 100) + '%;'"></div>
+                  <div class="flex-row items-center">
+                    <!-- <div class="point"></div> -->
+                    <div class="text-region">{{chip.name}}</div>
+                  </div>
+                  <div class="text-data">{{byteTBStorage(chip.value)}}</div>
+                </div>
+              </template>
+            </div>
+          </div>
         </div>
         <div v-if="activeTab === 'storage'">
-          <div class='chart-trends' id='chart-bar-storage' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
+          <div class="chip-data">
+            <div class="cont-flex">
+              <div class="no-result flex-row center" v-if="chipDataAll.storage && chipDataAll.storage.length === 0">No Data</div>
+              <template v-for="chip in chipDataAll.storage" :key="chip">
+                <div class="cont flex-row space-between">
+                  <div class="absolute" :style="'width:' + (chip.value / chipDataAll.storageMaxData * 100) + '%;'"></div>
+                  <div class="flex-row items-center">
+                    <!-- <div class="point"></div> -->
+                    <div class="text-region">{{chip.name}}</div>
+                  </div>
+                  <div class="text-data">{{byteTBStorage(chip.value)}}</div>
+                </div>
+              </template>
+            </div>
+          </div>
         </div>
       </div>
     </el-col>
@@ -31,458 +88,67 @@
 </template>
 
 <script setup lang="ts">
-import { getOverviewData, getOverviewECPData } from '@/api/overview';
-import { byteTBStorage, timeout } from '@/utils/common';
-import { currentNetwork } from '@/utils/storage';
-import * as echarts from "echarts"
+import { byteTBStorage, replaceFormat } from '@/utils/common';
+
+const props = withDefaults(
+  defineProps<{
+    echartData?: any
+  }>(),
+  {
+    echartData: {}
+  }
+)
 
 const activeTab = ref('cpu')
-const cpLoad = ref(false)
-const gpuBarLoad = ref(false)
+const cpLoad = ref(true)
+const gpuBarLoad = ref(true)
 const chipDataAll = ref<any>({
   all: [],
+  cpu: [],
+  cpuMaxData: 0,
   memoryArray: [],
+  memoryMaxData: 0,
   storageArray: [],
-  gpu: []
+  storageMaxData: 0,
+  gpu: [],
+  gpuMaxData: 0
 })
 
-async function initFCP () {
+async function initGPU () {
   try {
     gpuBarLoad.value = true
-    cpLoad.value = true
-    const params = {
-      for_prod: 1
-    }
-    const echartsRes = await getOverviewData(params)
-    const data = echartsRes?.data ?? {}
-    if(data.toString() !== '{}') dataHandle(data, 'fcp')
-  }catch{ cpLoad.value = false}
-}
-async function initECP () {
-  try {
-    gpuBarLoad.value = true
-    cpLoad.value = true
-    const echartsRes = await getOverviewECPData()
-    const data = echartsRes?.data ?? {}
-    if(data.toString() !== '{}') dataHandle(data, 'ecp')
-  }catch{ cpLoad.value = false}
-} 
-async function dataHandle(data: any, type: string) {
-  const gpu_data = type === 'ecp' ? data.gpu.data : data.gpu_classification_count
-  const memory_data = type === 'ecp' ? data.memory.data : data.amount_of_memory_by_country
-  const storage_data = type === 'ecp' ? data.storage.data : data.amount_of_storage_by_country
-        
-  const gpuListCount = await newArrayList(gpu_data) || []
-  const memoryList = await newArrayList(memory_data) || []
-  const storageList = await newArrayList(storage_data) || []
-  chipDataAll.value.all = [...chipDataAll.value.all, ...gpuListCount]
-  chipDataAll.value.memoryArray = [...chipDataAll.value.memoryArray, ...memoryList]
-  chipDataAll.value.storageArray = [...chipDataAll.value.storageArray, ...storageList]
-  chipDataAll.value = await getChipList(chipDataAll.value)
-  if(currentNetwork.value === 'Mainnet') {
-    chipDataAll.value.gpu = chipDataAll.value.all.sort((a: any, b: any) => {
-      const aId = a.id || (99999999 + (a.value || 0))
-      const bId = b.id || (99999999 + (b.value || 0))
-      return aId - bId
-    })
-  } else chipDataAll.value.gpu = chipDataAll.value.all
-  // console.log(chipDataAll.value.gpu)
-  // console.log(chipDataAll.value.storageArray)
-  // console.log(chipDataAll.value.memoryArray)
-  changeGPUtype(chipDataAll.value)
-  changeCPUtype(chipDataAll.value)
-}
-async function newArrayList (list: any) {
-  try {
-    const newArray = list.map((item: any) => {
-      const newItem = Object.keys(item).reduce((acc: any, key: string) => {
-        const newKey = key === 'gpu_name' || key === 'region' ? 'name' : key === 'gpu_count' || key === 'memory_amount' || key === 'storage_amount' ? 'value' : key === 'gpu_value' ? 'id' : key
-        acc[newKey] = item[key];
-        return acc;
-      }, {});
-      return newItem;
-    })
-    return newArray
-  } catch{ return [] }
-}
-async function getChipList (list: any) {
-  let array = {
-    all: [],
-    memoryArray: [],
-    storageArray: []
+    chipDataAll.value.gpu = props.echartData?.gpu ? await props.echartData.gpu.models.sort((a, b) => b.value - a.value) : []
+    chipDataAll.value.gpuMaxData = chipDataAll.value.gpu[0].value ?? 0
+    gpuBarLoad.value = false
+  } catch {
+    chipDataAll.value.gpu = []
+    chipDataAll.value.gpuMaxData = 0
+    gpuBarLoad.value = false
   }
-  try {
-    array.all = await reduceMethod(list.all, 'name', 'value')
-    array.all = array.all ? await array.all.sort((a: any, b: any) => b.value - a.value) : []
-    array.memoryArray = await reduceMethod(list.memoryArray, 'name', 'value')
-    array.memoryArray = array.memoryArray ? await array.memoryArray.sort((a: any, b: any) => b.value - a.value) : []
-    array.storageArray = await reduceMethod(list.storageArray, 'name', 'value')
-    array.storageArray = array.storageArray ? await array.storageArray.sort((a: any, b: any) => b.value - a.value) : []
-    return array
-  } catch{ return array }
 }
-async function reduceMethod (arr: any, field: string, valueAmout: string) {
+async function initProvider () {
+  cpLoad.value = true
   try {
-    return arr.reduce((accumulator: any, current: any) => {
-      let existing = accumulator.find((item: any) => item[field].toLowerCase() === current[field].toLowerCase());
-      if (existing) {
-        existing[valueAmout] += current[valueAmout];
-      } else {
-        accumulator.push({ ...current });
-      }
-      return accumulator;
-    }, [])
-  } catch{ return [] }
-}
+    chipDataAll.value.cpu = props.echartData?.cpu ? await props.echartData.cpu.distributions.sort((a, b) => b.value - a.value) : []
+    chipDataAll.value.cpuMaxData = chipDataAll.value.cpu[0].value ?? 0
+  }catch{ console.error }
+  try {
+    chipDataAll.value.memory = props.echartData?.memory ? await props.echartData.memory.distributions.sort((a, b) => b.value - a.value) : []
+    chipDataAll.value.memoryMaxData = chipDataAll.value.memory[0].value ?? 0
+  }catch{ console.error }
+  try {
+    chipDataAll.value.storage = props.echartData?.storage ? await props.echartData.storage.distributions.sort((a, b) => b.value - a.value) : []
+    chipDataAll.value.storageMaxData = chipDataAll.value.storage[0].value ?? 0
+  }catch{ console.error }
+  cpLoad.value = false
+} 
 async function tabProvider(type: string) {
   activeTab.value = type
-  cpLoad.value = true
-  await timeout(500)
-  if (activeTab.value === 'storage') changeStoragetype(chipDataAll.value)
-  else if (activeTab.value === 'memory') changeMemorytype(chipDataAll.value)
-  else changeCPUtype(chipDataAll.value)
 }
-const changeGPUtype = async (data: any) => {
-  gpuBarLoad.value = true
-  try{
-    const chart_gpu = echarts.init(document.getElementById("chart-bar-gpu"));
-    const gpuDataName = data.gpu.map((user:any) => user.name);
-    const gpuDataValue = data.gpu.map((user: any) => user.value);
 
-    const option = {
-      grid: {
-        left: '3%',
-        right: '10%',
-        top: '0',
-        bottom: '0',
-        containLabel: true
-      },
-      xAxis: {
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        max: 'dataMax'
-      },
-      yAxis: {
-        type: 'category',
-        data: gpuDataName,
-        inverse: true,
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        axisTick: {
-            show: false 
-        }
-      },
-      series: [
-        {
-          realtimeSort: true,
-          name: 'GPU',
-          type: 'bar',
-          data: gpuDataValue,
-          label: {
-            show: true,
-            position: 'right', // inside
-            valueAnimation: true,
-            // formatter: '{c}',
-            textStyle: {
-              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
-            }
-          },
-          barGap: '0%',
-          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(
-              0, 0, 1, 0, 
-              [
-                  {offset: 0, color: '#91a8f4'},
-                  {offset: 1, color: '#567aee'}
-              ]
-            )
-          }
-        }
-      ],
-      legend: {
-        show: false
-      }
-    }
-    chart_gpu.setOption(option);
-    if (typeof ResizeObserver !== 'undefined') {
-      let observer = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          chart_gpu.resize();
-        }
-      });
-
-      let element = document.getElementById('resource-container');
-      observer.observe(element);
-    }
-    window.addEventListener("resize", function () {
-      chart_gpu.resize();
-    })
-  }catch{console.error}
-  gpuBarLoad.value = false
-}
-const changeCPUtype = async (data: any) => {
-  cpLoad.value = true
-  try{
-    const chart_cpu = echarts.init(document.getElementById("chart-bar-cpu"));
-    const gpuDataName = data.gpu.map((user:any) => user.name);
-    const gpuDataValue = data.gpu.map((user: any) => user.value);
-
-    const option = {
-      grid: {
-        left: '3%',
-        right: '10%',
-        top: '0',
-        bottom: '0',
-        containLabel: true
-      },
-      xAxis: {
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        max: 'dataMax'
-      },
-      yAxis: {
-        type: 'category',
-        data: gpuDataName,
-        inverse: true,
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        axisTick: {
-            show: false 
-        }
-      },
-      series: [
-        {
-          realtimeSort: true,
-          name: 'GPU',
-          type: 'bar',
-          data: gpuDataValue,
-          label: {
-            show: true,
-            position: 'right', // inside
-            valueAnimation: true,
-            // formatter: '{c}',
-            textStyle: {
-              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
-            }
-          },
-          barGap: '0%',
-          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(
-              0, 0, 1, 0, 
-              [
-                  {offset: 0, color: '#91a8f4'},
-                  {offset: 1, color: '#567aee'}
-              ]
-            )
-          }
-        }
-      ],
-      legend: {
-        show: false
-      }
-    }
-    chart_cpu.setOption(option);
-    if (typeof ResizeObserver !== 'undefined') {
-      let observer = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          chart_cpu.resize();
-        }
-      });
-
-      let element = document.getElementById('resource-container');
-      observer.observe(element);
-    }
-    window.addEventListener("resize", function () {
-      chart_cpu.resize();
-    })
-  }catch{console.error}
-  cpLoad.value = false
-}
-const changeMemorytype = async (data: any) => {
-  cpLoad.value = true
-  try{
-    const chart_memory = echarts.init(document.getElementById("chart-bar-memory"));
-    const memoryDataName = data.memoryArray.map((user: any) => user.name);
-    const memoryValue = data.memoryArray.map((user: any) => byteTBStorage(user.value));
-    
-    const option2 = {
-      grid: {
-        left: '3%',
-        right: '10%',
-        top: '0',
-        bottom: '0',
-        containLabel: true
-      },
-      xAxis: {
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        max: 'dataMax'
-      },
-      yAxis: {
-        type: 'category',
-        data: memoryDataName,
-        inverse: true,
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        axisTick: {
-            show: false 
-        }
-      },
-      series: [
-        {
-          realtimeSort: true,
-          name: 'Memory',
-          type: 'bar',
-          data: memoryValue,
-          label: {
-            show: true,
-            position: 'right',
-            valueAnimation: true,
-            textStyle: {
-              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
-            }
-          },
-          barGap: '0%',
-          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(
-              0, 0, 1, 0, 
-              [
-                  {offset: 0, color: '#91a8f4'},
-                  {offset: 1, color: '#567aee'}
-              ]
-            )
-          }
-        }
-      ],
-      legend: {
-        show: false
-      }
-    }
-      
-    chart_memory.setOption(option2);
-    if (typeof ResizeObserver !== 'undefined') {
-      let observer = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          chart_memory.resize();
-        }
-      });
-
-      let element = document.getElementById('resource-container');
-      observer.observe(element);
-    } 
-    window.addEventListener("resize", function () {
-      chart_memory.resize();
-    })
-  }catch{console.error}
-  cpLoad.value = false
-}
-const changeStoragetype = async (data: any) => {
-  cpLoad.value = true
-  try{
-    const chart_storage = echarts.init(document.getElementById("chart-bar-storage"));
-    const storageDataName = data.storageArray.map((user:any) => user.name);
-    const storageValue = data.storageArray.map((user: any) => byteTBStorage(user.value));
-    const option3 = {
-      grid: {
-        left: '3%',
-        right: '10%',
-        top: '0',
-        bottom: '0',
-        containLabel: true
-      },
-      xAxis: {
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        max: 'dataMax'
-      },
-      yAxis: {
-        type: 'category',
-        data: storageDataName,
-        inverse: true,
-        axisLabel: {
-          fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
-          color: '#7c889b',
-          //   formatter: '{value}'
-        },
-        axisTick: {
-            show: false 
-        }
-      },
-      series: [
-        {
-          realtimeSort: true,
-          name: 'Storage',
-          type: 'bar',
-          data: storageValue,
-          label: {
-            show: true,
-            position: 'right',
-            valueAnimation: true,
-            textStyle: {
-              fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
-            }
-          },
-          barGap: '0%',
-          barWidth: document.documentElement.clientWidth >= 1920 ? '16' : '12',
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(
-              0, 0, 1, 0, 
-              [
-                  {offset: 0, color: '#91a8f4'},
-                  {offset: 1, color: '#567aee'}
-              ]
-            )
-          }
-        }
-      ],
-      legend: {
-        show: false
-      }
-    }
-    chart_storage.setOption(option3);
-    if (typeof ResizeObserver !== 'undefined') {
-      let observer = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          chart_storage.resize();
-        }
-      });
-
-      let element = document.getElementById('resource-container');
-      observer.observe(element);
-    }
-    window.addEventListener("resize", function () {
-      chart_storage.resize();
-    })
-  }catch{console.error}
-  cpLoad.value = false
-}
-onMounted(async () => {
-  initFCP()
-  initECP()
+watch(() => props.echartData, () => {
+  initGPU()
+  initProvider()
 })
 </script>
 
@@ -605,6 +271,106 @@ onMounted(async () => {
       }
       .color-storage {
         color: #0046b7;
+      }
+      .chip-data {
+        width: 100%;
+        height: calc(100% - 0.35rem);
+        margin: 0.35rem auto 0;
+        flex-direction: column;
+        overflow: hidden;
+        .chip-filter {
+          height: 40px;
+          .world-name {
+            font-size: 0.14rem;
+            @media screen and (max-width: 600px) {
+              font-size: 12px;
+            }
+            small {
+              opacity: 0.6;
+            }
+          }
+          .el-radio-button__inner {
+            background-color: transparent;
+            font-size: 0.14rem;
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+            @media screen and (max-width: 600px) {
+              padding: 5px;
+              font-size: 11px;
+            }
+          }
+        }
+        .no-result {
+          width: 94%;
+          height: calc(100% - 40px);
+          margin: auto;
+        }
+        .cont-flex {
+          height: 420px;
+          overflow: hidden;
+          overflow-y: scroll;
+          // border: 1px solid #3a67cf;
+          // border-radius: 0.14rem;
+          scrollbar-width: none;
+          scrollbar-color: rgba(60, 70, 110, 0.6) rgba(13, 14, 18, 1);
+          @media screen and (max-width: 992px) {
+            height: 320px;
+          }
+          @media screen and (max-width: 600px) {
+            height: 220px;
+          }
+          &::-webkit-scrollbar-track {
+            background: rgba(13, 14, 18, 1);
+            border-radius: 4px;
+          }
+          &::-webkit-scrollbar {
+            width: 4px;
+            background: rgba(60, 70, 110, 0.6);
+          }
+          &::-webkit-scrollbar-thumb {
+            background: rgba(60, 70, 110, 0.6);
+          }
+          .cont {
+            position: relative;
+            flex-direction: row;
+            width: calc(100% - 0.34rem);
+            padding: 0.07rem 0.16rem;
+            margin: 0.1rem 0 0;
+            font-size: 0.18rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--color-dark);
+            z-index: 9;
+            border: 1px solid #3a67cf;
+            border-radius: 0.1rem;
+            @media screen and (max-width: 600px) {
+              padding: 0.12rem 0.16rem;
+              font-size: 12px;
+            }
+            .absolute {
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: linear-gradient(
+                45deg,
+                #91a8f4,
+                #567aee
+              );
+              border-radius: 0.1rem;
+              z-index: -1;
+            }
+            .items-center {
+              .point {
+                width: 12px;
+                height: 12px;
+                background-color: #52555f;
+                border-radius: 100%;
+              }
+            }
+          }
+        }
       }
     }
     .date {

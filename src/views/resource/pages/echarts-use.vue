@@ -45,12 +45,20 @@
 
 <script setup lang="ts">
 import { statsEchartsData } from '@/api/overview';
-import { getStatsResourceData } from '@/api/resource';
-import { dataResource, getDateRange, replaceFormat, byteStorage, unifyNumber, sizeChange, byteTBStorage } from '@/utils/common';
+import { dataResource, getDateRange, replaceFormat, sizeChange, byteTBStorage } from '@/utils/common';
 import * as echarts from "echarts"
 
+const props = withDefaults(
+  defineProps<{
+    echartData?: any
+  }>(),
+  {
+    echartData: {}
+  }
+)
+
 const cpLoad = ref(false)
-const providersLoad = ref(false)
+const providersLoad = ref(true)
 const weekList = reactive({
   value: 'Week',
   options: [
@@ -107,9 +115,7 @@ async function initEcharts () {
 async function initResource () {
   try{
     providersLoad.value = true
-    const echartsRes = await getStatsResourceData()
-    const data = echartsRes?.data ?? {}
-    changePietype(data)
+    changePietype(props.echartData)
   }catch{providersLoad.value = false}
 }
 const changetype = async (data: any) => {
@@ -399,8 +405,8 @@ const changePietype = async (data: any) => {
 }
 onMounted(async () => {
   initEcharts()
-  initResource()
 })
+watch(() => props.echartData, () => initResource())
 </script>
 
 <style lang="less" scoped>
