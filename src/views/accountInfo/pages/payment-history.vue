@@ -68,7 +68,8 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="created_at" min-width="120" sortable>
+        <!-- sortable -->
+        <el-table-column prop="created_at" min-width="120">
           <!-- column-key="created_at" filterable :filters="[
             { text: '60', value: '60' },
             { text: '50', value: '50' },
@@ -88,7 +89,8 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="ended_at" min-width="120" sortable>
+        <!-- sortable -->
+        <el-table-column prop="ended_at" min-width="120">
           <template #header>
             <div class="font-14 weight-4">End Time</div>
           </template>

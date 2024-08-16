@@ -63,7 +63,8 @@
             <span v-else>fil-c2-32G</span>
           </template>
         </el-table-column>
-        <el-table-column prop="started_at" min-width="135" sortable>
+        <!-- sortable -->
+        <el-table-column prop="started_at" min-width="135">
           <template #header>
             <div class="font-14 weight-4">Start Time</div>
           </template>
@@ -71,7 +72,8 @@
             <span>{{momentFun(scope.row.started_at)}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="ended_at" min-width="135" sortable>
+        <!-- sortable -->
+        <el-table-column prop="ended_at" min-width="135">
           <template #header>
             <div class="font-14 weight-4">End Time</div>
           </template>
@@ -105,9 +107,8 @@
 </template>
 <script setup lang="ts">
 import { getCPsZKProofData } from '@/api/cp-profile';
-import { openPage } from '@/hooks/router';
-import { copyContent, debounce, getUnit, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
-import { explorerLink, metaAddress } from '@/utils/storage';
+import { hiddAddress, momentFun, paginationWidth } from '@/utils/common';
+import { explorerLink } from '@/utils/storage';
 import {
   Search
 } from '@element-plus/icons-vue'

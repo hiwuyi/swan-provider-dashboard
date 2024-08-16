@@ -118,10 +118,10 @@ const changetype = async (data: any) => {
 
   const gpuData = await dataGPU(data.gpu, 'active')
   const gpuTotalData = await dataGPU(data.gpu, 'total')
-  const gpuDataMax = Math.ceil(Math.max(...gpuData.datum));
+  const gpuDataMax = Math.ceil(Math.max(...gpuData.datum)*1.1);
   const gpuDataMin = Math.floor(Math.min(...gpuData.datum)*0.8);
   const gpuDataInterval = Math.ceil((gpuDataMax-gpuDataMin)/(gpuDataMin===0?4:5))
-  const gpuTotalMax = Math.ceil(Math.max(...gpuTotalData.datum));
+  const gpuTotalMax = Math.ceil(Math.max(...gpuTotalData.datum)*1.1);
   const gpuTotalMin = Math.floor(Math.min(...gpuTotalData.datum)*0.8);
   const gpuTotalInterval = Math.ceil((gpuTotalMax - gpuTotalMin) / 5)
   
@@ -131,18 +131,18 @@ const changetype = async (data: any) => {
 
   const fcpData = await dataDelta(data.fcp, 'total')
   const fcpDeltaData = await dataDelta(data.fcp, 'delta')
-  const fcpMax = Math.ceil(Math.max(...fcpData.datum));
+  const fcpMax = Math.ceil(Math.max(...fcpData.datum)*1.1);
   const fcpMin = Math.floor(Math.min(...fcpData.datum)*0.8);
   const fcpInterval = Math.ceil((fcpMax-fcpMin)/(fcpMin===0?4:5))
-  const fcpDeltaMax = Math.ceil(Math.max(...fcpDeltaData.datum));
+  const fcpDeltaMax = Math.ceil(Math.max(...fcpDeltaData.datum)*1.1);
   const fcpDeltaMin = Math.floor(Math.min(...fcpDeltaData.datum)*0.8);
 
   const ecpData = await dataDelta(data.ecp, 'total')
   const ecpDeltaData = await dataDelta(data.ecp, 'delta')
-  const ecpMax = Math.ceil(Math.max(...ecpData.datum));
+  const ecpMax = Math.ceil(Math.max(...ecpData.datum)*1.1);
   const ecpMin = Math.floor(Math.min(...ecpData.datum)*0.8);
   const ecpInterval = Math.ceil((ecpMax-ecpMin)/(ecpMin===0?4:5))
-  const ecpDeltaMax = Math.ceil(Math.max(...ecpDeltaData.datum));
+  const ecpDeltaMax = Math.ceil(Math.max(...ecpDeltaData.datum)*1.1);
   const ecpDeltaMin = Math.floor(Math.min(...ecpDeltaData.datum)*0.8);
 
   const option1 = {

@@ -177,10 +177,10 @@ const changetype = async (data: any) => {
   
   const fcpCountsData = await dataCpData(data.fcp_job, 'total')
   const fcpRunningData = await dataDelta(data.fcp_job, 'delta')
-  const fcpCountsMax = Math.ceil(Math.max(...fcpCountsData.datum));
+  const fcpCountsMax = Math.ceil(Math.max(...fcpCountsData.datum)*1.1);
   const fcpCountsMin = Math.floor(Math.min(...fcpCountsData.datum)*0.8);
   const fcpCountsInterval = Math.ceil((fcpCountsMax-fcpCountsMin)/(fcpCountsMin===0?4:5))
-  const fcpRunningMax = Math.ceil(Math.max(...fcpRunningData.datum));
+  const fcpRunningMax = Math.ceil(Math.max(...fcpRunningData.datum)*1.1);
   const fcpRunningMin = Math.floor(Math.min(...fcpRunningData.datum)*0.8);
   const fcpRunningInterval = Math.ceil((fcpRunningMax-fcpRunningMin)/(fcpRunningMin===0?4:5))
   totalJob.value = sumArrays(fcpCountsData.datum, [])
@@ -190,9 +190,9 @@ const changetype = async (data: any) => {
 
   const ecpCountsData = await dataCpData(data.ecp_task, 'total')
   const ecpGrowthData = await dataDelta(data.ecp_task, 'delta')
-  const ecpCountMax = Math.ceil(Math.max(...ecpCountsData.datum));
+  const ecpCountMax = Math.ceil(Math.max(...ecpCountsData.datum)*1.1);
   const ecpCountMin = Math.floor(Math.min(...ecpCountsData.datum)*0.8);
-  const ecpGrowthMax = Math.ceil(Math.max(...ecpGrowthData.datum));
+  const ecpGrowthMax = Math.ceil(Math.max(...ecpGrowthData.datum)*1.1);
   const ecpGrowthMin = Math.floor(Math.min(...ecpGrowthData.datum)*0.8);
   const ecpCountsInterval = Math.ceil((ecpCountMax-ecpCountMin)/(ecpCountMin===0?4:5))
   const ecpGrowthInterval = Math.ceil((ecpGrowthMax-ecpGrowthMin)/(ecpGrowthMin===0?4:5))
@@ -201,7 +201,7 @@ const changetype = async (data: any) => {
   const ecpCollateralData = await dataCpData(data.ecp_collateral, 'total')
   const ecpEscrowData = await dataCpData(data.ecp_collateral, 'active')
   const ecpSequencerData = await dataCpData(data.sequencer, 'total')
-  const ecpSequencerMax = Math.ceil(Math.max(...ecpSequencerData.datum));
+  const ecpSequencerMax = Math.ceil(Math.max(...ecpSequencerData.datum)*1.1);
   const ecpSequencerMin = Math.floor(Math.min(...ecpSequencerData.datum)*0.8);
 
   const option1 = {

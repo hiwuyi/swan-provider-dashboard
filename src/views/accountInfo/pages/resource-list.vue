@@ -8,10 +8,10 @@
               <el-col :xs="24" :sm="12" :md="7" :lg="7" :xl="7" class="flex flex-ai-center baseline">
                 <p class="font-14">MachineID: </p>
               </el-col>
-              <el-col :xs="24" :sm="12" :md="17" :lg="17" :xl="17" class="flex flex-ai-center baseline">
+              <el-col :xs="24" :sm="12" :md="17" :lg="17" :xl="17" class="flex flex-ai-center baseline" @click="copyContent(machines.machine_id, 'Copied')">
                 <div class="flex flex-ai-center copy-style">
                   {{machines.machine_id}}
-                  <svg @click="copyContent(machines.machine_id, 'Copied')" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+                  <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                     <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                       fill="#3d3d3d" p-id="6468"></path>
                     <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"

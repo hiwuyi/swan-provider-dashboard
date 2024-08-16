@@ -10,7 +10,7 @@
           <div class="cont-flex">
             <div class="no-result flex-row center" v-if="chipDataAll.gpu && chipDataAll.gpu.length === 0">No Data</div>
             <template v-for="chip in chipDataAll.gpu" :key="chip">
-              <div class="cont flex-row space-between">
+              <div class="cont flex-row space-between font-14">
                 <div class="absolute" :style="'width:' + (chip.value / chipDataAll.gpuMaxData * 100) + '%;'"></div>
                 <div class="flex-row items-center">
                   <!-- <div class="point"></div> -->
@@ -36,7 +36,7 @@
             <div class="cont-flex">
               <div class="no-result flex-row center" v-if="chipDataAll.cpu && chipDataAll.cpu.length === 0">No Data</div>
               <template v-for="chip in chipDataAll.cpu" :key="chip">
-                <div class="cont flex-row space-between">
+                <div class="cont flex-row space-between font-14">
                   <div class="absolute" :style="'width:' + (chip.value / chipDataAll.cpuMaxData * 100) + '%;'"></div>
                   <div class="flex-row items-center">
                     <!-- <div class="point"></div> -->
@@ -53,7 +53,7 @@
             <div class="cont-flex">
               <div class="no-result flex-row center" v-if="chipDataAll.memory && chipDataAll.memory.length === 0">No Data</div>
               <template v-for="chip in chipDataAll.memory" :key="chip">
-                <div class="cont flex-row space-between">
+                <div class="cont flex-row space-between font-14">
                   <div class="absolute" :style="'width:' + (chip.value / chipDataAll.memoryMaxData * 100) + '%;'"></div>
                   <div class="flex-row items-center">
                     <!-- <div class="point"></div> -->
@@ -70,7 +70,7 @@
             <div class="cont-flex">
               <div class="no-result flex-row center" v-if="chipDataAll.storage && chipDataAll.storage.length === 0">No Data</div>
               <template v-for="chip in chipDataAll.storage" :key="chip">
-                <div class="cont flex-row space-between">
+                <div class="cont flex-row space-between font-14">
                   <div class="absolute" :style="'width:' + (chip.value / chipDataAll.storageMaxData * 100) + '%;'"></div>
                   <div class="flex-row items-center">
                     <!-- <div class="point"></div> -->
@@ -280,23 +280,13 @@ watch(() => props.echartData, () => {
         overflow: hidden;
         .chip-filter {
           height: 40px;
-          .world-name {
-            font-size: 0.14rem;
-            @media screen and (max-width: 600px) {
-              font-size: 12px;
-            }
-            small {
-              opacity: 0.6;
-            }
-          }
           .el-radio-button__inner {
             background-color: transparent;
-            font-size: 0.14rem;
+            font-size: var(--font-14);
             color: var(--color-primary);
             border-color: var(--color-primary);
             @media screen and (max-width: 600px) {
               padding: 5px;
-              font-size: 11px;
             }
           }
         }
@@ -336,16 +326,14 @@ watch(() => props.echartData, () => {
             width: calc(100% - 0.34rem);
             padding: 0.07rem 0.16rem;
             margin: 0.1rem 0 0;
-            font-size: 0.18rem;
             font-weight: 700;
             letter-spacing: 1px;
             color: var(--color-dark);
             z-index: 9;
             border: 1px solid #3a67cf;
-            border-radius: 0.1rem;
+            border-radius: 0.12rem;
             @media screen and (max-width: 600px) {
               padding: 0.12rem 0.16rem;
-              font-size: 12px;
             }
             .absolute {
               position: absolute;

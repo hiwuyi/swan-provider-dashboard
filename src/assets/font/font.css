@@ -26,6 +26,7 @@
   --font-20: 20px;
   --font-18: 18px;
   --font-16: 16px;
+  --font-14: 14px;
   --font-12: 12px;
 }
 
@@ -191,6 +192,7 @@
     --font-20: 24px !important;
     --font-18: 22px !important;
     --font-16: 20px !important;
+    --font-14: 18px !important;
     --font-12: 16px !important;
   }
   .font-12 {
@@ -248,6 +250,7 @@
     --font-20: 12px !important;
     --font-18: 12px !important;
     --font-16: 12px !important;
+    --font-14: 10px !important;
     --font-12: 10px !important;
   }
   .font-12 {
