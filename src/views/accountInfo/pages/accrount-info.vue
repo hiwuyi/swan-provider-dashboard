@@ -126,7 +126,7 @@ const props = withDefaults(
   .note {
     a.link-to {
       color: var(--color-primary);
-      text-decoration: underline;
+      // text-decoration: underline;
     }
     .el-row {
       margin: 0.1rem 0;

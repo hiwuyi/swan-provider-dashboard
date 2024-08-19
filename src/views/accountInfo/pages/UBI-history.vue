@@ -316,7 +316,7 @@ watch(() => props.watchRoute, () => getAllData())
               font-size: inherit;
               // color: inherit;
               &:hover {
-                text-decoration: underline;
+                // text-decoration: underline;
               }
             }
           }

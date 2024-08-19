@@ -118,7 +118,7 @@
             </template>
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
-                <div class="flex flex-ai-center flex-jc-center machines-style">
+                <div class="flex flex-ai-center flex-jc-center machines-style font-13">
                   <span v-for="(gpu, g) in scope.row.gpus" :key="g">
                     {{gpu}}
                   </span>

@@ -1132,7 +1132,7 @@ const contractAddress = ref('')
         // background-color: rgba(116, 5, 255, 0.1);
         // color: rgba(116, 5, 255, 1);
         .link {
-          text-decoration: underline;
+          // text-decoration: underline;
         }
       }
       .link {
