@@ -406,6 +406,15 @@ export function hiddAddress (val: string) {
   }
 }
 
+export function hiddLongAddress (val: string) {
+  try {
+    if (val) return `${val.substring(0, 25)}...${val.substring(val.length - 16)}`
+    else return '-'
+  } catch{
+    return val
+  }
+}
+
 export function copyContent(text: string, tipCont?: string) {
   try {
     navigator.clipboard.writeText(text).then(

@@ -18,7 +18,7 @@
             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
               <p class="text-capitalize label">NodeID:</p>
               <div class="flex flex-ai-center copy-style" v-if="props.cpsData.node_id" @click="copyContent(props.cpsData.node_id, 'Copied')">
-                {{ hiddAddress(props.cpsData.node_id) ?? '-' }}
+                {{ hiddLongAddress(props.cpsData.node_id) ?? '-' }}
                 <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import { explorerLink, signature } from "@/utils/storage"
-import { copyContent, hiddAddress, momentFun, replaceDecimalsFormat } from "@/utils/common"
+import { copyContent, hiddAddress, hiddLongAddress, momentFun, replaceDecimalsFormat } from "@/utils/common"
 
 const bodyWidth = ref(document.body.clientWidth > 1440 ? 24 : 10)
 const route = useRoute()

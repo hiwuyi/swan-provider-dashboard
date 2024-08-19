@@ -183,7 +183,7 @@ const changetype = async (data: any) => {
   const fcpRunningMax = Math.ceil(Math.max(...fcpRunningData.datum)*1.1);
   const fcpRunningMin = Math.floor(Math.min(...fcpRunningData.datum)*0.8);
   const fcpRunningInterval = Math.ceil((fcpRunningMax-fcpRunningMin)/(fcpRunningMin===0?4:5))
-  totalJob.value = sumArrays(fcpCountsData.datum, [])
+  totalJob.value = data.fcp_job && data.fcp_job.length > 0 ? data.fcp_job.slice(-1)[0].total : 0
 
   const fcpCollateralData = await dataCpData(data.fcp_collateral, 'total')
   const fcpEscrowData = await dataCpData(data.fcp_collateral, 'active')
@@ -196,12 +196,13 @@ const changetype = async (data: any) => {
   const ecpGrowthMin = Math.floor(Math.min(...ecpGrowthData.datum)*0.8);
   const ecpCountsInterval = Math.ceil((ecpCountMax-ecpCountMin)/(ecpCountMin===0?4:5))
   const ecpGrowthInterval = Math.ceil((ecpGrowthMax-ecpGrowthMin)/(ecpGrowthMin===0?4:5))
-  totalReward.value = sumArrays(ecpCountsData.datum, [])
+  // totalReward.value = sumArrays(ecpCountsData.datum, [])
+  totalReward.value = data.ecp_task && data.ecp_task.length > 0 ? data.ecp_task.slice(-1)[0].total : 0
 
   const ecpCollateralData = await dataCpData(data.ecp_collateral, 'total')
   const ecpEscrowData = await dataCpData(data.ecp_collateral, 'active')
   const ecpSequencerData = await dataCpData(data.sequencer, 'total')
-  const ecpSequencerMax = Math.ceil(Math.max(...ecpSequencerData.datum)*1.1);
+  const ecpSequencerMax = (Math.max(...ecpSequencerData.datum)*1.1).toFixed(5)
   const ecpSequencerMin = Math.floor(Math.min(...ecpSequencerData.datum)*0.8);
 
   const option1 = {

@@ -32,7 +32,7 @@ export default [
     component: () => import("../views/aar/aar-FCP.vue"),
     meta: {
       keepAlive: true,
-      title: 'Swan Chain Mainnet Campaign'
+      title: 'Swan Mainnet Campaign'
     }
   },
   {
@@ -41,7 +41,7 @@ export default [
     component: () => import("../views/aar/aar-ECP.vue"),
     meta: {
       keepAlive: true,
-      title: 'Swan Chain Mainnet Campaign'
+      title: 'Swan Mainnet Campaign'
     }
   },
   {
