@@ -2,7 +2,7 @@
   <div class="flex flex-ai-center flex-jc-center">
     <el-dialog v-model="props.centerDrawerVisible" :show-close="true" :close-on-click-modal="true" :close-on-press-escape="false" @before-close="closeHandle()" @close="closeHandle()" align-center class="dialog-body">
       <template #header>
-        <div class="flex flex-ai-center font-24 header-title">
+        <div class="flex flex-ai-center font-20 header-title color-dark">
           <span v-if="props.list.type === 'claimAccount'">Signature Verifcation</span>
           <span v-else-if="props.list.type === 'Sequencer'">Add Sequencer</span>
           <span v-else>{{`${props.list.type} Deposit`}}</span>
@@ -110,6 +110,11 @@
         </el-row>
 
         <el-row class="font-14 note" v-else v-loading="ruleForm.show">
+          <el-col>
+            <div class="font-14 mb-8">Contract Address:</div>
+            <div class="font-14" v-if="props.list.type === 'FCP'">{{ fcpDeposit }}</div>
+            <div class="font-14" v-else>{{ ecpDeposit }}</div>
+          </el-col>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
             <p v-if="props.list.type === 'FCP'">For each FCP job, you need to have at least 5 SWANC in an escrow account.</p>
             <p v-if="props.list.type === 'ECP'">To receive ZK tasks, you need to have at least 100 SWANC in an escrow account.</p>
@@ -120,7 +125,7 @@
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
             <div class="flex flex-ai-center nowrap">
-              <el-input-number v-model="ruleForm.amount" :min="0" :step="0.25" controls-position="right" />
+              <el-input-number v-model="ruleForm.amount" :min="props.list.type === 'FCP' ? 5 : 100" controls-position="right" />
               <span class="text-white">&nbsp;&nbsp;SWANC</span>
             </div>
           </el-col>
@@ -142,7 +147,10 @@ import {
 } from '@element-plus/icons-vue'
 import * as echarts from "echarts"
 import CollateralABI from '@/utils/abi/CollateralContract.json'
-import { metaAddress } from '@/utils/storage';
+import fcpABI from '@/utils/abi/FCP-Collateral.json'
+import ecpABI from '@/utils/abi/ECPCollateral.json'
+import tokenABI from '@/utils/abi/SwanToken.json'
+import { ecpDeposit, fcpDeposit, metaAddress } from '@/utils/storage';
 import { copyContent, getDateTime, messageTip } from '@/utils/common';
 import web3Init from '@/utils/login';
 
@@ -162,74 +170,93 @@ const props = withDefaults(
   }
 )
   
-    const cpLoad = ref(false)
-    const sortanow = ref('')
-    const ruleForm = reactive({
-      name: '',
-      email: '',
-      sign_code: '',
-      signature: '',
-      amount: 0.25,
-      show: false,
-      tx_hash: ''
-    })
-    const rules = reactive({
-      name: [
-        { required: true, message: 'This field is required.', trigger: 'blur' },
-      ],
-      email: [
-        { required: true, message: 'This field is required.', trigger: 'blur' },
-        {
-          type: 'email',
-          message: 'Please input correct email address',
-          trigger: ['blur', 'change'],
-        }
-      ],
-      signature: [
-        { required: true, message: 'This field is required.', trigger: 'blur' },
-      ]
-    })
-    const collateralAddress = import.meta.env.VITE_COLLATERAL_CONTACT
-    const collateralContract = new web3Init.eth.Contract(CollateralABI, collateralAddress)
+const route = useRoute()
+const cpLoad = ref(false)
+const sortanow = ref('')
+const ruleForm = reactive({
+  name: '',
+  email: '',
+  sign_code: '',
+  signature: '',
+  amount: props.list.type === 'FCP' ? 5 : 150,
+  show: false,
+  tx_hash: ''
+})
+const rules = reactive({
+  name: [
+    { required: true, message: 'This field is required.', trigger: 'blur' },
+  ],
+  email: [
+    { required: true, message: 'This field is required.', trigger: 'blur' },
+    {
+      type: 'email',
+      message: 'Please input correct email address',
+      trigger: ['blur', 'change'],
+    }
+  ],
+  signature: [
+    { required: true, message: 'This field is required.', trigger: 'blur' },
+  ]
+})
+const collateralAddress = import.meta.env.VITE_COLLATERAL_CONTACT
+const collateralContract = new web3Init.eth.Contract(CollateralABI, collateralAddress)
+const fcpContract = new web3Init.eth.Contract(fcpABI, fcpDeposit)
+const ecpContract = new web3Init.eth.Contract(ecpABI, ecpDeposit)
+const tokenContract = new web3Init.eth.Contract(tokenABI, import.meta.env.VITE_MAINNET_SWANTOKEN_ADDRESS)
 
-    const emits = defineEmits(['hardClose'])
-    function closeHandle () {
-      emits('hardClose', false)
-    }
-    function cpCollateral() {
-      if(props.list.type === 'claimAccount') return
-      ruleForm.show = true
-      try {
-        if (Number(ruleForm.amount) >= 0) cpDeposit()
-        else ruleForm.show = false
-      } catch{
-        ruleForm.show = false
-      }
-    }
-    async function cpDeposit () {
-      try {
-        const amount = web3Init.utils.toWei(String(ruleForm.amount), 'ether')
+const emits = defineEmits(['hardClose'])
+function closeHandle () {
+  emits('hardClose', false)
+}
+function cpCollateral() {
+  if(props.list.type === 'claimAccount') return
+  ruleForm.show = true
+  try {
+    if (Number(ruleForm.amount) >= 0) cpDeposit()
+    else ruleForm.show = false
+  } catch{
+    ruleForm.show = false
+  }
+}
+async function cpDeposit () {
+  try {
+    const amount = web3Init.utils.toWei(String(ruleForm.amount), 'ether')
 
-        let payMethod = collateralContract.methods.deposit(metaAddress.value)
-        let payGasLimit = await payMethod.estimateGas({ from: metaAddress.value })
-        const tx = await payMethod.send({ from: metaAddress.value, gasLimit: Math.floor(payGasLimit * 5), value: amount })
-          .on('transactionHash', async (transactionHash) => {
-            console.log('transactionHash:', transactionHash)
-            ruleForm.tx_hash = transactionHash
-            ruleForm.show = false
-          })
-          .on('error', () => ruleForm.show = false)
-      } catch (err) {
-        console.log('err', err)
-        if (err && err.message) messageTip('error', err.message)
+    let approveGasLimit = await tokenContract.methods
+      .approve(route.params.cp_addr, amount)
+      .estimateGas({ from: metaAddress.value })
+
+    const approve_tx = await tokenContract.methods
+      .approve(route.params.cp_addr, amount)
+      .send({
+        from: metaAddress.value, gasLimit: Math.floor(approveGasLimit * 1.5)
+      })
+
+    let payMethod = props.list.type === 'FCP' ?
+      fcpContract.methods.deposit(route.params.cp_addr) :
+      ecpContract.methods.deposit(route.params.cp_addr)
+    let payGasLimit = await payMethod.estimateGas({ from: metaAddress.value })
+    const tx = await payMethod.send({ from: metaAddress.value, gasLimit: Math.floor(payGasLimit * 5), value: amount })
+      .on('transactionHash', async (transactionHash: any) => {
+        console.log('transactionHash:', transactionHash)
+        ruleForm.tx_hash = transactionHash
+      })
+      .on('receipt', (receipt: any) => {
+        console.log('receipt:', receipt)
         ruleForm.show = false
-      }
-    }
-    onMounted(async () => {
-      // const rightnow = (Date.now() / 1000).toFixed(0)
-      // sortanow.value = rightnow - (rightnow % 600)
-      sortanow.value = getDateTime()
-    })
+      })
+      .on('error', () => ruleForm.show = false)
+  } catch (err: any) {
+    console.log('err', err)
+    if (err && err.message) messageTip('error', err.message)
+    ruleForm.show = false
+  }
+}
+onMounted(async () => {
+  // const rightnow = (Date.now() / 1000).toFixed(0)
+  // sortanow.value = rightnow - (rightnow % 600)
+  sortanow.value = getDateTime()
+})
 </script>
 
 <style lang="less">

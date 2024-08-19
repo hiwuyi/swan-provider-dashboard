@@ -34,11 +34,11 @@
           </el-select>
         </div>
 
-        <!-- <div class="web3Modal-style">
+        <div class="web3Modal-style">
           <web3-modal />
-        </div> -->
+        </div>
 
-        <!-- <div class="header-right flex flex-ai-center nowrap pcShow" v-if="token !== ''">
+        <!-- <div class="header-right flex flex-ai-center nowrap pcShow" v-if="metaAddress !== ''">
           <div class="set">
             <el-dropdown popper-class="menu-style" @command="handleSelect" placement="bottom-end">
               <div class="el-dropdown-link setting-style loginImg flex flex-ai-center">
@@ -58,7 +58,11 @@
                     <div class="profile router-link b">CP Collateral Check</div>
                   </el-dropdown-item>
                   <el-dropdown-item command="sign_out">
-                    <span class="link">Sign Out</span>
+                    <div class="profile router-link b">
+                      <div class="flex flex-ai-center font-16">
+                        <span class="link">Sign Out</span>
+                      </div>
+                    </div>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -100,7 +104,7 @@
                       </div>
                     </div>
                   </el-dropdown-item>
-                  <el-dropdown-item command="accountInfo" v-if="metaAddress && token">
+                  <el-dropdown-item command="accountInfo" v-if="metaAddress">
                     <div class="profile router-link b">
                       <div class="flex flex-ai-center font-16">
                         <i class="icon icon-AccountInfo"></i>

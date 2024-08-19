@@ -23,12 +23,12 @@
             <span class="font-14">ECP List</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="accountInfo" v-if="metaAddress && token">
+        <!-- <el-menu-item index="accountInfo" v-if="metaAddress">
           <i class="icon icon-AccountInfo"></i>
           <template #title>
             <span class="font-14">CP Profile</span>
           </template>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item index="resource">
           <i class="icon icon-Resource"></i>
           <template #title>

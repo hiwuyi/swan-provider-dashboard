@@ -4,7 +4,7 @@ import { reconnect, disconnect, getChainId } from '@wagmi/core'
 import { getAccount, watchAccount } from '@wagmi/core'
 import configJS from './../utils/config'
 import { Init, throttle, login } from '@/utils/login';
-import { metaAddress, signature } from '@/utils/storage';
+import { clearMetaAddress, metaAddress, setMetaAddress, signature } from '@/utils/storage';
 import { signOutFun, timeout } from '@/utils/common';
 
 const projectId = configJS.projectId
@@ -48,13 +48,15 @@ async function login2 () {
   const time = await throttle()
   if (!time) return false
   Init(async (addr, chain) => {
-    await timeout(500)
-    login(config)
+    setMetaAddress(addr)
+    // await timeout(500)
+    // login(config)
   })
 }
 
-async function signout2 () {
-  await signOutFun('disconnect')
+async function signout2() {
+  clearMetaAddress()
+  // await signOutFun('disconnect')
   // console.log("in signout function")
   // window.location.reload()
 }
@@ -69,7 +71,8 @@ watchAccount(config, {
       if (account ?.isConnected && signature.value === '' && metaAddress.value === '') {
         console.log("prompted")
         login2()
-      } else if (!account ?.isConnected && prevAccount ?.isConnected) {
+      } else if (!account?.isConnected && prevAccount?.isConnected) {
+        console.log('clear')
         signout2()
       }
     } catch{ }
@@ -100,7 +103,7 @@ async function test () {
 <template>
   <div class="flex flex-ai-center">
     <w3m-button balance="hide" size="sm" @click="test" />
-    <el-button @click="login2" v-if="metaAddress !== '' && signature === ''" class="m-button">Login</el-button>
+    <!-- <el-button @click="login2" v-if="metaAddress !== '' && signature === ''" class="m-button">Login</el-button> -->
   </div>
 </template>
 

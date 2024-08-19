@@ -23,7 +23,7 @@
     <el-table :data="tableData" style="width: 100%" v-loading="dataLoad">
       <el-table-column prop="tx_hash" label="Transaction Hash">
         <template #default="scope">
-          <a v-if="scope.row.tx_hash" :href="`${explorerLink}tx/${scope.row.tx_hash}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.tx_hash)}}</a>
+          <div v-if="scope.row.tx_hash" class="font-14 pointer" @click="openPage(`${explorerLink}tx/${scope.row.tx_hash}`)">{{hiddAddress(scope.row.tx_hash)}}</div>
           <span v-else>-</span>
         </template>
       </el-table-column>
@@ -72,12 +72,12 @@
       </el-table-column>
       <el-table-column prop="blob_cid" label="Blob CID">
         <template #default="scope">
-          <a :href="`${scope.row.gateway}/ipfs/${scope.row.blob_cid}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.blob_cid)}}</a>
+          <div class="font-14 pointer" @click="openPage(`${scope.row.gateway}/ipfs/${scope.row.blob_cid}`)">{{hiddAddress(scope.row.blob_cid)}}</div>
         </template>
       </el-table-column>
       <el-table-column prop="payload_cid" label="Payload CID">
         <template #default="scope">
-          <a :href="`${scope.row.gateway}${scope.row.payload_url}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.payload_cid)}}</a>
+          <div class="font-14 pointer" @click="openPage(`${scope.row.gateway}${scope.row.payload_url}`)">{{hiddAddress(scope.row.payload_cid)}}</div>
         </template>
       </el-table-column>
     </el-table>

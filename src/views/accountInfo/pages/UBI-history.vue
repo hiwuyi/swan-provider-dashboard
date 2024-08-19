@@ -81,18 +81,14 @@
             <span>{{momentFun(scope.row.ended_at)}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="reward_tx_hash" min-width="120">
-          <template #header>
-            <div class="font-14 weight-4">Reward TX Hash</div>
-          </template>
-          <template #default="scope">
-            <a v-if="scope.row.reward_tx_hash" :href="`${explorerLink}tx/${scope.row.reward_tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.reward_tx_hash}}</a>
-            <span v-else>-</span>
-          </template>
-        </el-table-column>
         <el-table-column prop="reward">
           <template #header>
             <div class="font-14 weight-4">reward</div>
+          </template>
+          <template #default="scope">
+            <span>
+              {{ replaceFormat(scope.row.reward) }}
+            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -107,7 +103,7 @@
 </template>
 <script setup lang="ts">
 import { getCPsZKProofData } from '@/api/cp-profile';
-import { debounce, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
+import { debounce, hiddAddress, momentFun, paginationWidth, replaceFormat } from '@/utils/common';
 import { explorerLink } from '@/utils/storage';
 import {
   Search

@@ -24,6 +24,15 @@
       <!-- @filter-change="handleFilterChange" -->
       <el-table v-loading="paymentLoad" element-loading-text="Please do not refresh the page" :data="paymentData" stripe style="width: 100%">
         <!-- <el-table-column prop="chain_id" label="chain id" min-width="110" /> -->
+        <el-table-column prop="reward_tx_hash" min-width="120">
+          <template #header>
+            <div class="font-14 weight-4">transaction hash</div>
+          </template>
+          <template #default="scope">
+            <a v-if="scope.row.reward_tx_hash" :href="`${explorerLink}tx/${scope.row.reward_tx_hash}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.reward_tx_hash)}}</a>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="task_uuid" min-width="120">
           <template #header>
             <div class="font-14 weight-4">task UUID</div>
@@ -126,7 +135,7 @@
             </div>
           </template>
           <template #default="scope">
-            <div>
+            <div style="text-transform: capitalize;">
               <span v-if="scope.row.status && scope.row.status.toLowerCase() === 'task failed'" class="flex flex-ai-center flex-jc-center">
                 {{ scope.row.status }}
                 <el-popover placement="top" :width="200" effect="dark" popper-style="word-break: break-word; text-align: left;font-size:12px;" trigger="hover" content="The Task cannot be deployed or the contract cannot be retrieved after the user has initiated an Early Termination.">
@@ -256,21 +265,13 @@
             </span>
           </template>
         </el-table-column> -->
-        <el-table-column prop="reward_tx_hash" min-width="120">
-          <template #header>
-            <div class="font-14 weight-4">transaction hash</div>
-          </template>
-          <template #default="scope">
-            <a :href="`${explorerLink}tx/${scope.row.reward_tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.reward_tx_hash}}</a>
-          </template>
-        </el-table-column>
         <el-table-column prop="reward">
           <template #header>
             <div class="font-14 weight-4">Reward</div>
           </template>
           <template #default="scope">
             <span>
-              {{ scope.row.reward }}
+              {{ replaceFormat(scope.row.reward) }}
             </span>
           </template>
         </el-table-column>
@@ -286,7 +287,7 @@
 </template>
 <script setup lang="ts">
 import { getCPsfcpRewardsData } from '@/api/cp-profile';
-import { copyContent, debounce, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
+import { copyContent, debounce, hiddAddress, momentFun, paginationWidth, replaceFormat } from '@/utils/common';
 import { explorerLink } from '@/utils/storage';
 import {
   Search

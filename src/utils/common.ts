@@ -38,7 +38,7 @@ export function replaceFormat (value: any) {
     const intPartFormat = intPartArr[0]
       .toString()
       .replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
-    return intPartArr[1] ? `${intPartFormat}.${intPartArr[1].slice(0, 2)}` : intPartFormat
+    return intPartArr[1] && parseFloat(intPartArr[1]) !== 0 ? `${intPartFormat}.${intPartArr[1].slice(0, 2)}` : intPartFormat
   } catch {
     return '-'
   }

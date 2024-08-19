@@ -117,8 +117,10 @@ const chipDataAll = ref<any>({
 async function initGPU () {
   try {
     gpuBarLoad.value = true
-    chipDataAll.value.gpu = props.echartData?.gpu ? await props.echartData.gpu.models.sort((a, b) => b.value - a.value) : []
-    chipDataAll.value.gpuMaxData = chipDataAll.value.gpu[0].value ?? 0
+    chipDataAll.value.gpu = props.echartData?.gpu?.models ?? []
+    const gpuList = JSON.parse(JSON.stringify(props.echartData?.gpu?.models))
+    const gpuTop = gpuList ? await gpuList.sort((a, b) => b.value - a.value) : []
+    chipDataAll.value.gpuMaxData = gpuTop[0].value ?? 0
     gpuBarLoad.value = false
   } catch {
     chipDataAll.value.gpu = []
