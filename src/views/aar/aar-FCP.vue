@@ -11,13 +11,13 @@
           <el-col :xs="24" :sm="12" :md="24" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">CP Account Address: </span>
-              <el-input class="zk-input" v-model="networkInput.contract_address" placeholder="please enter Contract Address" />
+              <el-input class="zk-input" v-model="networkInput.contract_address" @input="clearChangeProvider()" placeholder="please enter Contract Address" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
             <div class="flex flex-ai-center nowrap child">
               <el-button type="info" :disabled="!networkInput.contract_address ? true:false" round @click="clearProvider">Clear</el-button>
-              <el-button type="primary" :disabled="!networkInput.contract_address ? true:false" round @click="searchProvider">
+              <el-button type="primary" round @click="searchProvider">
                 <el-icon>
                   <Search />
                 </el-icon>
@@ -28,9 +28,9 @@
         </el-row>
 
         <el-table ref="singleTableRef" :data="providersData" @filter-change="handleFilterChange" @expand-change="expandV2Change" :row-key="getRowKeysV2" :expand-row-keys="expands" style="width: 100%" empty-text="No Data" v-loading="providersTableLoad">
-          <el-table-column type="index" min-width="70">
+          <el-table-column type="index" min-width="50">
             <template #header>
-              <div class="font-14 weight-4">Ranking</div>
+              <div class="font-14 weight-4">Rank</div>
             </template>
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
@@ -64,7 +64,7 @@
             </template>
           </el-table-column>
           <!-- <el-table-column prop="country" label="Country" /> -->
-          <el-table-column prop="active_deployment" label="Active deployment" min-width="130" />
+          <el-table-column prop="active_deployment" label="Active Deployments" min-width="130" />
           <!-- <el-table-column prop="score" label="Score" width="120" /> -->
           <el-table-column prop="gpu_list" label="GPU" min-width="140">
             <template #default="scope">
@@ -237,9 +237,16 @@ async function getList (list:any) {
   return l
 }
 const searchProvider = async function () {
-  networkInput.searchFor = true
+  networkInput.searchFor = !networkInput.contract_address ? false : true
   handleCurrentChange(1)
 }
+const clearChangeProvider = debounce(async function () {
+  if(!networkInput.searchFor) return
+  if (!networkInput.contract_address) {
+    handleCurrentChange(1)
+    networkInput.searchFor = false
+  }
+}, 700)
 function clearProvider () {
   networkInput.contract_address = ''
   if (networkInput.searchFor) handleCurrentChange(1)

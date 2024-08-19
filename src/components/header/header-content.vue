@@ -129,7 +129,7 @@
                   <el-dropdown-item command="aar-fcp">
                     <div class="profile router-link b">
                       <div class="flex flex-ai-center font-16">
-                        <i class="icon icon-AAR"></i>
+                        <i class="icon"></i>
                         <span>FCP Ranking</span>
                       </div>
                     </div>
@@ -137,13 +137,18 @@
                   <el-dropdown-item command="aar-ecp">
                     <div class="profile router-link b">
                       <div class="flex flex-ai-center font-16">
-                        <i class="icon icon-AAR"></i>
+                        <i class="icon"></i>
                         <span>ECP Ranking</span>
                       </div>
                     </div>
                   </el-dropdown-item>
                   <el-dropdown-item command="sign_out" v-if="token !== ''">
-                    <span class="link">Sign Out</span>
+                    <!-- <span class="link">Sign Out</span> -->
+                    <div class="profile router-link b">
+                      <div class="flex flex-ai-center font-16">
+                        <span class="link">Sign Out</span>
+                      </div>
+                    </div>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>

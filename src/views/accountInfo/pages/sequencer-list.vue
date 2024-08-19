@@ -4,13 +4,13 @@
       <el-col :xs="24" :sm="12" :md="12" :lg="9" :xl="9">
         <div class="flex flex-ai-center nowrap child">
           <span class="font-14">Task Contract: </span>
-          <el-input class="zk-input" v-model="networkZK.contract_address" placeholder="please enter Task Contract" />
+          <el-input class="zk-input" v-model="networkZK.contract_address" @input="clearChangeProvider()" placeholder="please enter Task Contract" />
         </div>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="4" :xl="4">
         <div class="flex flex-ai-center nowrap child">
           <el-button type="info" :disabled="!networkZK.contract_address ? true:false" round @click="clearProvider">Clear</el-button>
-          <el-button type="primary" :disabled="!networkZK.contract_address ? true:false" round @click="handleZKCurrentChange(1)">
+          <el-button type="primary" round @click="searchProvider">
             <el-icon>
               <Search />
             </el-icon>
@@ -23,7 +23,7 @@
     <el-table :data="tableData" style="width: 100%" v-loading="dataLoad">
       <el-table-column prop="tx_hash" label="Transaction Hash">
         <template #default="scope">
-          <a v-if="scope.row.tx_hash" :href="`${explorerLink}tx/${scope.row.tx_hash}`" target="_blank" class="name-style font-14">{{scope.row.tx_hash}}</a>
+          <a v-if="scope.row.tx_hash" :href="`${explorerLink}tx/${scope.row.tx_hash}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.tx_hash)}}</a>
           <span v-else>-</span>
         </template>
       </el-table-column>
@@ -72,12 +72,12 @@
       </el-table-column>
       <el-table-column prop="blob_cid" label="Blob CID">
         <template #default="scope">
-          <a :href="`${scope.row.gateway}/ipfs/${scope.row.blob_cid}`" target="_blank" class="name-style font-14">{{scope.row.blob_cid}}</a>
+          <a :href="`${scope.row.gateway}/ipfs/${scope.row.blob_cid}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.blob_cid)}}</a>
         </template>
       </el-table-column>
       <el-table-column prop="payload_cid" label="Payload CID">
         <template #default="scope">
-          <a :href="`${scope.row.gateway}${scope.row.payload_url}`" target="_blank" class="name-style font-14">{{scope.row.payload_cid}}</a>
+          <a :href="`${scope.row.gateway}${scope.row.payload_url}`" target="_blank" class="name-style font-14">{{hiddAddress(scope.row.payload_cid)}}</a>
         </template>
       </el-table-column>
     </el-table>
@@ -93,14 +93,15 @@
 <script setup lang="ts">
 import { getCPsSequencesData } from '@/api/cp-profile';
 import { openPage } from '@/hooks/router';
-import { copyContent, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
+import { copyContent, debounce, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
 import { explorerLink } from '@/utils/storage';
 
 const route = useRoute()
 const dataLoad = ref(false)
 const tableData = ref<any>([])
 const networkZK = reactive({
-  contract_address: ''
+  contract_address: '',
+  searchFor: false
 })
 const pagin = reactive({
   pageSize: 20,
@@ -108,9 +109,21 @@ const pagin = reactive({
   total: 0
 })
 
+const searchProvider = async function () {
+  networkZK.searchFor = !networkZK.contract_address ? false : true
+  handleZKCurrentChange(1)
+}
+const clearChangeProvider = debounce(async function () {
+  if(!networkZK.searchFor) return
+  if (!networkZK.contract_address) {
+    handleZKCurrentChange(1)
+    networkZK.searchFor = false
+  }
+}, 700)
 function clearProvider() {
   networkZK.contract_address = ''
-  handleZKCurrentChange(1)
+  if(networkZK.searchFor) handleZKCurrentChange(1)
+  networkZK.searchFor = false
 }
 function handleSizeChange (val: number) {
   pagin.pageSize = val

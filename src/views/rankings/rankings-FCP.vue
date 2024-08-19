@@ -10,25 +10,25 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Contract Address: </span>
-              <el-input class="zk-input" v-model="networkInput.contract_address" placeholder="please enter Contract Address" />
+              <el-input class="zk-input" v-model="networkInput.contract_address" @input="clearChangeProvider()" placeholder="please enter Contract Address" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Name: </span>
-              <el-input class="zk-input" v-model="networkInput.owner_addr" placeholder="please enter CP name" />
+              <el-input class="zk-input" v-model="networkInput.owner_addr" @input="clearChangeProvider()" placeholder="please enter CP name" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="7" :xl="7">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">NodeID: </span>
-              <el-input class="zk-input" v-model="networkInput.node_id" placeholder="please enter NodeID" />
+              <el-input class="zk-input" v-model="networkInput.node_id" @input="clearChangeProvider()" placeholder="please enter NodeID" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="3" :xl="3">
             <div class="flex flex-ai-center nowrap child">
               <el-button type="info" :disabled="!networkInput.contract_address && !networkInput.owner_addr && !networkInput.node_id  ? true:false" round @click="clearProvider">Clear</el-button>
-              <el-button type="primary" :disabled="!networkInput.contract_address && !networkInput.owner_addr && !networkInput.node_id ? true:false" round @click="searchProvider">
+              <el-button type="primary" round @click="searchProvider">
                 <el-icon>
                   <Search />
                 </el-icon>
@@ -51,9 +51,9 @@
               <div class="font-14 weight-4">Contract Address</div>
             </template>
             <template #default="scope">
-              <div class="flex flex-ai-center flex-jc-center nowrap copy-style" @click="copyContent(scope.row.addr, 'Copied')">
+              <div class="flex flex-ai-center flex-jc-center nowrap copy-style">
                 <span class="name-style w" @click="handleSelect(scope.row.addr)">{{hiddAddress(scope.row.addr)}}</span>
-                <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
+                <svg class="icon" @click="copyContent(scope.row.addr, 'Copied')" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
                   <path d="M251.65 662.81h-29.34a29.73 29.73 0 0 1-29.69-29.69V222.31a29.73 29.73 0 0 1 29.69-29.69h410.81a29.73 29.73 0 0 1 29.69 29.69v29.34a29 29 0 0 0 58 0v-29.34a87.79 87.79 0 0 0-87.69-87.69H222.31a87.79 87.79 0 0 0-87.69 87.69v410.81a87.79 87.79 0 0 0 87.69 87.69h29.34a29 29 0 0 0 0-58z"
@@ -98,7 +98,7 @@
           </el-table-column>
           <el-table-column prop="deployments" sortable min-width="130">
             <template #header>
-              <div class="font-14 weight-4">Active deployment</div>
+              <div class="font-14 weight-4">Active Deployments</div>
             </template>
             <template #default="scope">
               <div>{{ replaceFormat(scope.row.active_deployments) }}</div>
@@ -163,7 +163,7 @@
 
 <script setup lang="ts">
 import { getCPsFCPListData, statsOverviewData } from "@/api/overview";
-import { copyContent, hiddAddress, paginationWidth, replaceFormat, unifyNumber } from "@/utils/common";
+import { copyContent, debounce, hiddAddress, paginationWidth, replaceFormat, unifyNumber } from "@/utils/common";
 import { getLocation, setLocation } from "@/utils/storage";
 import {
   Search
@@ -237,9 +237,16 @@ async function init() {
   providersTableLoad.value = false
 }
 const searchProvider = async function () {
-  networkInput.searchFor = true
+  networkInput.searchFor = !networkInput.contract_address && !networkInput.owner_addr && !networkInput.node_id ? false : true
   handleCurrentChange(1)
 }
+const clearChangeProvider = debounce(async function () {
+  if(!networkInput.searchFor) return
+  if (!networkInput.contract_address && !networkInput.owner_addr && !networkInput.node_id) {
+    handleCurrentChange(1)
+    networkInput.searchFor = false
+  }
+}, 700)
 function clearProvider () {
   networkInput.contract_address = ''
   networkInput.owner_addr = ''

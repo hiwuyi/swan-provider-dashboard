@@ -5,13 +5,13 @@
         <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
           <div class="flex flex-ai-center nowrap child">
             <span class="font-14">Task UUID: </span>
-            <el-input class="zk-input" v-model="networkZK.owner_addr" placeholder="please enter Task UUID" />
+            <el-input class="zk-input" v-model="networkZK.owner_addr" @input="clearChangeProvider()" placeholder="please enter Task UUID" />
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
           <div class="flex flex-ai-center nowrap child">
             <el-button type="info" :disabled="!networkZK.owner_addr ? true:false" round @click="clearProvider">Clear</el-button>
-            <el-button type="primary" :disabled="!networkZK.owner_addr ? true:false" round @click="handleZKCurrentChange(1)">
+            <el-button type="primary" round @click="searchProvider">
               <el-icon>
                 <Search />
               </el-icon>
@@ -286,7 +286,7 @@
 </template>
 <script setup lang="ts">
 import { getCPsfcpRewardsData } from '@/api/cp-profile';
-import { copyContent, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
+import { copyContent, debounce, hiddAddress, momentFun, paginationWidth } from '@/utils/common';
 import { explorerLink } from '@/utils/storage';
 import {
   Search
@@ -303,7 +303,8 @@ const pagin = reactive({
 const networkZK = reactive({
   contract_address: '',
   owner_addr: '',
-  node_id: ''
+  node_id: '',
+  searchFor: false
 })
 const small = ref(false)
 const background = ref(false)
@@ -351,9 +352,21 @@ async function getAllData() {
   } catch{console.error}
   paymentLoad.value = false
 }
+const searchProvider = async function () {
+  networkZK.searchFor = !networkZK.owner_addr ? false : true
+  handleZKCurrentChange(1)
+}
+const clearChangeProvider = debounce(async function () {
+  if(!networkZK.searchFor) return
+  if (!networkZK.owner_addr) {
+    handleZKCurrentChange(1)
+    networkZK.searchFor = false
+  }
+}, 700)
 function clearProvider() {
   networkZK.owner_addr = ''
-  handleZKCurrentChange(1)
+  if(networkZK.searchFor) handleZKCurrentChange(1)
+  networkZK.searchFor = false
 }
 onMounted(() => {
   getAllData()

@@ -11,19 +11,19 @@
           <el-col :xs="24" :sm="12" :md="12" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Name: </span>
-              <el-input class="zk-input" v-model="networkZK.name" placeholder="please enter name" />
+              <el-input class="zk-input" v-model="networkZK.name" @input="clearChangeProvider()" placeholder="please enter name" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="10" :xl="10">
             <div class="flex flex-ai-center nowrap child">
               <span class="font-14">Contract Address: </span>
-              <el-input class="zk-input" v-model="networkZK.cp_addr" placeholder="please enter CP Account Address" />
+              <el-input class="zk-input" v-model="networkZK.cp_addr" @input="clearChangeProvider()" placeholder="please enter CP Account Address" />
             </div>
           </el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="3" :xl="3">
             <div class="flex flex-ai-center nowrap child">
               <el-button type="info" :disabled="!networkZK.cp_addr && !networkZK.name ? true:false" round @click="clearProvider">Clear</el-button>
-              <el-button type="primary" :disabled="!networkZK.cp_addr && !networkZK.name ? true:false" round @click="searchZKProvider">
+              <el-button type="primary" round @click="searchZKProvider">
                 <el-icon>
                   <Search />
                 </el-icon>
@@ -34,9 +34,9 @@
         </el-row>
 
         <el-table :data="providerBody.ubiTableData" @filter-change="handleFilterECPChange" @expand-change="expandChange" :row-key="getRowKeys" :expand-row-keys="expands" style="width: 100%" empty-text="No Data" v-loading="providersECPLoad">
-          <el-table-column type="index" min-width="70">
+          <el-table-column type="index" min-width="50">
             <template #header>
-              <div class="font-14 weight-4">Ranking</div>
+              <div class="font-14 weight-4">Rank</div>
             </template>
             <template #default="scope">
               <div class="badge flex flex-ai-center flex-jc-center">
@@ -249,9 +249,16 @@ async function getList (list:any) {
   })
   return l
 }
-const searchZKProvider = debounce(async function () {
-  networkZK.searchFor = true
+const searchZKProvider = async function () {
+  networkZK.searchFor = !networkZK.cp_addr && !networkZK.name ? false : true
   handleZKCurrentChange(1)
+}
+const clearChangeProvider = debounce(async function () {
+  if(!networkZK.searchFor) return
+  if (!networkZK.cp_addr && !networkZK.name) {
+    handleZKCurrentChange(1)
+    networkZK.searchFor = false
+  }
 }, 700)
 function clearProvider () {
   networkZK.name = ''

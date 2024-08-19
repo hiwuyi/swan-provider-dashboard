@@ -20,25 +20,25 @@
   <el-row :gutter="12" v-loading="cpLoad">
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline mb-10">
       <el-row class="width">
-        <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">GPU Usage</p>
             <div class='chart-trends' id='chart-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">CPU Usage</p>
             <div class='chart-trends' id='chart-cpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">Memory Usage (GiB)</p>
             <div class='chart-trends' id='chart-memory' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">Storage Usage (GiB)</p>
             <div class='chart-trends' id='chart-storage' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
@@ -415,7 +415,7 @@ watch(() => props.cpsData, () => {
         height: 220px;
       }
       @media screen and (max-width: 600px) {
-        height: 250px;
+        height: 200px;
       }
       &.big {
         height: 2.7rem;

@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="32" class="width">
-    <el-col v-loading="gpuBarLoad" :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+  <el-row :gutter="32">
+    <el-col v-loading="gpuBarLoad" :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <div class="grid-content small-spacing text-center font-20">
         <div class="flex flex-ai-end flex-jc-center mb-24">
           <p class="font-16 text-center">GPU Amount</p>
@@ -23,7 +23,7 @@
         </div>
       </div>
     </el-col>
-    <el-col v-loading="cpLoad" :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+    <el-col v-loading="cpLoad" :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <div class="grid-content small-spacing text-center font-20">
         <div class="flex flex-ai-end flex-jc-center mb-24">
           <p class="font-16 text-center">Provider Regions</p>
@@ -332,6 +332,7 @@ watch(() => props.echartData, () => {
             z-index: 9;
             border: 1px solid #3a67cf;
             border-radius: 0.12rem;
+            overflow: hidden;
             @media screen and (max-width: 600px) {
               padding: 0.12rem 0.16rem;
             }

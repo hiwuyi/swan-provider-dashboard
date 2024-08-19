@@ -2,25 +2,25 @@
   <el-row :gutter="12">
     <el-col v-loading="providersLoad" :xs="24" :sm="24" :md="24" :lg="12" :xl="12" class="flex flex-ai-center baseline">
       <el-row class="width">
-        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">GPU Usage</p>
             <div class='chart-trends' id='chart-gpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">CPU Usage</p>
             <div class='chart-trends' id='chart-cpu' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">Memory Usage (TB)</p>
             <div class='chart-trends' id='chart-memory' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
+        <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
           <div class="grid-content small-spacing text-center font-20">
             <p class="font-14 text-center mb-12">Storage Usage (TB)</p>
             <div class='chart-trends' id='chart-storage' element-loading-background="rgba(255, 255, 255, 0.8)"></div>
@@ -160,7 +160,7 @@ const changetype = async (data: any) => {
         // icon: 'circle',
         // itemWidth: 10,
         // itemHeight: 10,
-        itemGap: 20,
+        itemGap: document.documentElement.clientWidth >= 768 ? 20 : 0,
         textStyle: {
           color: '#95a3bd',
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
@@ -439,6 +439,10 @@ watch(() => props.echartData, () => initResource())
       background: var(--color-light);
       border-radius: 0.18rem;
       // box-shadow: 0 0 12px #e6e7eb;
+      @media screen and (max-width: 767px) {
+        width: 100%;
+        padding: 0.18rem 0;
+      }
       &.small-spacing {
         width: calc(100% - 0.1rem);
         padding: 0.18rem 0.05rem;
@@ -550,12 +554,15 @@ watch(() => props.echartData, () => initResource())
         height: 220px;
       }
       @media screen and (max-width: 600px) {
-        height: 270px;
+        height: 200px;
       }
       &.big {
         height: 5rem;
         @media screen and (max-width: 768px) {
           height: 220px;
+        }
+      @media screen and (max-width: 767px) {
+          width: 100%;
         }
       }
     }

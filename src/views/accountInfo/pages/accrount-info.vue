@@ -136,7 +136,7 @@ const props = withDefaults(
       .el-col {
         margin: 0.08rem 0;
         .label {
-          min-width: 1.75rem;
+          min-width: 1.85rem;
         }
       }
     }

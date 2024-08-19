@@ -49,10 +49,11 @@ export function replaceDecimalsFormat (value: any) {
     if (String(value) === '0') return '0'
     else if (!value) return '-'
     const intPartArr = String(value).split('.')
+    const intPoint = intPartArr[1] ? String(intPartArr[1]).length > 5 ? intPartArr[1].slice(0, 5) : intPartArr[1] : ''
     const intPartFormat = intPartArr[0]
       .toString()
       .replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
-    return intPartArr[1] ? `${intPartFormat}.${intPartArr[1]}` : intPartFormat
+    return intPoint ? `${intPartFormat}.${intPoint}` : intPartFormat
   } catch {
     return '-'
   }
