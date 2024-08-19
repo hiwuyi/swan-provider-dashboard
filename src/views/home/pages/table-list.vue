@@ -193,7 +193,9 @@ async function initECPList () {
     const page = pagin.pageNo > 0 ? pagin.pageNo - 1 : 0
     const paramsCont = {
       "page_no": page,
-      "page_size": pagin.pageSize
+      "page_size": pagin.pageSize,
+      "order": 'tasks', // tasks、score、completion_rate
+      "desc": true
     }
     const providerECPRes = await getCPsECPListData(paramsCont)
     providersECPData.value = providerECPRes?.data?.list ?? []
