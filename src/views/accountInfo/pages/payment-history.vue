@@ -3,13 +3,13 @@
     <div class="payment-history container-landing font-14">
       <el-row class="search-container font-14">
         <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
-          <div class="flex flex-ai-center nowrap child">
+          <div class="flex flex-ai-center nowrap child mb-16">
             <span class="font-14">Task UUID: </span>
             <el-input class="zk-input" v-model="networkZK.owner_addr" @input="clearChangeProvider()" placeholder="please enter Task UUID" />
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
-          <div class="flex flex-ai-center nowrap child">
+          <div class="flex flex-ai-center nowrap child mb-16">
             <el-button type="info" :disabled="!networkZK.owner_addr ? true:false" round @click="clearProvider">Clear</el-button>
             <el-button type="primary" round @click="searchProvider">
               <el-icon>

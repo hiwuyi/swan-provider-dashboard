@@ -2,13 +2,13 @@
   <section>
     <el-row class="search-container font-14">
       <el-col :xs="24" :sm="12" :md="12" :lg="9" :xl="9">
-        <div class="flex flex-ai-center nowrap child">
+        <div class="flex flex-ai-center nowrap child mb-16">
           <span class="font-14">Task Contract: </span>
           <el-input class="zk-input" v-model="networkZK.contract_address" @input="clearChangeProvider()" placeholder="please enter Task Contract" />
         </div>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="4" :xl="4">
-        <div class="flex flex-ai-center nowrap child">
+        <div class="flex flex-ai-center nowrap child mb-16">
           <el-button type="info" :disabled="!networkZK.contract_address ? true:false" round @click="clearProvider">Clear</el-button>
           <el-button type="primary" round @click="searchProvider">
             <el-icon>

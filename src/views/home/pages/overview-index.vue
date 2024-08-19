@@ -235,7 +235,7 @@
                 </el-col>
                 <el-col :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="grid-content g-select">
-                    <h6 class="font-12 weight-4 text-center flex flex-ai-center nowrap">
+                    <h6 class="font-12 weight-4 text-center flex flex-ai-center flex-jc-center nowrap">
                       <el-select v-model="AvgZKRewards.value" placeholder="Select" size="small">
                         <el-option v-for="item in AvgZKRewards.options" :key="item.value" :label="item.value" :value="item.value">
                           <div class="font-14">{{item.value}}</div>
@@ -677,6 +677,13 @@ onMounted(async () => {
         &.g-select {
           height: calc(100% - 0.4rem);
           padding-top: 0.05rem;
+        }
+      }
+      .tabs-container {
+        .tabs-button{
+          top: 0.3rem;
+          bottom: auto;
+          height: auto;
         }
       }
     }

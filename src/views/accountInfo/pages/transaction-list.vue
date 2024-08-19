@@ -2,12 +2,12 @@
   <section>
     <el-row class="search-container font-14" justify="space-between">
       <el-col :xs="24" :sm="12" :md="24" :lg="7" :xl="7">
-        <div class="flex flex-ai-center nowrap child">
+        <div class="flex flex-ai-center nowrap child mb-16">
           <span class="font-14">Total: {{pagin.total}} Transactions</span>
         </div>
       </el-col>
       <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
-        <div class="flex flex-ai-center nowrap child">
+        <div class="flex flex-ai-center nowrap child mb-16">
           <el-select v-model="searchList.value" placeholder="Select" size="small" @change="handleZKCurrentChange(1)">
             <el-option v-for="item in searchList.options" :key="item" :label="item" :value="item">
               <div class="flex flex-ai-center font-14">{{item}}</div>

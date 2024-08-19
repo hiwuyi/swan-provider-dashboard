@@ -225,7 +225,7 @@ const changetype = async (data: any) => {
           // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>';
           var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + replaceDecimalsFormat(item.value) + '<br/>'; 
+          result += colorDot + item.seriesName + ': ' + replaceFormat(item.value) + '<br/>'; 
         });
         return result;
       }
@@ -352,7 +352,7 @@ const changetype = async (data: any) => {
           // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>';
           var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + replaceDecimalsFormat(item.value) + '<br/>'; 
+          result += colorDot + item.seriesName + ': ' + replaceFormat(item.value) + '<br/>'; 
         });
         return result;
       }
@@ -446,7 +446,7 @@ const changetype = async (data: any) => {
           // result += colorDot + item.seriesName + ' ' + item.value + 'Used 26Free' + '<br/>';
           var color = item.color.colorStops ? item.color.colorStops[0].color : item.color; 
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + replaceDecimalsFormat(item.value) + '<br/>'; 
+          result += colorDot + item.seriesName + ': ' + replaceFormat(item.value) + '<br/>'; 
         });
         return result;
       }
@@ -565,12 +565,13 @@ const changetype = async (data: any) => {
         fontFamily: 'HELVETICA-ROMAN'
       },
       icon: 'roundRect',
-      formatter: function (params) {
+      formatter: function (params:any) {
         var result = params[0].name + '<br/>'; 
-        params.forEach(function (item) {
+        params.forEach(function (item:any) {
+          const v = item.seriesName.indexOf('Sequencer') > -1 ? replaceDecimalsFormat(item.value) : replaceFormat(item.value)
           var color = item.color.colorStops ? item.color.colorStops[0].color : item.color;
           let colorDot = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + color + ';"></span>';
-          result += colorDot + item.seriesName + ': ' + replaceDecimalsFormat(item.value) + '<br/>'; 
+          result += colorDot + item.seriesName + ': ' + v + '<br/>'; 
         });
         return result;
       }
@@ -579,7 +580,7 @@ const changetype = async (data: any) => {
       left: '3%',
       right: '4%',
       top: '15%',
-      bottom: document.documentElement.clientWidth >= 768 ? '13%' : '20%',
+      bottom: document.documentElement.clientWidth > 768 ? '13%' : '20%',
       containLabel: true
     },
     legend: {
@@ -589,7 +590,7 @@ const changetype = async (data: any) => {
       // icon: 'circle',
       // itemWidth: 10,
       // itemHeight: 10,
-      itemGap: document.documentElement.clientWidth >= 768 ? 20 : 5,
+      itemGap: document.documentElement.clientWidth > 768 ? 20 : 5,
       textStyle: {
         color: '#95a3bd',
         fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,

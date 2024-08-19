@@ -442,6 +442,11 @@ dt {
         height: auto;
         line-height: 1.2;
       }
+      .font-14{
+        @media screen and (max-width: 768px) {
+          padding: 3px 0;
+        }
+      }
     }
   }
   .el-select-dropdown__item{
@@ -1062,7 +1067,7 @@ body {
       cursor: pointer;
       transition: all 0.2s;
       @media screen and (max-width: 600px) {
-        display: block;
+        display: flex;
       }
       &.is-disabled {
         color: #eee;

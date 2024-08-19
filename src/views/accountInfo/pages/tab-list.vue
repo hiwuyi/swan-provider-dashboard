@@ -1,8 +1,8 @@
 <template>
   <div class="search-body flex flex-ai-center font-14">
     <div class="tabs-container">
-      <div @click="tabsSwitch(0)" class="tabs-button text-center tabs-prev flex flex-ai-center flex-jc-center" :class="{'is-disabled': activeName === 0}">&lt;</div>
-      <div @click="tabsSwitch(1)" class="tabs-button text-center tabs-next flex flex-ai-center flex-jc-center" :class="{'is-disabled': activeName === 3}">&gt;</div>
+      <div @click="tabsSwitch(0)" class="tabs-button text-center tabs-prev flex-ai-center flex-jc-center" :class="{'is-disabled': activeName === 0}">&lt;</div>
+      <div @click="tabsSwitch(1)" class="tabs-button text-center tabs-next flex-ai-center flex-jc-center" :class="{'is-disabled': activeName === 3}">&gt;</div>
 
       <el-tabs v-model="activeName" class="demo-tabs">
         <el-tab-pane :name="0">

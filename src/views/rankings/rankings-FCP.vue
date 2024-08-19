@@ -96,7 +96,7 @@
               <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column prop="deployments" sortable min-width="130">
+          <el-table-column prop="deployments" sortable="custom" min-width="130">
             <template #header>
               <div class="font-14 weight-4">Active Deployments</div>
             </template>
@@ -104,7 +104,7 @@
               <div>{{ replaceFormat(scope.row.active_deployments) }}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="score" sortable min-width="80">
+          <el-table-column prop="score" sortable="custom" min-width="80">
             <template #header>
               <div class="font-14 weight-4">Score</div>
             </template>

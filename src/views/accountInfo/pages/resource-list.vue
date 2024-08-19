@@ -171,6 +171,9 @@ const props = withDefaults(
     transform: translate(-50%, 50%);
     // border: 1px solid #b4b4b4;
     border-radius: 0.06rem;
+    @media screen and (max-width: 768px) {
+      transform: translate(-50%, 35%);
+    }
     svg, path{
       width: 24px;
       height: 24px;

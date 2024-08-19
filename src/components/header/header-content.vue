@@ -142,14 +142,13 @@
                       </div>
                     </div>
                   </el-dropdown-item>
-                  <el-dropdown-item command="sign_out" v-if="token !== ''">
-                    <!-- <span class="link">Sign Out</span> -->
+                  <!-- <el-dropdown-item command="sign_out" v-if="token !== ''">
                     <div class="profile router-link b">
                       <div class="flex flex-ai-center font-16">
                         <span class="link">Sign Out</span>
                       </div>
                     </div>
-                  </el-dropdown-item>
+                  </el-dropdown-item> -->
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -1140,6 +1139,9 @@ const contractAddress = ref('')
         width: 100%;
         padding: 0;
         margin: 0;
+        @media screen and (max-width: 768px) {
+          padding: 3px 0;
+        }
         // &.router-link {
         //   display: block;
         //   width: 100%;
