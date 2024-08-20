@@ -384,7 +384,8 @@ export function momentFun(dateItem: any) {
       dataUnit = dataUnitArray ? dataUnitArray.replace(/0/g, '').replace('GMT', 'UTC') : '-'
       break
   }
-  const dateResult = moment(new Date(dateNew)).format('YYYY/MM/DD HH:mm:ss') + ` ${dataUnit}`
+  // const dateResult = moment(new Date(dateNew)).format('YYYY/MM/DD HH:mm:ss') + ` ${dataUnit}`
+  const dateResult = moment(new Date(dateNew)).format('YYYY-MM-DD HH:mm:ss')
   return dateResult ?? '-'
 }
 
@@ -473,4 +474,12 @@ export function getEchartDateTime (time: any) {
   const formattedDay = day < 10 ? '0' + day : day;
 
   return `${year}-${formattedMonth}-${formattedDay}`;
+}
+
+let lastTime = 0
+export async function throttleLast () {
+  const now = new Date().valueOf()
+  if (lastTime > 0 && now - lastTime <= 2000) return false
+  lastTime = now
+  return true
 }

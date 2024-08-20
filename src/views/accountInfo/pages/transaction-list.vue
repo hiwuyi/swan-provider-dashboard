@@ -81,8 +81,8 @@
       </el-table-column>
       <el-table-column prop="address" label="Status">
         <template #default="scope">
-          <span v-if="scope.row.status === 1">active</span>
-          <span v-else>{{scope.row.status}}</span>
+          <span v-if="scope.row.status === 1">OK</span>
+          <span v-else>Failed</span>
         </template>
       </el-table-column>
     </el-table>
@@ -115,8 +115,8 @@ const pagin = reactive({
 })
 
 function compact(array: any) {
-  return array.filter(function(item: any) {
-    return item !== null && item !== undefined && item !== '';
+  return array.filter(function(item: any, index: number) {
+    return item !== null && item !== undefined && item !== '' && item.indexOf(item) === index
   });
 }
 function handleSizeChange(val: number) {

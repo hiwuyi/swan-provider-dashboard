@@ -14,7 +14,7 @@ export default [
     component: () => import("../views/rankings/rankings-FCP.vue"),
     meta: {
       keepAlive: true,
-      title: 'Rankings'
+      title: 'Fog Computing Provider List'
     }
   },
   {
@@ -23,7 +23,7 @@ export default [
     component: () => import("../views/rankings/rankings-ECP.vue"),
     meta: {
       keepAlive: true,
-      title: 'Rankings'
+      title: 'Edge Computing Provider List'
     }
   },
   {

@@ -11,6 +11,7 @@ export const explorerLink = ref(currentNetwork.value === 'Proxima' ? ELINK.PROXI
 export const baseurl = currentNetwork.value === 'Mainnet' ? import.meta.env.VITE_BASEAPI : import.meta.env.VITE_BASEAPI_PROXIMA
 export const fcpDeposit = import.meta.env.VITE_FCP_DEPOSIT_ADDRESS
 export const ecpDeposit = import.meta.env.VITE_ECP_DEPOSIT_ADDRESS
+export const addCollateral = ref(false)
 
 export function removeStorage(key: string) {
   localStorage.removeItem(key)

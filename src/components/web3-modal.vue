@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/vue'
-import { reconnect, disconnect, getChainId } from '@wagmi/core'
+import { reconnect, disconnect, getChainId, connect } from '@wagmi/core'
+import { injected } from '@wagmi/connectors'
 import { getAccount, watchAccount } from '@wagmi/core'
 import configJS from './../utils/config'
-import { Init, throttle, login } from '@/utils/login';
-import { clearMetaAddress, metaAddress, setMetaAddress, signature } from '@/utils/storage';
-import { signOutFun, timeout } from '@/utils/common';
+import { Init, login } from '@/utils/login';
+import { addCollateral, clearMetaAddress, metaAddress, setMetaAddress, signature } from '@/utils/storage';
+import { signOutFun, throttleLast, timeout } from '@/utils/common';
 
 const projectId = configJS.projectId
 const config = configJS.config
@@ -28,15 +29,6 @@ createWeb3Modal({
   }
 })
 
-let lastTime = 0
-async function throttle () {
-  // Prevent multiple signatures
-  let now = new Date().valueOf()
-  if (lastTime > 0 && now - lastTime <= 2000) return false
-  lastTime = now
-  return true
-}
-
 let account = reactive(getAccount(config))
 
 // const chainId = reactive(getChainId(config))
@@ -45,7 +37,7 @@ let account = reactive(getAccount(config))
 async function login2 () {
   // console.log('here')
   // console.log(account)
-  const time = await throttle()
+  const time = await throttleLast()
   if (!time) return false
   Init(async (addr, chain) => {
     setMetaAddress(addr)
@@ -98,6 +90,8 @@ window.onunload = function () {
 async function test () {
   // console.log("here")
 }
+
+watch(() => addCollateral.value, () => connect(config, { connector: injected() }))
 </script>
 
 <template>

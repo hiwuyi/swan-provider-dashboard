@@ -10,7 +10,8 @@
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
                   <div class="flex flex-ai-center flex-jc-between width border">
                     <span class="font-18">FCP</span>
-                    <div :class="{'collateral m blue pointer':true,'is-disabled': !metaAddress}" @click="handleSelect('cpProfile', {}, 'FCP')">Add Collateral</div>
+                    <div v-if="!metaAddress" :class="`collateral m blue pointer`" @click="addCollateral=!addCollateral">Add Collateral</div>
+                    <div v-else :class="`collateral m blue ${metaAddress?'pointer':'is-disabled'}`" @click="handleSelect('cpProfile', {}, 'FCP')">Add Collateral</div>
                   </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
@@ -28,7 +29,7 @@
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Total Reward: </span>
-                    <span>{{ replaceDecimalsFormat(Number(balanceData?.fcp_collateral?.locked) + Number(balanceData?.fcp_collateral?.balance)) }} SWANC</span>
+                    <span>{{ balanceData?.fcp_reawrd ? replaceDecimalsFormat(balanceData?.fcp_reawrd) : 0 }} SWANC</span>
                   </div>
                 </el-col>
               </el-row>
@@ -60,7 +61,8 @@
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
                   <div class="flex flex-ai-center flex-jc-between width border">
                     <span class="font-18">ECP</span>
-                    <div :class="{'collateral m blue pointer':true,'is-disabled': !metaAddress}" @click="handleSelect('cpProfile', {}, 'ECP')">Add Collateral</div>
+                    <div v-if="!metaAddress" :class="`collateral m blue pointer`" @click="addCollateral=!addCollateral">Add Collateral</div>
+                    <div v-else :class="`collateral m blue ${metaAddress?'pointer':'is-disabled'}`" @click="handleSelect('cpProfile', {}, 'ECP')">Add Collateral</div>
                   </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
@@ -78,7 +80,7 @@
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Total Reward: </span>
-                    <span>{{ replaceDecimalsFormat(Number(balanceData?.ecp_collateral?.locked)+Number(balanceData?.ecp_collateral?.balance)) }} SWANC</span>
+                    <span>{{ balanceData?.ecp_reward ? replaceDecimalsFormat(balanceData?.ecp_reward) : 0 }} SWANC</span>
                   </div>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
@@ -101,7 +103,7 @@
                   </div>
                 </el-col>
                 <!-- <el-col :xs="24" :sm="24" :md="10" :lg="6" :xl="6" class="flex flex-ai-center flex-jc-right">
-                  <div :class="{'collateral m pointer':true,'is-disabled': !metaAddress}" @click="handleSelect('cpProfile', {}, 'Sequencer')">Add</div>
+                  <div :class="`collateral m blue ${metaAddress?'pointer':'is-disabled'}`" @click="handleSelect('cpProfile', {}, 'Sequencer')">Add</div>
                 </el-col> -->
               </el-row>
             </div>
@@ -131,7 +133,7 @@
 <script setup lang="ts">
 import vmDialog from "@/components/vmDialog.vue"
 import { getCPsBalancesData, getCPsEchartsData } from "@/api/cp-profile";
-import { metaAddress } from "@/utils/storage"
+import { addCollateral, metaAddress } from "@/utils/storage"
 import { dataCpData, dataDelta, dataGPU, getDateRange, replaceDecimalsFormat, replaceFormat, sumArrays } from "@/utils/common";
 import * as echarts from "echarts"
 
@@ -186,11 +188,13 @@ const changetype = async (data: any) => {
   
   const fcpCountsData = await dataCpData(data.fcp_job, 'total')
   const fcpRunningData = await dataDelta(data.fcp_job, 'delta')
-  const fcpCountsMax = Math.ceil(Math.max(...fcpCountsData.datum)*1.1);
-  const fcpCountsMin = Math.floor(Math.min(...fcpCountsData.datum)*0.8);
+  const fcpCountsMax = Math.ceil(Math.max(...fcpCountsData.datum)*1.1)
+  const fcpCountsNumber = Math.min(...fcpCountsData.datum) >= 0 ? 0.9 : 1.1
+  const fcpCountsMin = Math.floor(Math.min(...fcpCountsData.datum)*fcpCountsNumber)
   const fcpCountsInterval = Math.ceil((fcpCountsMax-fcpCountsMin)/(fcpCountsMin===0?4:5))
-  const fcpRunningMax = Math.ceil(Math.max(...fcpRunningData.datum)*1.1);
-  const fcpRunningMin = Math.floor(Math.min(...fcpRunningData.datum)*0.8);
+  const fcpRunningMax = Math.ceil(Math.max(...fcpRunningData.datum)*1.1)
+  const fcpRunningNumber = Math.min(...fcpRunningData.datum) >= 0 ? 0.9 : 1.1
+  const fcpRunningMin = Math.floor(Math.min(...fcpRunningData.datum)*fcpRunningNumber)
   const fcpRunningInterval = Math.ceil((fcpRunningMax-fcpRunningMin)/(fcpRunningMin===0?4:5))
   totalJob.value = data.fcp_job && data.fcp_job.length > 0 ? data.fcp_job.slice(-1)[0].total : 0
 
@@ -199,10 +203,12 @@ const changetype = async (data: any) => {
 
   const ecpCountsData = await dataCpData(data.ecp_task, 'total')
   const ecpGrowthData = await dataDelta(data.ecp_task, 'delta')
-  const ecpCountMax = Math.ceil(Math.max(...ecpCountsData.datum)*1.1);
-  const ecpCountMin = Math.floor(Math.min(...ecpCountsData.datum)*0.8);
-  const ecpGrowthMax = Math.ceil(Math.max(...ecpGrowthData.datum)*1.1);
-  const ecpGrowthMin = Math.floor(Math.min(...ecpGrowthData.datum)*0.8);
+  const ecpCountMax = Math.ceil(Math.max(...ecpCountsData.datum)*1.1)
+  const ecpCountNumber = Math.min(...ecpCountsData.datum) >= 0 ? 0.9 : 1.1
+  const ecpCountMin = Math.floor(Math.min(...ecpCountsData.datum)*ecpCountNumber)
+  const ecpGrowthMax = Math.ceil(Math.max(...ecpGrowthData.datum)*1.1)
+  const ecpGrowthNumber = Math.min(...ecpGrowthData.datum) >= 0 ? 0.9 : 1.1
+  const ecpGrowthMin = Math.floor(Math.min(...ecpGrowthData.datum)*ecpGrowthNumber)
   const ecpCountsInterval = Math.ceil((ecpCountMax-ecpCountMin)/(ecpCountMin===0?4:5))
   const ecpGrowthInterval = Math.ceil((ecpGrowthMax-ecpGrowthMin)/(ecpGrowthMin===0?4:5))
   // totalReward.value = sumArrays(ecpCountsData.datum, [])
@@ -213,7 +219,7 @@ const changetype = async (data: any) => {
   const ecpSequencerData = await dataCpData(data.sequencer, 'total')
   const ecpSequencerMax = (Math.max(...ecpSequencerData.datum)*1.05).toFixed(5)
   const ecpSequencerMin = (Math.min(...ecpSequencerData.datum)*0.95).toFixed(5);
-console.log(ecpSequencerMax, ecpSequencerMin)
+
   const option1 = {
     tooltip: {
       trigger: 'axis',

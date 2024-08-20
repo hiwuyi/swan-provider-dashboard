@@ -112,8 +112,9 @@
         <el-row class="font-14 note" v-else v-loading="ruleForm.show">
           <el-col>
             <div class="font-14 mb-8">Contract Address:</div>
-            <div class="font-14" v-if="props.list.type === 'FCP'">{{ fcpDeposit }}</div>
-            <div class="font-14" v-else>{{ ecpDeposit }}</div>
+            <div class="font-14">{{ route.params.cp_addr }}</div>
+            <!-- <div class="font-14" v-if="props.list.type === 'FCP'">{{ fcpDeposit }}</div>
+            <div class="font-14" v-else>{{ ecpDeposit }}</div> -->
           </el-col>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
             <p v-if="props.list.type === 'FCP'">For each FCP job, you need to have at least 5 SWANC in an escrow account.</p>
