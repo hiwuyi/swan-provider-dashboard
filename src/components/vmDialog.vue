@@ -136,16 +136,17 @@
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="flex flex-ai-center baseline">
             <div class="flex flex-ai-center nowrap">
-              <el-input-number v-model="ruleForm.amount" :min="props.list.type === 'FCP' ? 5 : 100" controls-position="right" />
+              <el-input-number v-model="ruleForm.amount" :min="0" controls-position="right" />
               <span class="text-white">&nbsp;&nbsp;SWANC</span>
             </div>
           </el-col>
         </el-row>
       </div>
       <template #footer>
-        <div class="dialog-footer flex flex-ai-center flex-end font-14">
+        <div class="dialog-footer flex flex-ai-center flex-jc-right font-14">
           <el-button @click="closeHandle()">Cancel</el-button>
-          <el-button @click="cpCollateral" :disabled="!ruleForm.amount || props.list.type === 'claimAccount'" type="primary">Submit</el-button>
+          <!-- !ruleForm.amount ||  -->
+          <el-button @click="cpCollateral" :disabled="props.list.type === 'claimAccount'" type="primary">Submit</el-button>
         </div>
       </template>
     </el-dialog>
@@ -159,8 +160,11 @@ import {
 import * as echarts from "echarts"
 import CollateralABI from '@/utils/abi/CollateralContract.json'
 import fcpABI from '@/utils/abi/FCP-Collateral.json'
+import fcpProximaABI from '@/utils/abi/fcp-CollateralV2.json'
 import ecpABI from '@/utils/abi/ECPCollateral.json'
+import ecpProximaABI from '@/utils/abi/ECPCollateral-proxima.json'
 import tokenABI from '@/utils/abi/SwanToken.json'
+import tokenProximaABI from '@/utils/abi/tokenLLL.json'
 import { ecpDeposit, fcpDeposit, metaAddress } from '@/utils/storage';
 import { copyContent, getDateTime, messageTip } from '@/utils/common';
 import web3Init from '@/utils/login';
@@ -213,7 +217,7 @@ const collateralAddress = import.meta.env.VITE_COLLATERAL_CONTACT
 const collateralContract = new web3Init.eth.Contract(CollateralABI, collateralAddress)
 const fcpContract = new web3Init.eth.Contract(fcpABI, fcpDeposit)
 const ecpContract = new web3Init.eth.Contract(ecpABI, ecpDeposit)
-const tokenContract = new web3Init.eth.Contract(tokenABI, import.meta.env.VITE_MAINNET_SWANTOKEN_ADDRESS)
+const tokenContract = new web3Init.eth.Contract(tokenABI, import.meta.env.VITE_MAINNET_SWANTOKEN_ADDRESS_PROXIMA)
 
 const emits = defineEmits(['hardClose'])
 function closeHandle () {
@@ -234,18 +238,19 @@ async function cpDeposit () {
     const amount = web3Init.utils.toWei(String(ruleForm.amount), 'ether')
 
     let approveGasLimit = await tokenContract.methods
-      .approve(route.params.cp_addr, amount)
+      .approve(props.list.type === 'FCP' ? fcpDeposit : ecpDeposit, amount)
       .estimateGas({ from: metaAddress.value })
 
     const approve_tx = await tokenContract.methods
-      .approve(route.params.cp_addr, amount)
+      .approve(props.list.type === 'FCP' ? fcpDeposit : ecpDeposit, amount)
       .send({
         from: metaAddress.value, gasLimit: Math.floor(approveGasLimit * 1.5)
       })
-
+      
     let payMethod = props.list.type === 'FCP' ?
       fcpContract.methods.deposit(route.params.cp_addr) :
       ecpContract.methods.deposit(route.params.cp_addr, amount)
+
     let payGasLimit = await payMethod.estimateGas({ from: metaAddress.value })
     const tx = await payMethod.send({ from: metaAddress.value, gasLimit: Math.floor(payGasLimit * 1.5), value: amount })
       .on('transactionHash', async (transactionHash: any) => {
