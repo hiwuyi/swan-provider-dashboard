@@ -135,7 +135,7 @@ const changetype = async () => {
         left: 'left',
         show: false
       },
-      color: ['#02a7f1', '#56cfb2'],
+      color: [totalAll.gpu.used.toString() === '0'?'#727272':'#02a7f1', totalAll.gpu.free.toString() === '0'?'#989898':'#56cfb2'],
       series: [
         {
           name: 'Access From',
@@ -183,6 +183,7 @@ const changetype = async () => {
       { value: totalAll.cpu.used, name: 'Used' },
       { value: totalAll.cpu.free, name: 'Free' }
     ]
+    option2.color = [totalAll.cpu.used.toString() === '0'?'#727272':'#02a7f1', totalAll.cpu.free.toString() === '0'?'#989898':'#56cfb2'],
     option2.series[0].tooltip = {
       formatter: function (params: any) {
         return `<div class="flex flex-ai-center">${params.marker}${params.data.name}: ${replaceFormat(params.data.value)}</div>`;
@@ -195,6 +196,7 @@ const changetype = async () => {
       { value: totalAll.memory.used, name: 'Used' },
       { value: totalAll.memory.free, name: 'Free' }
     ]
+    option3.color = [totalAll.memory.used.toString() === '0'?'#727272':'#02a7f1', totalAll.memory.free.toString() === '0'?'#989898':'#56cfb2'],
     option3.series[0].label.normal.formatter = function (params: any) {
       return `${ replaceFormat(byteStorage(params.data.value))} ${params.data.name}`;
     }
@@ -207,6 +209,7 @@ const changetype = async () => {
       { value: totalAll.storage.used, name: 'Used' },
       { value: totalAll.storage.free, name: 'Free' }
     ]
+    option4.color = [totalAll.storage.used.toString() === '0'?'#727272':'#02a7f1', totalAll.storage.free.toString() === '0'?'#989898':'#56cfb2'],
     option4.series[0].label.normal.formatter = function (params: any) {
       return `${ replaceFormat(byteStorage(params.data.value))} ${params.data.name}`;
     }

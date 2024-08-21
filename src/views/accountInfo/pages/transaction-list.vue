@@ -7,10 +7,10 @@
         </div>
       </el-col>
       <el-col :xs="24" :sm="12" :md="24" :lg="4" :xl="4">
-        <div class="flex flex-ai-center nowrap child mb-16">
+        <div class="flex flex-ai-center flex-jc-right nowrap child mb-16">
           <el-select v-model="searchList.value" placeholder="Select" size="small" @change="handleZKCurrentChange(1)">
             <el-option v-for="item in searchList.options" :key="item" :label="item" :value="item">
-              <div class="flex flex-ai-center font-14">{{item}}</div>
+              <div class="flex flex-ai-center font-12">{{item}}</div>
             </el-option>
           </el-select>
         </div>
@@ -115,8 +115,9 @@ const pagin = reactive({
 })
 
 function compact(array: any) {
+  if (!array) return []
   return array.filter(function(item: any, index: number) {
-    return item !== null && item !== undefined && item !== '' && item.indexOf(item) === index
+    return item !== null && item !== undefined && item !== ''
   });
 }
 function handleSizeChange(val: number) {
@@ -142,6 +143,7 @@ async function getAllData() {
     pagin.total = dataRes?.data?.total ?? 0
     const method = compact(dataRes?.data?.methods)
     searchList.options = ['All'].concat(method)
+    searchList.options = searchList.options.filter((item, index) => searchList.options.indexOf(item) === index);
   } catch{console.error}
   dataLoad.value = false
 }
@@ -157,7 +159,10 @@ const props = withDefaults(
     watchRoute: false
   }
 )
-watch(() => props.watchRoute, () => getAllData())
+watch(() => props.watchRoute, () => {
+  searchList.value = 'All'
+  getAllData()
+})
 </script>
 
 <style scoped lang="less">
@@ -165,6 +170,9 @@ watch(() => props.watchRoute, () => getAllData())
   height: 100%;
   span {
     white-space: nowrap;
+  }
+  :deep(.el-select) {
+    max-width: 240px;
   }
 }
 :deep(.el-input) {

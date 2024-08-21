@@ -5,7 +5,7 @@
         <span class="font-14">Chipset: </span>
         <el-select v-model="chipsetList.value" @change="handleClick" placeholder="Select" size="small">
           <el-option v-for="item in chipsetList.options" :key="item.value" :label="item.label" :value="item.value">
-            <div class="font-14">{{item.label}}</div>
+            <div class="font-12">{{item.label}}</div>
           </el-option>
         </el-select>
       </div>
@@ -15,7 +15,7 @@
         <span class="font-14">vRAM: </span>
         <el-select v-model="vRAMList.value" @change="handleClick" placeholder="Select" size="small">
           <el-option v-for="item in vRAMList.options" :key="item.value" :label="item.label" :value="item.value">
-            <div class="font-14">{{item.label}}</div>
+            <div class="font-12">{{item.label}}</div>
           </el-option>
         </el-select>
       </div>
@@ -25,7 +25,7 @@
         <span class="font-14">Interface: </span>
         <el-select v-model="interfaceList.value" @change="handleClick" placeholder="Select" size="small">
           <el-option v-for="item in interfaceList.options" :key="item.value" :label="item.label" :value="item.value">
-            <div class="font-14">{{item.label}}</div>
+            <div class="font-12">{{item.label}}</div>
           </el-option>
         </el-select>
       </div>

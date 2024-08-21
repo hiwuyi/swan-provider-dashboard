@@ -20,7 +20,7 @@
           </el-input>
           <el-select v-model="explorerList.value" placeholder="Select" size="small" @change="currentMethod">
             <template #prefix>
-              <div class="flex flex-ai-center font-14">
+              <div class="flex flex-ai-center font-12">
                 <i class="icon icon-swanProxima"></i>
                 {{explorerList.value}}
               </div>
@@ -32,10 +32,10 @@
               </div>
             </el-option>
           </el-select>
-        </div>
 
-        <div class="web3Modal-style">
-          <web3-modal />
+          <div class="web3Modal-style">
+            <web3-modal />
+          </div>
         </div>
 
         <!-- <div class="header-right flex flex-ai-center nowrap pcShow" v-if="metaAddress !== ''">
@@ -219,15 +219,15 @@
       <div class="area flex flex-ai-center" v-loading="cpCheckCont.show">
         <div class="fast width">
           <label>Available Collateral </label>
-          <div class="address">{{cpCheckCont.balance}} sETH</div>
+          <div class="address">{{cpCheckCont.balance}} ETH</div>
         </div>
         <div class="fast width">
           <label>Hold Collateral</label>
-          <div class="address">{{cpCheckCont.taskBalance}} sETH</div>
+          <div class="address">{{cpCheckCont.taskBalance}} ETH</div>
         </div>
         <div class="fast width">
           <label>Total Collateral</label>
-          <div class="address">{{AddFormat(cpCheckCont.balance, cpCheckCont.taskBalance)}} sETH</div>
+          <div class="address">{{AddFormat(cpCheckCont.balance, cpCheckCont.taskBalance)}} ETH</div>
         </div>
       </div>
     </el-dialog>

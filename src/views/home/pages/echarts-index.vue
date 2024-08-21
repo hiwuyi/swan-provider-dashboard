@@ -10,7 +10,7 @@
         <div class="date">
           <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
             <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-14">{{item.label}}</div>
+              <div class="flex flex-ai-center font-12">{{item.label}}</div>
             </el-option>
           </el-select>
         </div>
@@ -26,7 +26,7 @@
         <div class="date">
           <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
             <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-14">{{item.label}}</div>
+              <div class="flex flex-ai-center font-12">{{item.label}}</div>
             </el-option>
           </el-select>
         </div>
@@ -42,7 +42,7 @@
         <div class="date">
           <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
             <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-14">{{item.label}}</div>
+              <div class="flex flex-ai-center font-12">{{item.label}}</div>
             </el-option>
           </el-select>
         </div>
@@ -58,7 +58,7 @@
         <div class="date">
           <el-select v-model="weekList.value" placeholder="Select" size="small" @change="initEcharts">
             <el-option v-for="item in weekList.options" :key="item.value" :label="item.label" :value="item.value">
-              <div class="flex flex-ai-center font-14">{{item.label}}</div>
+              <div class="flex flex-ai-center font-12">{{item.label}}</div>
             </el-option>
           </el-select>
         </div>
@@ -214,6 +214,11 @@ const changetype = async (data: any) => {
         fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         // interval: 6,
         color: '#7c889b',
+        interval: function (index, value) {
+          var count = 7;
+          var step = Math.ceil(cpuData.timeArr.length / count); 
+          return index % step === 0 ? value : false;
+        },
         formatter: function (value) {
           return value.split(' ').join('\n');
         }
@@ -319,6 +324,11 @@ const changetype = async (data: any) => {
           // interval: 6,
         fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
+          interval: function (index, value) {
+            var count = 7;
+            var step = Math.ceil(fcpData.timeArr.length / count); 
+            return index % step === 0 ? value : false;
+          },
           formatter: function (value) {
             return value.split(' ').join('\n');
           }
@@ -459,6 +469,11 @@ const changetype = async (data: any) => {
         fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         // interval: 6,
         color: '#7c889b',
+        interval: function (index, value) {
+          var count = 7;
+          var step = Math.ceil(gpuData.timeArr.length / count); 
+          return index % step === 0 ? value : false;
+        },
         formatter: function (value) {
           return value.split(' ').join('\n');
         }
@@ -496,7 +511,7 @@ const changetype = async (data: any) => {
         type: 'line',
         showSymbol: true,
         yAxisIndex: 1,
-        color: '#a801a1',
+        color: '#ed5da0',
         smooth: false,
         data: gpuData.datum
       },
@@ -505,7 +520,7 @@ const changetype = async (data: any) => {
         type: 'line',
         showSymbol: true,
         yAxisIndex: 0,
-        color: '#93c605',
+        color: '#5871fa',
         smooth: false,
         data: gpuTotalData.datum
       }
@@ -573,6 +588,11 @@ const changetype = async (data: any) => {
           // interval: 6,
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
+          interval: function (index, value) {
+            var count = 7;
+            var step = Math.ceil(ecpData.timeArr.length / count); 
+            return index % step === 0 ? value : false;
+          },
           formatter: function (value) {
             return value.split(' ').join('\n');
           }

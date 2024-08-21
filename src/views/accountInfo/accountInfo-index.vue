@@ -13,7 +13,7 @@
       </div>
       <span v-else>-</span>
       <div class="flex name-title">
-        <a @click="handleSelect('claimAccount', {}, 'claimAccount')" :class="{'is-disabled': false, 'pointer': true}">Claim Account</a>
+        <a @click="handleSelect('claimAccount', cpsData, 'claimAccount')" :class="{'is-disabled': cpsLoad, 'pointer': true}">Claim Account</a>
       </div>
     </div>
 
@@ -68,6 +68,7 @@ function hardClose (dialog:boolean) {
 }
 
 async function handleSelect(key: string, row: any, type: string) {
+  if(cpsLoad.value) return
   switch (key) {
     case 'claimAccount':
       vmOperate.row = row

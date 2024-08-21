@@ -498,6 +498,11 @@ const props = withDefaults(
             fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
             // interval: 6,
             color: '#7c889b',
+            interval: function (index, value) {
+              var count = 7;
+              var step = Math.ceil(cpuData.timeArr.length / count); 
+              return index % step === 0 ? value : false;
+            },
             formatter: function (value) {
               return value.split(' ').join('\n');
             }

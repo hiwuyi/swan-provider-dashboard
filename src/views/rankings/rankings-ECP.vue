@@ -68,7 +68,11 @@
             </template>
             <template #default="scope">
               <div class="flex flex-ai-center flex-jc-center copy-style" v-if="scope.row.name" @click="copyContent(scope.row.name, 'Copied')">
-                {{hiddAddress(scope.row.name)}}
+                <el-popover placement="top" effect="dark" popper-class="popup-content" popper-style="word-break: break-word; text-align: center;font-size:12px;" trigger="hover" :content="scope.row.name">
+                  <template #reference>
+                    <div>{{hiddAddress(scope.row.name)}}</div>
+                  </template>
+                </el-popover>
                 <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16" height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>

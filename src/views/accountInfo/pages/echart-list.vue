@@ -29,7 +29,7 @@
                 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="flex flex-ai-center baseline">
                   <div class="flex flex-ai-center flex-jc-between width">
                     <span>Total Reward: </span>
-                    <span>{{ balanceData?.fcp_reawrd ? replaceDecimalsFormat(balanceData?.fcp_reawrd) : 0 }} SWANC</span>
+                    <span>{{ balanceData?.fcp_reward ? replaceDecimalsFormat(balanceData?.fcp_reward) : 0 }} SWANC</span>
                   </div>
                 </el-col>
               </el-row>
@@ -96,10 +96,10 @@
                             </svg>
                           </div>
                         </template>
-                        Every ZK task consumes 0.00001 sETH and you shall get 48 task per day. 1 week consumption( 0.00336 sETH) is recommended.
+                        Every ZK task consumes 0.00001 ETH and you shall get 48 task per day. 1 week consumption( 0.00336 ETH) is recommended.
                       </el-popover>:
                     </div>
-                    <span>{{ replaceDecimalsFormat(balanceData?.sequencer?.balance) }} sETH</span>
+                    <span>{{ replaceDecimalsFormat(balanceData?.sequencer?.balance) }} ETH</span>
                   </div>
                 </el-col>
                 <!-- <el-col :xs="24" :sm="24" :md="10" :lg="6" :xl="6" class="flex flex-ai-center flex-jc-right">
@@ -216,9 +216,15 @@ const changetype = async (data: any) => {
 
   const ecpCollateralData = await dataCpData(data.ecp_collateral, 'total')
   const ecpEscrowData = await dataCpData(data.ecp_collateral, 'active')
+  const ecpCollaMax = Math.max(Math.max(...ecpCollateralData.datum), Math.max(...ecpEscrowData.datum))
+  const ecpCollateralMax = Math.ceil(ecpCollaMax*1.1)
+  const ecpCollaMin = Math.min(Math.min(...ecpEscrowData.datum), Math.min(...ecpCollateralData.datum))
+  const ecpEscrowNumber = ecpCollaMin >= 0 ? 0.9 : 1.1
+  const ecpCollateralMin = Math.floor(ecpCollaMin*ecpEscrowNumber)
   const ecpSequencerData = await dataCpData(data.sequencer, 'total')
   const ecpSequencerMax = (Math.max(...ecpSequencerData.datum)*1.05).toFixed(5)
-  const ecpSequencerMin = (Math.min(...ecpSequencerData.datum)*0.95).toFixed(5);
+  const ecpSequenceNumber = Math.min(...ecpSequencerData.datum) >= 0 ? 0.95 : 1.05
+  const ecpSequencerMin = (Math.min(...ecpSequencerData.datum)*ecpSequenceNumber).toFixed(5);
 
   const option1 = {
     tooltip: {
@@ -283,6 +289,11 @@ const changetype = async (data: any) => {
         axisLabel: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
+          interval: function (index, value) {
+            var count = 7;
+            var step = Math.ceil(fcpCountsData.timeArr.length / count); 
+            return index % step === 0 ? value : false;
+          },
           //   formatter: '{value}'
         },
         // prettier-ignore
@@ -410,6 +421,11 @@ const changetype = async (data: any) => {
       axisLabel: {
         fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
         color: '#7c889b',
+        interval: function (index, value) {
+          var count = 7;
+          var step = Math.ceil(fcpCollateralData.timeArr.length / count); 
+          return index % step === 0 ? value : false;
+        },
         //   formatter: '{value}'
       },
       data: fcpCollateralData.timeArr
@@ -504,6 +520,11 @@ const changetype = async (data: any) => {
         axisLabel: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
+          interval: function (index, value) {
+            var count = 7;
+            var step = Math.ceil(ecpCountsData.timeArr.length / count); 
+            return index % step === 0 ? value : false;
+          },
           //   formatter: '{value}'
         },
         // prettier-ignore
@@ -600,7 +621,7 @@ const changetype = async (data: any) => {
       containLabel: true
     },
     legend: {
-      data: ['Collateral (SWANC)', 'Escrow (SWANC)', 'Sequencer (sETH)'],
+      data: ['Collateral (SWANC)', 'Escrow (SWANC)', 'Sequencer (ETH)'],
       right: 'auto',
       bottom: '0',
       // icon: 'circle',
@@ -630,6 +651,11 @@ const changetype = async (data: any) => {
         axisLabel: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
+          interval: function (index, value) {
+            var count = 7;
+            var step = Math.ceil(ecpCollateralData.timeArr.length / count); 
+            return index % step === 0 ? value : false;
+          },
           //   formatter: '{value}'
         },
         // prettier-ignore
@@ -648,20 +674,19 @@ const changetype = async (data: any) => {
         nameTextStyle: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 16 : 11,
           color: '#7c889b',
-        }
+        },
+        min: ecpCollateralMax,
+        max: ecpCollateralMin,
+        splitNumber: 4,
       },
       {
         type: 'value',
-        name: 'sETH',
+        name: 'ETH',
         axisLabel: {
           fontSize: document.documentElement.clientWidth >= 1920 ? 17 : 12,
           color: '#7c889b',
-        //   formatter: function (value:any) {
-        //     const v = `${value} sETH`
-        //     return v.split(' ').join('\n');
-          //   }
           formatter: function(value:any) {
-            return value.toFixed(5); // 保留两位小数
+            return value.toFixed(5); 
           }
         },
         nameTextStyle: {
@@ -701,7 +726,7 @@ const changetype = async (data: any) => {
         color: '#56cfb2'
       },
       {
-        name: 'Sequencer (sETH)',
+        name: 'Sequencer (ETH)',
         type: 'line',
         smooth: false,
         showSymbol: true,

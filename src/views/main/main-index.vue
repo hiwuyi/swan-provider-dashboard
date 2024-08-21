@@ -44,6 +44,7 @@ const backtopMargin = ref(document.body.clientWidth > 768 ? 50 : 150)
     .el-backtop {
       background-color: var(--color-primary);
       color: #fff;
+      z-index: 9;
     }
   }
   .container {

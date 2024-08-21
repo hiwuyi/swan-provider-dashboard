@@ -10,13 +10,12 @@
           <div class="cont-flex">
             <div class="no-result flex-row center" v-if="chipDataAll.gpu && chipDataAll.gpu.length === 0">No Data</div>
             <template v-for="chip in chipDataAll.gpu" :key="chip">
-              <div class="cont flex-row space-between font-14">
-                <div class="absolute" :style="'width:' + (chip.value / chipDataAll.gpuMaxData * 100) + '%;'"></div>
-                <div class="flex-row items-center">
-                  <!-- <div class="point"></div> -->
-                  <div class="text-region">{{chip.name}}</div>
+              <div class="cont flex flex-ai-center flex-jc-between nowrap font-13">
+                <div class="items-center text-right">{{chip.name}}</div>
+                <div class="flex flex-ai-center flex-jc-left nowrap items-number">
+                  <div class="absolute" :style="'width:' + (chip.value / chipDataAll.gpuMaxData * 100) + '%;'"></div>
+                  <div class="text-data color-light ml-4 mr-2">{{replaceFormat(chip.value)}}</div>
                 </div>
-                <div class="text-data">{{replaceFormat(chip.value)}}</div>
               </div>
             </template>
           </div>
@@ -36,13 +35,12 @@
             <div class="cont-flex">
               <div class="no-result flex-row center" v-if="chipDataAll.cpu && chipDataAll.cpu.length === 0">No Data</div>
               <template v-for="chip in chipDataAll.cpu" :key="chip">
-                <div class="cont flex-row space-between font-14">
-                  <div class="absolute" :style="'width:' + (chip.value / chipDataAll.cpuMaxData * 100) + '%;'"></div>
-                  <div class="flex-row items-center">
-                    <!-- <div class="point"></div> -->
-                    <div class="text-region">{{chip.name}}</div>
+                <div class="cont flex-row space-between nowrap font-13">
+                  <div class="items-center text-right">{{chip.name}}</div>
+                  <div class="flex flex-ai-center flex-jc-left nowrap items-number">
+                    <div class="absolute" :style="'width:' + (chip.value / chipDataAll.cpuMaxData * 100) + '%;'"></div>
+                    <div class="text-data color-light ml-4 mr-2">{{replaceFormat(chip.value)}}</div>
                   </div>
-                  <div class="text-data">{{replaceFormat(chip.value)}}</div>
                 </div>
               </template>
             </div>
@@ -53,13 +51,12 @@
             <div class="cont-flex">
               <div class="no-result flex-row center" v-if="chipDataAll.memory && chipDataAll.memory.length === 0">No Data</div>
               <template v-for="chip in chipDataAll.memory" :key="chip">
-                <div class="cont flex-row space-between font-14">
-                  <div class="absolute" :style="'width:' + (chip.value / chipDataAll.memoryMaxData * 100) + '%;'"></div>
-                  <div class="flex-row items-center">
-                    <!-- <div class="point"></div> -->
-                    <div class="text-region">{{chip.name}}</div>
+                <div class="cont flex-row space-between nowrap font-13">
+                  <div class="items-center text-right">{{chip.name}}</div>
+                  <div class="flex flex-ai-center flex-jc-left nowrap items-number">
+                    <div class="absolute" :style="'width:' + (chip.value / chipDataAll.memoryMaxData * 100) + '%;'"></div>
+                    <div class="text-data color-light ml-4 mr-2">{{byteTBStorage(chip.value)}}</div>
                   </div>
-                  <div class="text-data">{{byteTBStorage(chip.value)}}</div>
                 </div>
               </template>
             </div>
@@ -70,13 +67,12 @@
             <div class="cont-flex">
               <div class="no-result flex-row center" v-if="chipDataAll.storage && chipDataAll.storage.length === 0">No Data</div>
               <template v-for="chip in chipDataAll.storage" :key="chip">
-                <div class="cont flex-row space-between font-14">
-                  <div class="absolute" :style="'width:' + (chip.value / chipDataAll.storageMaxData * 100) + '%;'"></div>
-                  <div class="flex-row items-center">
-                    <!-- <div class="point"></div> -->
-                    <div class="text-region">{{chip.name}}</div>
+                <div class="cont flex-row space-between nowrap font-13">
+                  <div class="items-center text-right">{{chip.name}}</div>
+                  <div class="flex flex-ai-center flex-jc-left nowrap items-number">
+                    <div class="absolute" :style="'width:' + (chip.value / chipDataAll.storageMaxData * 100) + '%;'"></div>
+                    <div class="text-data color-light ml-4 mr-2">{{byteTBStorage(chip.value)}}</div>
                   </div>
-                  <div class="text-data">{{byteTBStorage(chip.value)}}</div>
                 </div>
               </template>
             </div>
@@ -325,34 +321,58 @@ watch(() => props.echartData, () => {
           .cont {
             position: relative;
             flex-direction: row;
-            width: calc(100% - 0.34rem);
-            padding: 0.07rem 0.16rem;
+            width: 100%;
+            padding: 0.07rem 0;
             margin: 0.1rem 0 0;
             font-weight: 700;
             letter-spacing: 1px;
             color: var(--color-dark);
             z-index: 9;
-            border: 1px solid #3a67cf;
-            border-radius: 0.12rem;
             overflow: hidden;
+            letter-spacing: 0;
             @media screen and (max-width: 600px) {
-              padding: 0.12rem 0.16rem;
+              padding: 0.12rem 0;
             }
-            .absolute {
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              background: linear-gradient(
-                45deg,
-                #91a8f4,
-                #567aee
-              );
-              border-radius: 0.1rem;
-              z-index: -1;
+            .items-number {
+              position: relative;
+              width: calc(100% - 2.8rem);
+              height: 0.2rem;
+              @media screen and (max-width: 768px) {
+                width: calc(100% - 2.2rem);
+              }
+              &::after {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 50%;
+                content: '';
+                width: 100%;
+                height: 1px;
+                background-color: #ecedeb;
+                z-index: -1;
+              }
+              .absolute {
+                height: 100%;
+                margin: 0;
+                background: linear-gradient(
+                  45deg,
+                  #91a8f4,
+                  #567aee
+                );
+                z-index: 1;
+              }
+              .text-data {
+                padding: 0 2px;
+                background-color: #567aee;
+                border-radius: 2px;
+                z-index: 1;
+              }
             }
             .items-center {
+              width: 2.7rem;
+              @media screen and (max-width: 768px) {
+                width: 2.1rem;
+              }
               .point {
                 width: 12px;
                 height: 12px;

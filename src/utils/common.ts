@@ -400,7 +400,8 @@ export async function signOutFun (status: string) {
 
 export function hiddAddress (val: string) {
   try {
-    if (val) return `${val.substring(0, 5)}...${val.substring(val.length - 5)}`
+    if(val && String(val).length <= 10) return val
+    else if (val) return `${val.substring(0, 5)}...${val.substring(val.length - 5)}`
     else return '-'
   } catch{
     return val
@@ -441,7 +442,7 @@ export function getDateRange(unit:string) {
   switch (unit) {
     case 'Week':
       return {
-        start: getEchartDateTime(new Date(now - 7 * oneDay).toISOString()),
+        start: getEchartDateTime(new Date(now - 6 * oneDay).toISOString()),
         end: getEchartDateTime(now.toISOString())
       };
     case 'Month':

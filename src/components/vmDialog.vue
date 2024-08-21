@@ -18,7 +18,17 @@
               </template>
               <label class="label">
                 <div class="flex flex-ai-center">
-                  {{metaAddress || '-'}}
+                  {{props.list.owner_addr || '-'}}
+                </div>
+              </label>
+            </el-form-item>
+            <el-form-item prop="owner_address">
+              <template #label>
+                <div class="flex flex-ai-center font-16 text-capitalize">CP Account</div>
+              </template>
+              <label class="label">
+                <div class="flex flex-ai-center">
+                  {{ route.params.cp_addr }}
                 </div>
               </label>
             </el-form-item>
@@ -52,7 +62,7 @@
               </template>
               <div class="server font-14">
                 <!--  {{sortanow}} -->
-                <p class="flex flex-ai-center flex-jc-center">Signing message for CP Account {{metaAddress}} on Swan Provider Dashboard at {{sortanow}}</p>
+                <p class="flex flex-ai-center flex-jc-center">Signing message for {{route.params.cp_addr}} on Swan Provider Dashboard at {{sortanow}}</p>
               </div>
             </el-form-item>
             <el-form-item prop="sign_code">
@@ -60,8 +70,8 @@
                 <div class="flex flex-ai-center font-16 text-capitalize">Sign code</div>
               </template>
               <div class="flex flex-ai-center nowrap copy-style width">
-                <div class="server sign-code font-14">{{'computing-provider wallet sign Owner Address'}}{{props.list.owner_address}}</div>
-                <svg @click="copyContent('computing-provider wallet sign XXXX XXXXXXXXXXXXXXXXXXXXXXXX', 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16"
+                <div class="server sign-code font-14">{{'computing-provider wallet sign '}}{{props.list.owner_addr}}</div>
+                <svg @click="copyContent(`computing-provider wallet sign ${props.list.owner_addr}`, 'Copied')" t="1717142367802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6467" width="16"
                   height="16">
                   <path d="M809.19 310.68H398.37a87.79 87.79 0 0 0-87.69 87.69v410.82a87.79 87.79 0 0 0 87.69 87.69h410.82a87.79 87.79 0 0 0 87.69-87.69V398.37a87.79 87.79 0 0 0-87.69-87.69z m29.69 498.51a29.73 29.73 0 0 1-29.69 29.69H398.37a29.73 29.73 0 0 1-29.69-29.69V398.37a29.73 29.73 0 0 1 29.69-29.69h410.82a29.73 29.73 0 0 1 29.69 29.69z"
                     fill="#3d3d3d" p-id="6468"></path>
@@ -235,9 +245,9 @@ async function cpDeposit () {
 
     let payMethod = props.list.type === 'FCP' ?
       fcpContract.methods.deposit(route.params.cp_addr) :
-      ecpContract.methods.deposit(route.params.cp_addr)
+      ecpContract.methods.deposit(route.params.cp_addr, amount)
     let payGasLimit = await payMethod.estimateGas({ from: metaAddress.value })
-    const tx = await payMethod.send({ from: metaAddress.value, gasLimit: Math.floor(payGasLimit * 5), value: amount })
+    const tx = await payMethod.send({ from: metaAddress.value, gasLimit: Math.floor(payGasLimit * 1.5), value: amount })
       .on('transactionHash', async (transactionHash: any) => {
         console.log('transactionHash:', transactionHash)
         ruleForm.tx_hash = transactionHash
